@@ -1,0 +1,7 @@
+# Internal tooling artifacts — not part of the Shopify theme
+.code-review-graph/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini

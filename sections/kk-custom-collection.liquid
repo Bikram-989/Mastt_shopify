@@ -1,0 +1,95 @@
+<style>
+.kk-custom-collection{
+  display: grid;
+  gap: var(--spacer);
+}
+  
+.kk-custom-collection h2{
+  margin: 0;
+  text-align: center;
+  font-size: clamp(26px, 24px + 0.625vw, 36px);
+  font-weight: 600;
+  font-style: italic;  
+}
+  
+.custom-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
+  
+@media screen and (min-width: 768px) {
+  .custom-collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.custom-collection-grid a {
+  display: block;
+  text-decoration: none;
+
+  border-radius: 20px;
+  box-shadow: var(--kk__cs);
+  overflow: hidden;
+}
+.custom-collection-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  
+}
+</style>
+
+<section class="kk-custom-collection kk__wrapper">
+  <h2>{{ section.settings.collection-title }}</h2>
+  <div class="custom-collection-grid">
+  
+    {% for block in section.blocks %}
+      {% if block.settings.image %}
+        <a href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+          <img src="{{ block.settings.image | image_url: width: 800 }}" alt="Collection Image">
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "KK Custom Collection",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "collection-title",
+      "label": "Collection title",
+      "default": "Mastt Collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_card",
+      "name": "Image Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "KK Custom Collection",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}

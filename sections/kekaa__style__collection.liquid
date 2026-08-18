@@ -1,0 +1,270 @@
+<style>
+
+.shopify-section:has(.style-collection) .kk__wrapper{
+  padding-block: calc(var(--spacer) / 2);
+  max-width: clamp(300px, 80px + 68.75vw, 1400px);
+}
+
+.style-collection .kk__heading{
+  display: none;
+}
+.style-collection {
+  --badge__size: clamp(110px, 96px + 4.375vw, 180px);
+  
+  display: grid;
+  grid-template: 1fr 1fr / 1fr 1fr;
+  gap: clamp(15px, 12px + 0.9375vw, 30px);
+  place-content: center;
+  align-items: center;
+  
+  position: relative;
+  max-width: clamp(300px, calc(100% - var(--badge__size) * 2), 900px);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.style-collection__leaf {    
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background-repeat: no-repeat;
+  background-size: var(--bg-size);
+  background-position: var(--focus-x) var(--focus-y);
+}
+
+.style-collection__heading,
+.style-collection__leaf,
+.style-collection__badge{
+  box-shadow: var(--kk__cs);
+}
+
+.style-collection__leaf{ border-radius: 250px; }
+
+.style-collection__leaf:has(.badge__tl) { border-top-left-radius: 20px; }
+.style-collection__leaf:has(.badge__tr) { border-top-right-radius: 20px; }
+.style-collection__leaf:has(.badge__bl) { border-bottom-left-radius: 20px; }
+.style-collection__leaf:has(.badge__br) { border-bottom-right-radius: 20px; }
+
+.badge__tl{ left: calc(0% - (var(--badge__size)/2)); top: calc(45% - (var(--badge__size)/2)); }
+.badge__tr{ right: calc(0% - (var(--badge__size)/2)); top: calc(45% - (var(--badge__size)/2)); }
+.badge__bl{ left: calc(0% - (var(--badge__size)/2)); bottom: calc(45% - (var(--badge__size)/2)); }
+.badge__br{ right: calc(0% - (var(--badge__size)/2)); bottom: calc(45% - (var(--badge__size)/2)); }
+
+.style-collection__badge {
+  position: absolute;
+  width: var(--badge__size);
+  aspect-ratio: 1;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: var(--badge-icon);
+  transition: transform .5s ease;
+  border-radius: 50%;
+}
+  
+.style-collection__badge:hover {
+  transform: scale(1.2);
+}
+  
+.style-collection__badge::before {
+  content: '';
+  width: inherit; aspect-ratio: inherit;
+  position: absolute; inset: 0; z-index: 10;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: var(--badge-text-image);
+  animation: badgeRotate 12s linear infinite;
+  transform-origin: center;
+}
+  
+.style-collection__badge:hover::before {
+  animation-play-state: paused;
+}
+  
+@keyframes badgeRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.style-collection__heading {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .kk__wrapper:has(.style-collection) .kk__heading{
+    display: block;
+    margin-bottom: 20px;
+    margin-block-start: 0;
+  }
+  
+  .style-collection{
+    grid-template-columns: 1fr;
+  }
+
+  .style-collection__leaf{ border-radius: 110px; }
+  .style-collection__leaf:has(.badge__tl) { border-bottom-right-radius: 20px; }
+  .style-collection__leaf:has(.badge__tr) { border-bottom-left-radius: 20px; }
+  .style-collection__leaf:has(.badge__bl) { border-top-right-radius: 20px; }
+  .style-collection__leaf:has(.badge__br) { border-top-left-radius: 20px; }
+
+  .badge__tl{ left: -25px; bottom: 0; top: unset; }
+  .badge__tr{ right: -25px; bottom: 0; top: unset; }
+  .badge__bl{ right: -25px; bottom: 0; left: unset; }
+  .badge__br{ left: -25px; bottom: 0; right: unset; }
+}
+
+@media screen and (min-width: 769px) {
+
+  .style-collection__heading{
+    display: grid;
+    place-items: center;
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(200px, 180px + 6.25vw, 300px);
+    aspect-ratio: 1;
+    z-index: 20;
+    
+    border-radius: 50%;
+    background: #fff;
+    
+    font-family: 'Playfair Display';
+    text-align: center;  
+  }
+
+  .style-collection__heading h2{
+    font-size: clamp(26px, 23.2px + 0.875vw, 40px);
+    max-width: 14ch;
+  }
+}
+
+
+
+
+
+</style>
+
+<div class="kk__wrapper">
+  <h2 class="kk__heading">{{ section.settings.heading_text }}</h2>
+  
+  <section class="style-collection">
+    
+    <div class="style-collection__heading">
+      <h2>{{ section.settings.heading_text }}</h2>
+    </div>
+    
+    {% for block in section.blocks %}
+      <a
+        href="{{ block.settings.badge_link }}"
+        class="style-collection__leaf"
+        style="
+          --bg-size: {{ block.settings.bg_size }}%;
+          --focus-x: {{ block.settings.focus_x }}%;
+          --focus-y: {{ block.settings.focus_y }}%;
+          background-image: url({{ block.settings.leaf_shape | img_url: 'master' }});
+        "
+      >
+        <span
+          class="style-collection__badge badge__{{ block.settings.position }}"
+          style="
+            --badge-icon: url('{{ block.settings.badge_icon | img_url: 'master' }}');
+            --badge-text-image: url('{{ block.settings.badge_text_image | img_url: 'master' }}');
+          "
+        ></span>
+      </a>
+
+    {% endfor %}
+  </section>
+</div>
+
+
+{% schema %}
+{
+  "name": "Outfit Style Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading text",
+      "default": "Outfit‐Style Collections"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Leaf Card (4 Total)",
+      "settings": [
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Grid Position",
+          "options": [
+            { "value": "tl", "label": "Top Left" },
+            { "value": "tr", "label": "Top Right" },
+            { "value": "bl", "label": "Bottom Left" },
+            { "value": "br", "label": "Bottom Right" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "leaf_shape",
+          "label": "Leaf shape"
+        },
+        {
+          "type": "image_picker",
+          "id": "badge_icon",
+          "label": "Static Icon"
+        },
+        {
+          "type": "image_picker",
+          "id": "badge_text_image",
+          "label": "Rotating Text SVG"
+        },
+        {
+          "type": "url",
+          "id": "badge_link",
+          "label": "Click-through URL"
+        },
+        {
+          "type": "range",
+          "id": "bg_size",
+          "label": "Background Zoom (%)",
+          "min": 100,
+          "max": 300,
+          "step": 10,
+          "unit": "%",
+          "default": 150
+        },
+        {
+          "type": "range",
+          "id": "focus_x",
+          "label": "Image Focus X-axis (%)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "focus_y",
+          "label": "Image Focus Y-axis (%)",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Style Collection",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

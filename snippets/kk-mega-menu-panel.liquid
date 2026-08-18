@@ -1,0 +1,115 @@
+{%- comment -%}
+  header-mega-menu-panel.liquid
+  Renders the native submenu structure of your selected link.
+  Expects both `mega` (the block) and `link` (the nav item) passed in:
+    {% render 'header-mega-menu-panel', mega: mega, link: link %}
+{%- endcomment -%}
+
+<style>
+
+.header__link-item.has-mega-menu {
+  position: relative;
+}
+
+.global-settings-popup, .header__submenu.global-settings-popup{
+  border-radius: var(--mastt-radius-pill);
+  box-shadow: var(--mastt-shadow-lg);
+}
+
+details-menu:has(.mega-menu-grid){
+  border-style: none !important;
+}
+
+.mega-menu-disclosure > summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.mega-menu-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  display: none;
+  z-index: 20;
+}
+
+.mega-menu-grid{
+  padding: 3rem 5rem;
+}
+
+.mega-menu-disclosure[open] .mega-menu-panel {
+  display: block;
+}
+
+/* Grid layout for columns */
+
+/* .mega-menu-columns{
+  display: grid;
+  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
+  font-size: 22px;
+} */
+  
+.mega-menu-columns{
+  display: flex;
+  gap: clamp(20px, 9.1304px + 1.087vw, 30px);
+  padding: 0;
+
+  font-size: 22px;
+}
+
+.mega-menu-columns > :first-child {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding-right: clamp(5px, -22.1739px + 2.7174vw, 30px);
+}
+
+.mega-menu-columns > :not(:first-child) {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.mega-menu-heading{
+  font-weight: 600;
+  font-style: italic; 
+}
+
+details .list-menu--disclosure {
+  min-width: max-content;
+}
+
+.mega-menu-disclosure .list-menu--disclosure{
+  min-width: 100%;
+}
+
+</style>
+
+{%- assign columns = link.links -%}
+
+{%- if columns.size > 0 -%}
+  <div class="mega-menu-grid horizontal_center">
+    <div class="mega-menu-columns page-width">
+      {%- for col in columns -%}
+        <div class="mega-menu-column">
+          <a href="{{ col.url }}" class="mega-menu__link mega-menu__link--level-2 link">{{ col.title }}</a>
+          {%- if col.links.size > 0 -%}
+            <ul class="list-unstyled">
+              {%- for item in col.links -%}
+                <li class="mega-menu-item">
+                  <a href="{{ item.url }}" class="mega-menu__link link">{{ item.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- else -%}
+  <!-- No sub-links defined under this link; nothing to show -->
+{%- endif -%}
+

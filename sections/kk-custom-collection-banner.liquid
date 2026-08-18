@@ -1,0 +1,82 @@
+{% comment %}
+  KK Custom Banner
+  Choose web & mobile banner images independently.
+  - Mobile image is the preference: if only mobile is set, it shows on web too.
+  - If both are set: web image on desktop, mobile image on mobile.
+  - If neither is set, the section does not render.
+{% endcomment %}
+
+{%- liquid
+  assign web_img = section.settings.web_image
+  assign mobile_img = section.settings.mobile_image
+  # Mobile is the fallback for both viewports; web is the fallback only if mobile is empty
+  assign desktop_src = web_img | default: mobile_img
+  assign mobile_src = mobile_img | default: web_img
+-%}
+
+{%- if desktop_src != blank -%}
+<style>
+  .collection-banner__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 26 / 5;
+    background-image: url('{{ desktop_src | image_url: width: 2400 }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: var(--kk-br);
+    box-shadow: var(--kk__cs);
+  }
+
+  .collection-banner__image p {
+    display: none;
+  }
+
+  /* Override on mobile */
+  @media only screen and (max-width: 749px) {
+    #FacetBannerContainer {
+      background-image: url('{{ mobile_src | image_url: width: 1200 }}');
+    }
+
+    .collection-banner__image {
+      aspect-ratio: 80 / 39;
+    }
+  }
+</style>
+
+  <section class="collection-banner page-width">
+    <div id="FacetBannerContainer" class="collection-banner__image"><p>Banner</p></div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KK Custom Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner images"
+    },
+    {
+      "type": "paragraph",
+      "content": "Mobile image takes preference. If only the mobile image is set, it shows on both mobile and desktop. If both are set, each shows on its own device. If neither is set, the banner is hidden."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "image_picker",
+      "id": "web_image",
+      "label": "Web / desktop image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mastt Custom Banner",
+      "category": "Collections"
+    }
+  ]
+}
+{% endschema %}

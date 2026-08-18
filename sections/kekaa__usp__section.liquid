@@ -1,0 +1,171 @@
+<style>
+h1,
+h2,
+h3,
+p{
+  margin: 0;
+}
+.usp-wrapper {
+  display: grid;
+  place-content: center;
+
+  padding-bottom: calc(clamp(15px, 13px + 0.625vw, 25px) * 2);
+}
+
+.usp-container {
+  --diamond: clamp(125px, 105px + 6.25vw, 225px);
+    
+  display: grid;
+  grid-template-columns: repeat(4, var(--diamond));
+  column-gap: clamp(15px, 13px + 0.625vw, 25px);
+  row-gap: calc((var(--diamond)/2) + clamp(15px, 12px + 0.9375vw, 30px));
+  margin-top: clamp(78px, 71.6px + 2vw, 110px);
+  
+  position: relative;
+}
+
+.usp-container::before {
+  content: '';
+  inset: calc(clamp(15px, 13px + 0.625vw, 25px) * (-1));
+  top: 25%;
+  position: absolute;
+  border-radius: 20px;
+  background: #ED9958;
+
+  background: linear-gradient(rgba(237, 153,88, 0.85), rgba(237, 153,88, 0.85));
+  box-shadow: var(--kk__cs);
+}
+
+{%- comment -%} Simplified for Mastt: same gradient at all sizes, no external texture image. {%- endcomment -%}
+
+.usp {
+  position: relative;
+  max-width: var(--diamond);
+  background: #ECDEC9;
+  border-radius: 0 0 20px 20px;
+}
+
+.usp-icon {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--diamond);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  
+  padding: 25px;
+  background: url('https://cdn.shopify.com/s/files/1/0615/9921/9798/files/diamond.svg?v=1745850904') no-repeat center;
+  background-size: contain;
+}
+
+.usp-icon img{
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.usp-content {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(var(--diamond) / 2.5);
+  padding: 0 10px 15px 10px;
+
+  isolation: isolate;
+}
+
+.usp-title{
+  font-size: clamp(14px, 12px + 0.625vw, 24px);
+  font-style: italic;
+  font-weight: 500;
+  color: #472A14;
+}
+
+.usp-content p {
+  text-align: center;
+  font-size: clamp(10px, 8.4px + 0.5vw, 18px);
+  line-height: 1.5em;
+}
+
+@media (width < 1050px){
+  .usp-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width < 576px){  
+  .usp-container::before{
+    top: calc(-25% + 10px);
+    margin-inline: -50px;
+    border-radius: 0;
+  }
+}
+</style>
+
+<section class="usp-wrapper kk__wrapper">
+  <h2 class="kk__heading">{{ section.settings.heading }}</h2>
+  <div class="usp-container">
+    {% for block in section.blocks %}
+      <div class="usp">
+        <span class="usp-icon">
+          {% if block.settings.icon != blank %}
+            <img src="{{ block.settings.icon | image_url }}" alt="USP Icon">
+          {% endif %}
+        </span>
+        <div class="usp-content">
+          <h3 class="usp-title">{{ block.settings.title }}</h3>
+          <p class="usp-desc">{{ block.settings.description }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "USP Section",
+  "tag": "section",
+  "class": "usp-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Promise"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Skin-Friendly"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Hypoallergenic Jewellery crafted for Comfort"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "USP Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,392 @@
+{%- comment -%}
+  snippets/kk-size-chart.liquid
+  Renders a size chart from a "Size chart" metaobject (product metafield custom.size_chart).
+  Usage:  {% render 'kk-size-chart', product: product %}
+
+  Table source is chosen by the entry's "Chart kind":
+    • Recipe kind (e.g. "ring"): rows built in code from the product's size
+      variants + standard lookups. Merchants add sizes by adding variants.
+      To add a recipe kind (bracelet, necklace…): add a `when` to the columns
+      case AND the tbody case below, detecting that kind's variant option.
+    • "custom": the entry's "Table" field holds the whole table — first line is
+      the headers, each following line is a row, columns separated by "|".
+
+  Step images are gender-split by UPLOAD ORDER (not alt text):
+    • Upload the him set first, then the her set, in equal counts (e.g. 4 + 4).
+    • A him product shows the first half; a her product shows the second half.
+    • Captions are shared (one per step, indexed against the shown half), not doubled.
+    • Source of truth is the drag-order in the metaobject field — keep the halves
+      contiguous (all him, then all her). If they get interleaved, the wrong set
+      shows with no error. Alt text (htm-ring-him-1 …) is only a human ordering aid.
+
+  Hovering a step image shows a magnifier lens that tracks the cursor (a cropped,
+  high-res copy of the image enlarged in place — not a fullscreen view).
+  Lens is enabled only on fine-pointer devices (mouse); touch keeps the plain
+  swipeable cards. See the guarded IIFE at the bottom.
+
+  Presentation (title, subtitle, steps, note, disclaimer) is always from the entry.
+{%- endcomment -%}
+
+<style>
+
+/* Trigger */
+.kk-sizechart__opener { display: inline-block; margin: .8rem 0; }
+.kk-sizechart__trigger {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-size: 1.35rem; letter-spacing: .02rem; color: rgb(var(--color-foreground));
+  text-decoration: underline; text-underline-offset: .3rem;
+  text-decoration-color: #C8A46B; text-decoration-thickness: .1rem;
+}
+.kk-sizechart__trigger:hover { color: #C8A46B; }
+
+/* Modal shell (reuses Dawn's modal-dialog behaviour) */
+.kk-sizechart-modal { display: none; }
+.kk-sizechart-modal[open] {
+  display: flex; align-items: center; justify-content: center;
+  position: fixed; inset: 0; z-index: 100; padding: 1.2rem; background: rgba(0,0,0,.55);
+}
+.kk-sizechart-modal__content {
+  position: relative; width: 100%; max-width: 100rem; max-height: 92vh;
+  overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
+  background: rgb(var(--color-background)); color: rgb(var(--color-foreground));
+  border-radius: var(--kk-br); padding: 2.2rem 2rem 1.8rem; box-shadow: 0 1.6rem 4rem rgba(0,0,0,.3);
+}
+.kk-sizechart-modal__close {
+  position: absolute; top: .8rem; right: .8rem; width: 3.2rem; height: 3.2rem;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 0; cursor: pointer; color: rgb(var(--color-foreground));
+}
+.kk-sizechart-modal__close svg { width: 1.4rem; height: 1.4rem; }
+
+/* Header */
+.kk-sizechart__header { text-align: center; margin-bottom: 1.6rem; }
+.kk-sizechart__title { font-family: var(--font-heading-family); font-size: 2.2rem; line-height: 1.1; margin: 0; }
+.kk-sizechart__subtitle { margin: .3rem 0 0; font-size: 1.3rem; opacity: .6; }
+
+/* How to measure — section label */
+.kk-sizechart__steps-label {
+  font-family: var(--font-heading-family);
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0 0 1rem;
+}
+@media screen and (max-width: 749px) {
+  .kk-sizechart__steps-label { margin: 0 0 .8rem; }
+}
+
+/* How to measure — 4-up grid on desktop */
+.kk-sizechart__steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 2rem; }
+.kk-sizechart__step { margin: 0; text-align: center; place-items: center; }
+.kk-sizechart__step-media {
+  position: relative; border-radius: .6rem;
+  background: rgba(var(--color-foreground), .05); aspect-ratio: 1 / 1;
+}
+.kk-sizechart__step-media[data-kk-zoom] { cursor: zoom-in; }
+.kk-sizechart__step-media.is-zooming { cursor: none; }
+.kk-sizechart__step-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.kk-sizechart__step-num {
+  position: absolute; top: .6rem; left: .6rem; width: 2.2rem; height: 2.2rem; z-index: 1;
+  display: flex; align-items: center; justify-content: center; border-radius: calc(var(--kk-br) / 2);
+  background: #C8A46B; color: #fff; font-size: 1.2rem; font-weight: 600;
+}
+.kk-sizechart__step-caption { width: 100%; display: flex; place-content: center; }
+.kk-sizechart__step-caption p { margin-top: .6rem; font-size: 1.5rem; line-height: 1.35; color: #000; font-weight: 500; max-width: 16ch; text-wrap-style: balance; }
+
+/* Magnifier lens (created in JS, appended inside the hovered media; clipped to
+   the square by the media's overflow:hidden). pointer-events:none so the media
+   keeps receiving pointermove. */
+.kk-sizechart__lens {
+  position: absolute; left: 0; top: 0; display: none; z-index: 3;
+  width: 20rem; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  border: .2rem solid rgba(255,255,255,.9);
+  box-shadow: 0 0 0 .1rem rgba(0,0,0,.25), 0 .4rem 1.2rem rgba(0,0,0,.35);
+  background: rgb(var(--color-background)); pointer-events: none;
+}
+.kk-sizechart__lens-img {
+  position: absolute; top: 0; left: 0; max-width: none;
+  object-fit: cover; will-change: transform;
+}
+
+/* Table */
+.kk-sizechart__table-wrap {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border: .1rem solid rgba(var(--color-foreground), .12); border-radius: var(--kk-br);
+}
+.kk-sizechart__table { width: 100%; border-collapse: collapse; font-size: 1.4rem; }
+.kk-sizechart__table th, .kk-sizechart__table td {
+  padding: .8rem 1rem; text-align: center; white-space: nowrap;
+  border-bottom: .1rem solid rgba(var(--color-foreground), .08);
+}
+.kk-sizechart__table tbody tr:last-child th, .kk-sizechart__table tbody tr:last-child td { border-bottom: 0; }
+.kk-sizechart__table thead th {
+  font-family: var(--font-heading-family); font-weight: 600; font-size: 1.3rem;
+  background: rgba(var(--color-foreground), .04);
+  border-bottom-color: rgba(var(--color-foreground), .16);
+}
+.kk-sizechart__col--primary { font-weight: 600; background: rgba(200,164,107,.12); }
+.kk-sizechart__table tbody tr:hover td,
+.kk-sizechart__table tbody tr:hover .kk-sizechart__col--primary { background: rgba(200,164,107,.18); }
+.kk-sizechart__fit { display: block; margin-top: .1rem; font-size: 1.05rem; opacity: .55; }
+
+/* Footer */
+.kk-sizechart__footer { text-align: center; margin-top: 1.6rem; }
+.kk-sizechart__note {
+  display: inline-flex; align-items: center; gap: .6rem;
+  margin: 0; padding: .6rem 1rem; border-radius: var(--kk-br);
+  background: rgba(200,164,107,.16); color: rgb(var(--color-foreground));
+  font-size: 1rem; font-weight: 600; line-height: 1.3;
+}
+.kk-sizechart__note-icon { display: inline-flex; flex: none; color: #C8A46B; }
+.kk-sizechart__note-icon svg { width: 1.25rem; height: 1.25rem; display: block; }
+.kk-sizechart__disclaimer {
+  margin: .9rem 0 0; font-size: 1rem; line-height: 1.4;
+}
+
+/* Mobile: swipeable step cards */
+@media screen and (max-width: 749px) {
+  .kk-sizechart-modal__content { padding: 2rem 1.2rem 1.4rem; }
+  .kk-sizechart__title { font-size: 2rem; }
+  .kk-sizechart__steps {
+    display: flex; grid-template-columns: none; overflow-x: auto;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    gap: 1rem; margin: 0 -1.2rem 1.6rem; padding: 0 1.2rem .4rem; scrollbar-width: none;
+  }
+  .kk-sizechart__steps::-webkit-scrollbar { display: none; }
+  .kk-sizechart__step { flex: 0 0 68%; scroll-snap-align: center; }
+  .kk-sizechart__table { font-size: 1.3rem; }
+  .kk-sizechart__table th, .kk-sizechart__table td { padding: .25rem; }
+}
+</style>
+
+{%- assign chart = product.metafields.custom.size_chart.value -%}
+{%- if chart != blank -%}
+  {%- liquid
+    assign kind = chart.chart_kind | default: 'ring' | downcase | strip
+
+    # Ring data from the brand reference chart, keyed by US size.
+    assign m_keys = '6,6.5,7,8,8.5,9.5,10,11,11.5,12' | split: ','
+    assign m_dia  = '16.5,16.9,17.3,18.1,18.5,19.4,19.8,20.6,21.0,21.4' | split: ','
+    assign m_circ = '51.8,53.1,54.3,56.9,58.1,60.9,62.2,64.7,65.9,67.2' | split: ','
+    assign m_ind  = '12,13,14,17,18,21,22,25,26,27' | split: ','
+
+    # Columns: recipe kinds define their own; "custom" reads the first line of the Table field.
+    case kind
+        when 'ring'
+            assign sc_columns = 'US|Dia (mm)|Circ (mm)|IND' | split: '|'
+            assign size_values = '' | split: ''
+            for opt in product.options_with_values
+            assign oname = opt.name | downcase
+            if oname contains 'size'
+                assign size_values = opt.values
+                break
+            endif
+            endfor
+            assign has_rows = false
+            if size_values.size > 0
+            assign has_rows = true
+            endif
+        else
+            assign tbl_lines = chart.table | strip | newline_to_br | split: '<br />'
+            assign sc_columns = tbl_lines[0] | split: '|'
+            assign has_rows = false
+            if tbl_lines.size > 1
+            assign has_rows = true
+            endif
+        endcase
+
+    assign sc_step_images = chart.step_images.value
+    assign sc_step_captions = chart.step_captions | newline_to_br | split: '<br />'
+
+    # Audience: decide which half of the step images to show.
+    # Images are uploaded in order — him set first, then her set, equal counts.
+    # 'women'/'female' tested before 'men'/'male' so substrings don't mis-hit.
+    # Source order: gender metafield first, then product tags + type as fallback.
+    # Unknown audience falls back to the first (him) half.
+    assign gender_raw = ''
+    assign g = product.metafields.custom.gender
+    if g != blank
+      assign gender_raw = g.value | default: g | append: '' | downcase
+    endif
+    if gender_raw == blank
+      assign gender_raw = product.tags | join: ' ' | append: ' ' | append: product.type | downcase
+    endif
+    assign sc_half = sc_step_images.size | divided_by: 2
+    assign sc_start = 0
+    if gender_raw contains 'her' or gender_raw contains 'women' or gender_raw contains 'female'
+      assign sc_start = sc_half
+    endif
+  -%}
+
+  <div class="kk-sizechart">
+    <header class="kk-sizechart__header">
+      <h2 class="kk-sizechart__title">{{ chart.chart_title }}</h2>
+      {%- if chart.chart_subtitle != blank -%}<p class="kk-sizechart__subtitle">{{ chart.chart_subtitle }}</p>{%- endif -%}
+    </header>
+
+    {%- capture sc_steps_html -%}
+      {%- for img in sc_step_images offset: sc_start limit: sc_half -%}
+        {%- liquid
+          assign step_img = img
+          if img.image != blank
+            assign step_img = img.image
+          endif
+          assign cap = sc_step_captions[forloop.index0] | strip
+        -%}
+        <figure class="kk-sizechart__step">
+          <div class="kk-sizechart__step-media"{% if step_img != blank %} data-kk-zoom data-zoom-src="{{ step_img | image_url: width: 1600 }}"{% endif %}>
+            <span class="kk-sizechart__step-num">{{ forloop.index }}</span>
+            {%- if step_img != blank -%}
+              <img src="{{ step_img | image_url: width: 600 }}" alt="{{ cap | strip_html | escape }}" loading="lazy" width="300" height="300">
+            {%- endif -%}
+          </div>
+          {%- if cap != blank -%}<figcaption class="kk-sizechart__step-caption"><p>{{ cap }}</p></figcaption>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- if sc_steps_html != blank -%}
+      <p class="kk-sizechart__steps-label">How to measure</p>
+      <div class="kk-sizechart__steps">{{ sc_steps_html }}</div>
+    {%- endif -%}
+
+    {%- if has_rows -%}
+      <div class="kk-sizechart__table-wrap" role="region" aria-label="{{ chart.chart_title | escape }}" tabindex="0">
+        <table class="kk-sizechart__table">
+          <thead>
+            <tr>
+              {%- for col in sc_columns -%}
+                <th scope="col"{% if forloop.first %} class="kk-sizechart__col--primary"{% endif %}>{{ col | strip }}</th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+          <tbody>
+            {%- case kind -%}
+              {%- when 'ring' -%}
+                {%- for value in size_values -%}
+                  {%- liquid
+                    assign vstr = value | append: ''
+                    assign us = vstr | split: '(' | first | strip | remove_first: 'US' | strip
+                    assign dia = '—'
+                    assign circ = '—'
+                    assign ind = '—'
+                    for k in m_keys
+                      if k == us
+                        assign dia = m_dia[forloop.index0]
+                        assign circ = m_circ[forloop.index0]
+                        assign ind = m_ind[forloop.index0]
+                        break
+                      endif
+                    endfor
+                  -%}
+                  <tr>
+                    <th scope="row" class="kk-sizechart__col--primary">{{ us }}</th>
+                    <td>{{ dia }}</td>
+                    <td>{{ circ }}</td>
+                    <td>{{ ind }}</td>
+                  </tr>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for line in tbl_lines offset: 1 -%}
+                  {%- assign line = line | strip -%}
+                  {%- unless line == blank -%}
+                    {%- assign cells = line | split: '|' -%}
+                    <tr>
+                      {%- for cell in cells -%}
+                        {%- if forloop.first -%}
+                          <th scope="row" class="kk-sizechart__col--primary">{{ cell | strip }}</th>
+                        {%- else -%}
+                          <td>{{ cell | strip }}</td>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </tr>
+                  {%- endunless -%}
+                {%- endfor -%}
+            {%- endcase -%}
+          </tbody>
+        </table>
+      </div>
+    {%- endif -%}
+
+    {%- if chart.footer_note != blank or chart.disclaimer != blank -%}
+      <div class="kk-sizechart__footer">
+        {%- if chart.footer_note != blank -%}
+          <p class="kk-sizechart__note">
+            <span class="kk-sizechart__note-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                <path d="M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1zm3-19a7 7 0 0 0-4 12.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26A7 7 0 0 0 12 2z"/>
+              </svg>
+            </span>
+            {{ chart.footer_note }}
+          </p>
+        {%- endif -%}
+        {%- if chart.disclaimer != blank -%}<p class="kk-sizechart__disclaimer">{{ chart.disclaimer }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <script>
+  (function () {
+    var ZOOM = 3; // magnification factor relative to the displayed thumbnail
+
+    function enable(media) {
+      var thumb = media.querySelector('img');
+      var src = media.getAttribute('data-zoom-src');
+      if (!thumb || !src) return;
+
+      var lens = document.createElement('div');
+      lens.className = 'kk-sizechart__lens';
+      var lensImg = document.createElement('img');
+      lensImg.className = 'kk-sizechart__lens-img';
+      lensImg.alt = '';
+      lensImg.src = src;
+      lens.appendChild(lensImg);
+      media.appendChild(lens);
+
+      var pre = new Image(); pre.src = src; // warm the cache so the first hover is instant
+      var lensW = 0, lensH = 0;
+
+      function show(e) {
+        var rect = media.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        if (x < 0 || y < 0 || x > rect.width || y > rect.height) { hide(); return; }
+        lens.style.display = 'block';
+        if (!lensW) { lensW = lens.offsetWidth; lensH = lens.offsetHeight; }
+        lensImg.style.width = (rect.width * ZOOM) + 'px';
+        lensImg.style.height = (rect.height * ZOOM) + 'px';
+        lensImg.style.transform =
+          'translate(' + (lensW / 2 - x * ZOOM) + 'px,' + (lensH / 2 - y * ZOOM) + 'px)';
+        lens.style.left = (x - lensW / 2) + 'px';
+        lens.style.top = (y - lensH / 2) + 'px';
+        media.classList.add('is-zooming');
+      }
+      function hide() {
+        lens.style.display = 'none';
+        media.classList.remove('is-zooming');
+      }
+
+      media.addEventListener('pointerenter', show);
+      media.addEventListener('pointermove', show);
+      media.addEventListener('pointerleave', hide);
+    }
+
+    function init() {
+      // Mouse-only: a follow-cursor lens has no touch equivalent, and enabling it
+      // on touch would fight the horizontal swipe carousel.
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      var nodes = document.querySelectorAll('.kk-sizechart__step-media[data-kk-zoom]');
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].__kkLensReady) continue;
+        nodes[i].__kkLensReady = true;
+        enable(nodes[i]);
+      }
+    }
+
+    init(); // runs each render; per-element guard above prevents double-binding
+    if (!window.__kkSizeChartZoom) {
+      window.__kkSizeChartZoom = true; // register the global re-scan only once
+      document.addEventListener('shopify:section:load', init);
+    }
+  })();
+  </script>
+{%- endif -%}

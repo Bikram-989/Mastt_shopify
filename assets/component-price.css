@@ -1,0 +1,219 @@
+.price {
+  font-size: clamp(16px, 15.0769px + 0.2564vw, 20px);
+  letter-spacing: 0;
+  line-height: clamp(13px, 10.8px + 0.6875vw, 24px);
+}
+
+.price > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.price.price--unavailable {
+  visibility: hidden;
+}
+
+.price--end {
+  text-align: right;
+}
+
+.price .price-item {
+  display: inline-block;
+  margin: 0 clamp(5px, 4px + 0.3125vw, 10px) 0 0;
+}
+
+.price__regular .price-item--regular {
+  margin-right: 0;
+}
+
+.price:not(.price--show-badge) .price-item--last:last-of-type {
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .price {
+    margin-bottom: 0;
+  }
+}
+
+.price--large {
+  font-size: 1.6rem;
+  line-height: calc(1 + 0.5 / var(--font-body-scale));
+}
+
+@media screen and (min-width: 750px) {
+  .price--large {
+    font-size: 1.8rem;
+  }
+}
+
+.price--sold-out .price__availability,
+.price__regular {
+  display: block;
+}
+
+.price__sale,
+.price__availability,
+.price .price__badge-sale,
+.price .price__badge-sold-out,
+.price--on-sale .price__regular,
+.price--on-sale .price__availability {
+  display: none;
+}
+
+.price--sold-out .price__badge-sold-out,
+.price--on-sale .price__badge-sale,
+.volume-pricing--sale-badge .price__badge-sale {
+  display: inline-block;
+}
+
+.volume-pricing--sale-badge .price__badge-sale {
+  margin-left: 0.5rem;
+}
+
+.price--on-sale .price__sale /* mod */{
+  display: flex;
+  align-items: start;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+}
+
+.price--center {
+  display: initial;
+  justify-content: center;
+}
+
+.price--on-sale .price-item--regular {
+  text-decoration: line-through;
+  color: rgba(var(--color-foreground), 0.75);
+  font-size: 1.3rem;
+}
+
+.unit-price {
+  display: block;
+  font-size: 1.1rem;
+  letter-spacing: 0.04rem;
+  line-height: calc(1 + 0.2 / var(--font-body-scale));
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+
+/* mod */
+
+.price__container{
+  font-family: var(--font-heading-family);
+}
+
+.card__content .price--on-sale .price__sale{
+  flex-direction: row;
+}
+
+.price--large{
+  letter-spacing: 0.1rem;
+}
+
+.price--on-sale .price-item--regular{
+  font-size: clamp(14px, 13.6px + 0.125vw, 16px);
+  line-height: 1em;
+  font-weight: 300;
+  color: #686868;
+}
+
+.product__info-wrapper .mrp-wrap{
+  margin-top: calc(clamp(1px, 0.8px + 0.0625vw, 2px) * -1);
+  margin-bottom: -8px;
+}
+
+
+.discount{
+  box-shadow: unset;
+  
+  background: var(--kk-accent-alt);
+  border-radius: 4px;
+  
+  color: var(--kk-white);
+  margin-top: 12px;
+}
+
+.taxes{
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: rgba(var(--color-foreground), 0.75);
+  line-height: 1rem;
+}
+
+
+
+/* ===== Unified MRP + offer-price treatment (all templates) ===== */
+.price--on-sale .price__sale {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: clamp(5px, 4px + 0.3125vw, 10px);
+  row-gap: 4px;
+}
+
+/* struck MRP: muted grey, light weight, always ~72% of the offer price */
+.price--on-sale .mrp-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  margin: 0;
+  color: #686868;
+  font-weight: 300;
+  font-size: 0.72em;          /* proportional, so the ratio is the same on PDP and cards */
+  line-height: 1;
+  text-decoration: line-through;   /* strikes "MRP" and the amount together */
+}
+.price--on-sale .mrp-wrap .price-item--regular {
+  margin: 0;
+  font: inherit;             /* drops the old fixed clamp size */
+  color: inherit;
+}
+
+/* offer price: the emphasised amount */
+.price--on-sale .price-item--sale {
+  margin: 0;
+}
+
+/* ===== Product page only: badge inline, tax/unit lines below ===== */
+.product__info-wrapper .price {
+  --padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: clamp(5px, 4px + 0.3125vw, 10px);
+
+  padding-top: calc(var(--padding) - 6px);
+  padding-bottom: var(--padding);
+
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.product__info-wrapper .price__container,
+.product__info-wrapper .price--on-sale .price__sale {
+  display: contents;
+}
+.product__info-wrapper .price--on-sale .taxes      { order: 5; flex-basis: 100%; }
+.product__info-wrapper .price--on-sale .unit-price { order: 6; flex-basis: 100%; }
+.product__info-wrapper .discount { margin-top: 0; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

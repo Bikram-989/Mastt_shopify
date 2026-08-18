@@ -1,0 +1,67 @@
+{%- comment -%}
+Reusable product badge logic
+Accepts:
+- product: Product object
+- context: 'card' | 'pdp' (optional, for styling differences)
+{%- endcomment -%}
+
+{% assign priority_badge = '' %}
+
+{% for t in product.tags %}
+  {% assign t_down = t | downcase %}
+  {% assign first_char = t_down | slice: 0, 1 %}
+  {% if first_char == '!' %}
+    {% assign priority_badge = t_down | remove_first: '!' %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{%- if priority_badge == blank -%}
+  {%- comment -%} No explicit !tag priority marker — fall back to the first matching tag, checked in this priority order. {%- endcomment -%}
+  {%- for candidate in 'bogo,halfprice,20off,50off,new,excl,medit,art' | split: ',' -%}
+    {%- if priority_badge == blank and product.tags contains candidate -%}
+      {%- assign priority_badge = candidate -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{% assign badge_class = '' %}
+{% assign badge_label = '' %}
+
+{% case priority_badge %}
+  {% when 'bogo' %}
+    {% assign badge_class = 'bogo__badge' %}
+    {% assign badge_label = 'Buy 1 Get 1' %}
+  {% when 'halfprice' %}
+    {% assign badge_class = 'hp__badge' %}
+    {% assign badge_label = 'Half Price' %}
+  {% when '20off' %}
+    {% assign badge_class = 'twentyoff__badge' %}
+    {% assign badge_label = '20% Off' %}
+  {% when '50off' %}
+    {% assign badge_class = 'fiftyoff__badge' %}
+    {% assign badge_label = '50% Off' %}
+  {% when 'new' %}
+    {% assign badge_class = 'new__badge' %}
+    {% assign badge_label = 'New Arrival' %}
+  {% when 'excl' %}
+    {% assign badge_class = 'exclusive__badge' %}
+    {% assign badge_label = 'Exclusive' %}
+  {% when 'medit' %}
+    {% assign badge_class = 'themasttedit__badge' %}
+    {% assign badge_label = 'The Mastt Edit' %}
+  {% when 'art' %}
+    {% assign badge_class = 'artisan__badge' %}
+    {% assign badge_label = 'Artisan Made' %}
+{% endcase %}
+
+{% if badge_class != blank %}
+<div class="promo__badge-withflap">
+  <div class="promo__badge-shine">
+    <div class="promotion__badge {{ badge_class }} promotion__badge--{{ context | default: 'card' }}">
+      {{ badge_label }}
+    </div>
+  </div>
+  <div class="promo-flap"></div>
+</div>
+{% endif %}

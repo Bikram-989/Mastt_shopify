@@ -1,0 +1,374 @@
+<style>
+.offers-wrapper * {
+  font-family: var(--font-body-family);
+  line-height: 1em;
+}
+.offers-wrapper h2, .offers-wrapper h3, .offers-wrapper p { margin: 0; padding: 0; }
+
+.offers-wrapper {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* heading */
+.offers-heading {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 14px;
+  padding-block: clamp(0px, -1px + 0.3125vw, 5px);
+  font-size: clamp(14px, 13.2px + 0.25vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #000;
+}
+.offers-heading .hr { height: 2px; border-radius: 10px; background: #E2DDDB; }
+
+/* panels */
+.offers {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(6px, 5px + 0.3125vw, 12px);
+  min-width: 0;
+}
+.bank-offers,
+.coupon-offers {
+  display: grid;
+  grid-template-rows: auto auto;
+  background: #fff;
+  border-radius: var(--kk-br);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.08);
+  padding-bottom: 8px;
+  min-width: 0;
+}
+.offer-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px;
+  font-size: clamp(12px,11.5385px + .1282vw,14px);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.offer-title .icon img { width: clamp(10px, 9.0769px + 0.2564vw, 14px); display: block; }
+
+/* rail */
+.offers-list-wrapper { margin-inline: 10px; position: relative; min-width: 0; }
+
+.offers-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(240px, 226.1538px + 3.8462vw, 300px);
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  min-width: 0;
+}
+.offers-list::-webkit-scrollbar { display: none; }
+.offers-list.is-draggable { cursor: grab; }
+.offers-list.is-draggable.dragging { cursor: grabbing; user-select: none; }
+
+/* card */
+.offer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  background: #F8F8F7;
+  border: 1px solid #EEEDEB;
+  border-radius: var(--kk-br);
+  color: var(--kk-charcoal);
+  font-weight: 600;
+  transition: background .2s ease, border-color .2s ease;
+}
+.offer:hover { background: #F2F2F0; border-color: #E4E2DF; }
+.offer span { display: grid; gap: 3px; min-width: 0; }
+.bank-logo { width: 26px; height: 26px; flex: 0 0 auto; object-fit: contain; }
+
+.offer .offer-headline {
+  font-size: clamp(11px, 10.7692px + 0.0641vw, 12px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--kk-charcoal);
+  margin: 0;
+}
+.offer p {
+  font-size: calc(clamp(11px, 10.7692px + 0.0641vw, 12px) - 1px);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--kk-charcoal);
+  opacity: 0.95;
+}
+
+/* compact code pill — icon-only copy */
+.code-pill {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px dashed #2F6C13;
+  border-radius: 4px;
+  background: #EFF8EC;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.code-pill__code {
+  display: flex;
+  align-items: center;
+  padding: 6px 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #2F6C13;
+  font-size: clamp(10px, 9.3077px + 0.1923vw, 13px);
+}
+.code-pill__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 9px;
+  background: #D3F1CD;
+  border-left: 1px dashed #2F6C13;
+}
+.code-pill__action img { height: 14px; display: block; }
+.code-pill__label {
+  font-weight: 700;
+  font-size: clamp(11px, 10.6px + 0.125vw, 13px);
+  color: #2F6C13;
+}
+
+/* states */
+.code-pill.copied { border-color: #BDBDBD; }
+.code-pill.copied .code-pill__code { color: #555; }
+.code-pill.copied .code-pill__action { background: #E4E4E4; border-left-color: #BDBDBD; }
+.code-pill.applied .code-pill__action { background: #2F6C13; }
+.code-pill.applied .code-pill__label { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .offers-list { scroll-behavior: auto; }
+}
+</style>
+
+{%- assign bank_offers   = section.blocks | where: "type", "bank_offer" -%}
+{%- assign coupon_offers = section.blocks | where: "type", "coupon_offer" -%}
+{%- assign show_both = false -%}
+{%- if bank_offers.size > 0 and coupon_offers.size > 0 -%}{%- assign show_both = true -%}{%- endif -%}
+
+{% if bank_offers.size > 0 or coupon_offers.size > 0 %}
+  <section class="offers-wrapper{% unless show_both %} offers-wrapper--single{% endunless %}" id="offers-{{ section.id }}">
+    {% if show_both %}
+      <div class="offers-heading">
+        <div>
+          OFFERS (<span class="count-s">{{ bank_offers.size | plus: coupon_offers.size }}</span>)
+        </div>
+        <span class="hr"></span>
+      </div>
+    {% endif %}
+
+    <div class="offers">
+      {% if bank_offers.size > 0 %}
+        <div class="bank-offers">
+          <div class="offer-title">
+            <div class="icon">
+              <img src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/bank.svg" alt="Bank">
+            </div>
+            <div>Bank Offers (<span class="count-s">{{ bank_offers.size }}</span>)</div>
+          </div>
+          <div class="offers-list-wrapper">
+            <div class="offers-list">
+              {% for o in bank_offers %}
+                <div class="offer">
+                  <img src="{{ o.settings.icon | image_url: width: 52 }}" class="bank-logo" width="26" height="26" loading="lazy" alt="">
+                  <span>
+                    <h3 class="offer-headline">{{ o.settings.title }}</h3>
+                    <p>{{ o.settings.description }}</p>
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if coupon_offers.size > 0 %}
+        <div class="coupon-offers">
+          <div class="offer-title">
+            <div class="icon">
+              <img src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/coupon.svg" alt="Coupon">
+            </div>
+            <div>Coupons (<span class="count-s">{{ coupon_offers.size }}</span>)</div>
+          </div>
+          <div class="offers-list-wrapper">
+            <div class="offers-list">
+              {% for o in coupon_offers %}
+                <div class="offer offer--coupon">
+                  <span>
+                    <h3 class="offer-headline">{{ o.settings.headline }}</h3>
+                    {% if o.settings.details != blank %}{{ o.settings.details }}{% endif %}
+                  </span>
+
+                  {% if o.settings.code != blank %}
+                    <button type="button"
+                            class="code-pill{% if o.settings.auto_apply %} code-pill--apply{% endif %}"
+                            data-code="{{ o.settings.code }}"
+                            aria-label="{% if o.settings.auto_apply %}Apply{% else %}Copy{% endif %} code {{ o.settings.code }}">
+                      <span class="code-pill__code">{{ o.settings.code }}</span>
+                      <span class="code-pill__action">
+                        {% if o.settings.auto_apply %}
+                          <span class="code-pill__label">APPLY</span>
+                        {% else %}
+                          <img src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/copy.svg" alt="">
+                        {% endif %}
+                      </span>
+                    </button>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      function init(root) {
+        if (!root || root.dataset.offersInit === '1') return;
+        root.dataset.offersInit = '1';
+
+        /* ---- Drag-to-scroll (mouse only; touch uses native scroll) ---- */
+        root.querySelectorAll('.offers-list').forEach(function (list) {
+          let isDown = false, startX = 0, startScroll = 0, moved = false;
+
+          const refresh = function () {
+            list.classList.toggle('is-draggable', list.scrollWidth > list.clientWidth + 1);
+          };
+          refresh();
+          window.addEventListener('resize', refresh);
+
+          list.addEventListener('pointerdown', function (e) {
+            if (e.pointerType !== 'mouse' || !list.classList.contains('is-draggable')) return;
+            if (e.target.closest('button, a')) return;
+            isDown = true; moved = false;
+            startX = e.clientX; startScroll = list.scrollLeft;
+            list.setPointerCapture(e.pointerId);
+            list.classList.add('dragging');
+          });
+          list.addEventListener('pointermove', function (e) {
+            if (!isDown) return;
+            const dx = e.clientX - startX;
+            if (Math.abs(dx) > 4) moved = true;
+            list.scrollLeft = startScroll - dx;
+          });
+          const stop = function () {
+            if (!isDown) return;
+            isDown = false;
+            list.classList.remove('dragging');
+          };
+          list.addEventListener('pointerup', stop);
+          list.addEventListener('pointercancel', stop);
+          list.addEventListener('click', function (e) {
+            if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+          }, true);
+        });
+
+        /* ---- Auto-apply (native Shopify checkout only) ---- */
+        root.querySelectorAll('.code-pill--apply').forEach(function (b) {
+          b.addEventListener('click', function () {
+            const code = b.dataset.code;
+            if (!code) return;
+            const back = location.pathname + '?offer_applied=' + encodeURIComponent(code);
+            window.location.href = '/discount/' + encodeURIComponent(code)
+                                + '?redirect=' + encodeURIComponent(back);
+          });
+        });
+
+        /* ---- Confirmation after redirect back ---- */
+        const params  = new URLSearchParams(location.search);
+        const applied = params.get('offer_applied');
+        if (applied) {
+          root.querySelectorAll('.code-pill--apply').forEach(function (b) {
+            if (b.dataset.code !== applied) return;
+            b.classList.add('applied');
+            b.disabled = true;
+            const label = b.querySelector('.code-pill__label');
+            if (label) label.textContent = 'APPLIED';
+          });
+          params.delete('offer_applied');
+          history.replaceState({}, '', location.pathname + (params.toString() ? '?' + params.toString() : ''));
+        }
+
+        /* ---- Copy-to-clipboard with non-secure-context fallback ---- */
+        function copyText(text) {
+          if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+          }
+          return new Promise(function (resolve, reject) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+            document.body.removeChild(ta);
+            ok ? resolve() : reject();
+          });
+        }
+
+        const copyBtns = root.querySelectorAll('.code-pill:not(.code-pill--apply)');
+        const original = Array.from(copyBtns).map(function (b) {
+          const img = b.querySelector('.code-pill__action img');
+          return { btn: b, img: img, src: img ? img.src : '' };
+        });
+        copyBtns.forEach(function (b) {
+          b.addEventListener('click', function () {
+            const code = b.dataset.code;
+            if (!code) return;
+            copyText(code).then(function () {
+              original.forEach(function (o) {
+                if (o.btn !== b && o.btn.classList.contains('copied')) {
+                  o.btn.classList.remove('copied');
+                  o.btn.disabled = false;
+                  if (o.img && o.src) o.img.src = o.src;
+                }
+              });
+              b.classList.add('copied');
+              b.disabled = true;
+              const img = b.querySelector('.code-pill__action img');
+              if (img) img.src = 'https://cdn.shopify.com/s/files/1/0615/9921/9798/files/tick.svg?v=1752007232';
+            }).catch(function () {});
+          });
+        });
+      }
+
+      function boot() { init(document.querySelector('#offers-{{ section.id }}')); }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+
+      document.addEventListener('shopify:section:load', function (e) {
+        if (e.detail && e.detail.sectionId === '{{ section.id }}') {
+          init((e.target && e.target.querySelector('#offers-{{ section.id }}'))
+               || document.querySelector('#offers-{{ section.id }}'));
+        }
+      });
+    })();
+  </script>
+{% endif %}

@@ -1,0 +1,419 @@
+<style>
+.form__label {
+  font-family: var(--font-body-family);
+  font-size: clamp(14px, 13.6px + 0.125vw, 16px);
+  text-transform: uppercase;
+}
+
+.variant__dropdown {
+  margin: 0;
+  padding: 0;
+  width: min(250px, 100%);
+  display: inline-block;
+  border: 2px solid #E2DDDB;
+  border-radius: 9999px;
+  background-color: #fff;
+  font-family: var(--font-heading-family);
+  font-size: clamp(14px, 13.2px + 0.25vw, 18px);
+  font-weight: 600;
+  line-height: 1.5;
+  position: relative;
+}
+.variant__dropdown svg {
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+.variant__dropdown .select__select {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  display: inline-block;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: clamp(8px, 0.475rem + 0.125vw, 10px) clamp(16px, 15.2px + 0.25vw, 20px);
+  font: inherit;
+  line-height: inherit;
+  cursor: pointer;
+}
+.select::after,
+.select::before {
+  display: none;
+}
+.variant__dropdown:hover {
+  background-color: #f9fafb;
+}
+.variant__dropdown .select__select:focus {
+  outline: none;
+}
+
+  /* ─ Variant-Group Base ─────────────────────────────────────── */
+  .kk-variant-group .product-form__input { max-width: unset !important; }
+
+  /* ─ Default Pills ─────────────────────────────────────────── */
+  .kk-pill-list { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .kk-pill-list .kk-pill { flex: 0 0 auto; }
+
+  /* ─ Icon-Only Pills ───────────────────────────────────────── */
+  .kk-pill--icon-only {
+    padding: unset !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+  }
+  .kk-pill--icon-only img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 80px;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+
+    filter: unset !important;
+  }
+
+  /* ── ICONS-ONLY SCROLL UI ────────────────────────────────── */
+  .kk-scroll-ui {
+    position: relative;
+    width: 100% !important;
+    box-sizing: border-box;
+    overflow: hidden !important;
+  }
+  .kk-scroll-ui .kk-pill-scroll {
+    box-sizing: border-box;
+    width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .kk-scroll-ui .kk-pill-list {
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    gap: 0.75rem;
+    padding-right: 0; /* overwritten by JS */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .kk-scroll-ui .kk-pill-list::-webkit-scrollbar { display: none; }
+
+  .kk-scroll-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 40px;
+    
+    padding: 0;    
+    background: none;
+    border: none;
+    
+    cursor: pointer;
+    z-index: 10;
+    
+    box-shadow: var(--kk__cs);
+    border-radius: 50%;
+    aspect-ratio: 1;
+  }
+  .kk-scroll-prev { left: 0.5rem; }
+  .kk-scroll-next { right: 0.5rem; }
+
+  .kk-scroll-arrow img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .kk-scroll-overlay {
+    position: absolute; top: 0; right: 0; width: 2rem; height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to left, #fff, rgba(255,255,255,0));
+    opacity: 0; transition: opacity 0.2s; z-index: 5;
+  }
+  .kk-scroll-ui.overflowing .kk-scroll-overlay { opacity: 1; }
+  .kk-scroll-ui.at-end .kk-scroll-overlay { opacity: 0 !important; }
+
+/* fade transitions and size overlays */
+.kk-scroll-overlay {
+  transition: opacity 0.25s ease;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0; height: 100%; z-index: 5;
+}
+.kk-scroll-overlay-left {
+  left: 0; width: 5rem;
+  background: linear-gradient(to right, #fff, rgba(255,255,255,0));
+}
+.kk-scroll-overlay-right {
+  right: 0; width: 5rem;
+  background: linear-gradient(to left, #fff, rgba(255,255,255,0));
+}
+
+/* fade arrows */
+.kk-scroll-arrow {
+  transition: opacity 0.25s ease;
+  opacity: 0;
+}
+
+/* hide scrollbars always */
+.kk-pill-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.kk-pill-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+  /* ─ Mobile Override ───────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .product-form__input--pill { overflow: visible !important; }
+  }
+</style>
+
+<section class="kk-variant-group">
+  {%- if product.metafields.custom[block.settings.option_type_metafield_key] -%}
+
+    {% if product.has_only_default_variant %}
+      {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+
+    {% assign related_products_metaobject = product.metafields.custom[block.settings.option_type_metafield_key].value %}
+    {% assign related_product_refs     = related_products_metaobject.product_grouping.value %}
+    {% assign sorted_products          = related_product_refs | sort: 'title' %}
+    {% assign product_count            = sorted_products | size %}
+    {% assign picker_type              = block.settings.picker_type %}
+    {% assign threshold                = block.settings.dynamic_threshold | default: 6 %}
+
+    {%- assign has_icon_only = false -%}
+    {%- for related_product in sorted_products -%}
+      {%- assign option_text = related_product.metafields.custom[block.settings.option_value_metafield_key].value -%}
+      {%- if option_text == blank -%}
+        {%- assign has_icon_only = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if picker_type == 'dynamic' -%}
+      {% if has_icon_only or product_count <= threshold %}
+        {% assign dynamic_picker_type = 'button' %}
+      {% else %}
+        {% assign dynamic_picker_type = 'dropdown' %}
+      {% endif %}
+    {%- else -%}
+      {% assign dynamic_picker_type = picker_type %}
+    {%- endif -%}
+
+    {% if dynamic_picker_type == 'button' %}
+      <fieldset class="js product-form__input product-form__input--pill">
+        <legend class="form__label">{{ block.settings.grouping_label }}</legend>
+
+        {% if has_icon_only %}
+          <div class="kk-scroll-ui">
+            
+          <!-- Prev -->
+          <button type="button" class="kk-scroll-arrow kk-scroll-prev" aria-label="Previous">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/arrow--left.svg?v=1752170583"
+              alt="Scroll previous"
+            />
+          </button>
+            
+            <div class="kk-pill-scroll">
+              <div class="kk-pill-list">
+                {% for related_product in sorted_products %}
+                  {% assign img = related_product.metafields.custom.product_grouping_gemstone_image %}
+                  {% assign filename = img | image_url | split: '/' | last | split: '.' | first %}
+                  {% assign alt = filename | replace: '_',' ' | downcase %}
+                  {% assign color = '#000' %}
+                  {% if alt contains 'red' %}{% assign color = '#940000' %}
+                  {% elsif alt contains 'pink' %}{% assign color = '#B84C8C' %}
+                  {% elsif alt contains 'yellow' %}{% assign color = '#D79915' %}
+                  {% elsif alt contains 'jade' %}{% assign color = '#007B60' %}
+                  {% elsif alt contains 'brown' %}{% assign color = '#693D15' %}
+                  {% elsif alt contains 'blue' %}{% assign color = '#0078AC' %}
+                  {% elsif alt contains 'black' %}{% assign color = '#1E1E1E' %}
+                  {% elsif alt contains 'gray' %}{% assign color = '#5C5C5C' %}
+                  {% elsif alt contains 'green' %}{% assign color = '#008A16' %}
+                  {% elsif alt contains 'purple' %}{% assign color = '#903CAD' %}
+                  {% elsif alt contains 'sap' %}{% assign color = '#5E7B0B' %}
+                  {% elsif alt contains 'violet' %}{% assign color = '#7227BD' %}
+                  {% elsif alt contains 'indigo' %}{% assign color = '#341CC3' %}{% endif %}
+                  <input
+                    type="radio"
+                    id="rp-{{related_product.id}}-{{block.id}}"
+                    name="rp_{{block.id}}"
+                    value="{{ related_product.url }}"
+                    onchange="window.location.href=this.value;"
+                    {% if product.handle == related_product.handle %}checked{% endif %}
+                  >
+                  <label
+                    for="rp-{{related_product.id}}-{{block.id}}"
+                    class="kk-pill kk-pill--icon-only"
+                    style="--kk-pill-color: {{color}};"
+                  >
+                    <img src="{{ img | image_url | escape }}"
+                         alt="{{ alt | escape }}"
+                         loading="lazy" />
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+            
+            <!-- Next -->
+            <button type="button" class="kk-scroll-arrow kk-scroll-next" aria-label="Next">
+              <img
+                src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/arrow--right.svg?v=1752170586"
+                alt="Scroll next"
+              />
+            </button>
+            
+            <div class="kk-scroll-overlay kk-scroll-overlay-left">&nbsp;</div>
+            <div class="kk-scroll-overlay kk-scroll-overlay-right">&nbsp;</div>
+
+          </div>
+        {% else %}
+          <div class="kk-pill-scroll">
+            <div class="kk-pill-list">
+              {% for related_product in sorted_products %}
+                {% assign img = related_product.metafields.custom.product_grouping_gemstone_image %}
+                {% assign filename = img | image_url | split: '/' | last | split: '.' | first %}
+                {% assign alt = filename | replace: '_',' ' | downcase %}
+                {% assign color = '#000' %}
+                {%- comment -%} same color logic… {%- endcomment -%}
+                <input
+                  type="radio"
+                  id="rp-{{related_product.id}}-{{block.id}}"
+                  name="rp_{{block.id}}"
+                  value="{{ related_product.url }}"
+                  onchange="window.location.href=this.value;"
+                  {% if product.handle == related_product.handle %}checked{% endif %}
+                >
+                {% assign text = related_product.metafields.custom[block.settings.option_value_metafield_key].value %}
+                <label
+                  for="rp-{{related_product.id}}-{{block.id}}"
+                  class="kk-pill{% if text == blank %} kk-pill--icon-only{% endif %}"
+                  style="--kk-pill-color: {{color}};"
+                >
+                  <img src="{{ img | image_url | escape }}"
+                       alt="{{ alt | escape }}"
+                       loading="lazy" />
+                  {% if text != blank %}
+                    <span class="kk-pill__text">{{ text }}</span>
+                  {% endif %}
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </fieldset>
+    {% endif %}
+
+    {% if dynamic_picker_type == 'dropdown' %}
+      <div class="product-form__input product-form__input--dropdown">
+        <label for="ProductSelect-related-{{ section.id }}-{{ block.id }}" class="form__label">
+          {{ block.settings.grouping_label }}
+        </label>
+        <div class="select variant__dropdown">
+          <select id="ProductSelect-related-{{ section.id }}-{{ block.id }}"
+                  class="select__select"
+                  onchange="window.location.href=this.value;">
+            {% for related_product in sorted_products %}
+              {% assign img = related_product.metafields.custom.product_grouping_gemstone_image %}
+              {% assign fname = img | image_url | split: '/' | last | split: '.' | first %}
+              <option value="{{ related_product.url }}"
+                      {% if product.handle == related_product.handle %}selected{% endif %}
+                      data-alt="{{ fname | replace:'_',' ' | downcase | escape }}">
+                {{ related_product.metafields.custom[block.settings.option_value_metafield_key].value }}
+              </option>
+            {% endfor %}
+          </select>
+          {% render 'icon-caret' %}
+        </div>
+      </div>
+    {% endif %}
+
+  {% endif %}
+</section>
+
+<!-- Scroll UI Initialization -->
+<script>
+(function() {
+  const DEBOUNCE_MS = 100;
+
+  function debounce(fn, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  function initScrollUI(wrapper) {
+    const scrollEl     = wrapper.querySelector('.kk-pill-scroll');
+    const prevBtn      = wrapper.querySelector('.kk-scroll-prev');
+    const nextBtn      = wrapper.querySelector('.kk-scroll-next');
+    const overlayLeft  = wrapper.querySelector('.kk-scroll-overlay-left');
+    const overlayRight = wrapper.querySelector('.kk-scroll-overlay-right');
+    if (!scrollEl || !prevBtn || !nextBtn) return;
+
+    const pageWidth = () => scrollEl.clientWidth;
+    const maxScroll = () => scrollEl.scrollWidth - scrollEl.clientWidth;
+
+    function updateUI() {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollEl;
+      const canScroll = scrollWidth > clientWidth + 1;
+      const atStart   = scrollLeft <= 1;
+      const atEnd     = scrollLeft + clientWidth >= scrollWidth - 1;
+
+      // Overlays
+      if (overlayLeft && overlayRight) {
+        overlayLeft.style.opacity  = (canScroll && !atStart) ? '1' : '0';
+        overlayRight.style.opacity = (canScroll && !atEnd)   ? '1' : '0';
+      }
+
+      // Arrows
+      [prevBtn, nextBtn].forEach(btn => btn.style.transition = 'opacity 0.25s ease');
+      prevBtn.style.opacity       = (canScroll && !atStart) ? '1' : '0';
+      nextBtn.style.opacity       = (canScroll && !atEnd)   ? '1' : '0';
+      prevBtn.style.pointerEvents = (canScroll && !atStart) ? 'auto' : 'none';
+      nextBtn.style.pointerEvents = (canScroll && !atEnd)   ? 'auto' : 'none';
+    }
+
+    function pageScroll(direction) {
+      const offset = direction === 1
+        ? Math.min(scrollEl.scrollLeft + pageWidth(), maxScroll())
+        : Math.max(scrollEl.scrollLeft - pageWidth(), 0);
+      scrollEl.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+
+    // Wire events
+    scrollEl.addEventListener('scroll', updateUI);
+    prevBtn.addEventListener('click', () => pageScroll(-1));
+    nextBtn.addEventListener('click', () => pageScroll(1));
+    updateUI();
+
+    // Re-run once all images in here have loaded
+    scrollEl.querySelectorAll('img').forEach(img => {
+      if (!img.complete) img.addEventListener('load', updateUI);
+    });
+
+    // Also ensure we catch any late layout changes on full page load
+    window.addEventListener('load', updateUI);
+  }
+
+  function initAll() {
+    document.querySelectorAll('.kk-scroll-ui').forEach(initScrollUI);
+  }
+
+  document.addEventListener('DOMContentLoaded', initAll);
+  window.addEventListener('resize', debounce(initAll, DEBOUNCE_MS));
+})();
+</script>
+

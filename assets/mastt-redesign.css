@@ -1,0 +1,447 @@
+/* ==========================================================================
+   MASTT JEWELLERY — VISUAL REDESIGN LAYER
+   ==========================================================================
+   Loaded right after base.css in layout/theme.liquid. Redeclares the same
+   custom property names Dawn/the theme already reads (--kk-*, --buttons-
+   radius, --inputs-radius, etc.) so nothing else needs to change.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. FONTS — Manrope stays Shopify-hosted (settings.type_body_font).
+      Fraunces loads via Google Fonts <link> in layout/theme.liquid <head>.
+   -------------------------------------------------------------------------- */
+
+
+/* --------------------------------------------------------------------------
+   2. DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+
+  /* ---- Brand palette (source of truth — from brand sheet) ---- */
+  --color-pearl-beige:  #F5E7DF;  /* Warm Pearl Beige  */
+  --color-nude-beige:   #E3C4BC;  /* Soft Nude Beige    */
+  --color-blush-pink:   #EC9F93;  /* Signature Blush Pink */
+  --color-dusty-coral:  #D6887C;  /* Dusty Coral (primary accent / CTA) */
+  --color-aqua:         #78AAB1;  /* Soft Aqua Blue (secondary accent) */
+  --color-charcoal:     #201B19;  /* Charcoal Black (text / ink) */
+  --color-white:        #FFFFFF;
+
+  /* ---- Tint/shade ramps, generated from the brand colors so nothing
+     is hand-guessed. color-mix() has >95% global support in 2026 —
+     safe for a Shopify storefront. ---- */
+  --color-coral-10:   color-mix(in srgb, var(--color-dusty-coral) 10%, white);
+  --color-coral-20:   color-mix(in srgb, var(--color-dusty-coral) 20%, white);
+  --color-coral-40:   color-mix(in srgb, var(--color-dusty-coral) 40%, white);
+  --color-coral-dark:  color-mix(in srgb, var(--color-dusty-coral) 80%, var(--color-charcoal));
+
+  --color-aqua-10:    color-mix(in srgb, var(--color-aqua) 10%, white);
+  --color-aqua-20:    color-mix(in srgb, var(--color-aqua) 20%, white);
+  --color-aqua-dark:   color-mix(in srgb, var(--color-aqua) 80%, var(--color-charcoal));
+
+  --color-charcoal-70: color-mix(in srgb, var(--color-charcoal) 70%, white); /* secondary text */
+  --color-charcoal-45: color-mix(in srgb, var(--color-charcoal) 45%, white); /* muted / strike-through */
+  --color-charcoal-15: color-mix(in srgb, var(--color-charcoal) 15%, white); /* hairline borders */
+  --color-charcoal-08: color-mix(in srgb, var(--color-charcoal) 8%,  white); /* faint fills */
+
+  /* ---- Legacy brand token names kept for compatibility with existing
+     base.css / component-card.css rules that already reference them ---- */
+  --kk-white:       var(--color-white);
+  --kk-charcoal:    var(--color-charcoal);
+  --kk-accent:      var(--color-dusty-coral);
+  --kk-accent-alt:  var(--color-aqua);
+  --kk-primary:     var(--color-pearl-beige);
+  --kk-cta-primary:   var(--color-charcoal);   /* button label */
+  --kk-cta-secondary: var(--color-dusty-coral); /* button fill */
+  --kk-br:          var(--radius-sm);
+  --mastt-radius-pill:      var(--radius-md);
+  --mastt-border-hairline:  1px solid var(--color-charcoal-15);
+  --kk__soft__shadow:   var(--shadow-md);
+  --mastt-shadow-lg:          var(--shadow-lg);
+  --kk__cs:             var(--shadow-sm);
+
+  /* ---- Radius scale (replaces the ad hoc 0px / 6px / 20px mix) ---- */
+  --radius-xs:   6px;   /* chips, tags */
+  --radius-sm:   10px;  /* inputs, small buttons */
+  --radius-md:   16px;  /* cards, media, modals */
+  --radius-lg:   24px;  /* hero panels, large feature cards */
+  --radius-full: 999px; /* pill buttons, avatars, circular tiles */
+
+  /* ---- Shadow scale — brand-tinted, low opacity (replaces the old
+     flat 25%-black shadows, which read heavy/generic) ---- */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+  --shadow-md: 0 8px 24px -4px color-mix(in srgb, var(--color-charcoal) 14%, transparent);
+  --shadow-lg: 0 20px 48px -8px color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+  --shadow-coral-glow: 0 10px 24px -6px color-mix(in srgb, var(--color-dusty-coral) 45%, transparent);
+
+  /* ---- Spacing scale (rem-based; pairs with the existing fluid
+     --spacer clamp already used for section rhythm) ---- */
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-6: 2.4rem;
+  --space-8: 3.2rem;
+  --space-12: 4.8rem;
+  --space-16: 6.4rem;
+  --spacer: clamp(32px, 20px + 3vw, 96px); /* was clamp(20px,14px+1.875vw,50px) — more breathing room between homepage sections */
+
+  /* ---- Typography scale (fluid, ~1.25 ratio) ---- */
+  --text-eyebrow: 500 1.1rem/1.4 var(--font-body-family, 'Manrope', sans-serif);
+  --text-xs:   clamp(1.2rem, 1.15rem + 0.15vw, 1.3rem);
+  --text-sm:   clamp(1.3rem, 1.25rem + 0.2vw,  1.5rem);
+  --text-base: clamp(1.5rem, 1.4rem + 0.3vw,   1.6rem);
+  --text-md:   clamp(1.8rem, 1.6rem + 0.6vw,   2.2rem);
+  --text-lg:   clamp(2.4rem, 2rem + 1.2vw,     3.2rem);
+  --text-xl:   clamp(3.2rem, 2.6rem + 2vw,     4.8rem);
+  --text-2xl:  clamp(4rem, 3rem + 3.5vw,       7.2rem);
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.14em;
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 180ms;
+  --duration-med: 320ms;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+:root:not(.system-body-font) {
+  --font-body-family: 'Manrope', sans-serif;
+}
+:root:not(.system-header-font) {
+  --font-heading-family: 'Fraunces', serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+body, p {
+  color: var(--color-charcoal);
+}
+
+/* "Eyebrow" label style — echoes the tracked-caps "JEWELLERY" / tagline
+   treatment in the logo. Use on section kickers, category labels,
+   USP microcopy: <span class="mastt-eyebrow">New In</span> */
+.mastt-eyebrow {
+  font: var(--text-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-aqua-dark);
+}
+
+/* Muted/secondary text utility */
+.mastt-text-muted { color: var(--color-charcoal-70); }
+
+
+/* --------------------------------------------------------------------------
+   4. BUTTONS
+   Unifies .button / .button--secondary / .button--tertiary AND the old
+   PDP-only override into one pill-shaped system.
+   -------------------------------------------------------------------------- */
+.button,
+.shopify-challenge__button,
+.customer button {
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-full);
+  padding: 0 3.2rem;
+  min-height: 4.8rem;
+  background-color: var(--color-dusty-coral);
+  color: var(--color-charcoal); /* WCAG contrast on coral: 6.75:1 — verified, do not swap to white */
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+.button:hover {
+  background-color: var(--color-coral-dark);
+  box-shadow: var(--shadow-coral-glow);
+  transform: translateY(-1px);
+}
+.button:active { transform: translateY(0); }
+
+.button--secondary {
+  background-color: transparent;
+  color: var(--color-charcoal);
+  border-color: var(--color-charcoal-15);
+}
+.button--secondary:hover {
+  background-color: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  border-color: var(--color-charcoal);
+  box-shadow: var(--shadow-md);
+}
+
+.button--tertiary {
+  background-color: transparent;
+  color: var(--color-charcoal);
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-charcoal-45);
+  padding: 0;
+  min-height: auto;
+  min-width: auto;
+}
+.button--tertiary:hover { text-decoration-color: var(--color-charcoal); }
+
+/* On dark sections (footer, .color-scheme-2/5 dark schemes) flip the
+   ghost button so it stays legible */
+.color-background-1.color-scheme-2 .button--secondary,
+.color-background-1.color-scheme-5 .button--secondary {
+  color: var(--color-pearl-beige);
+  border-color: color-mix(in srgb, var(--color-pearl-beige) 30%, transparent);
+}
+
+
+/* --------------------------------------------------------------------------
+   5. FORM INPUTS
+   -------------------------------------------------------------------------- */
+.field__input,
+.select__select {
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body-family);
+  background-color: var(--color-white);
+}
+.field::before,
+.field::after,
+.select::before,
+.select::after {
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 0 0 1px var(--color-charcoal-15) !important;
+}
+.field__input:focus ~ .field__label,
+.field__input:not(:placeholder-shown) ~ .field__label {
+  color: var(--color-charcoal-70);
+}
+.field__input:focus,
+.select:focus-within {
+  outline: none;
+}
+.field__input:focus ~ .field__label ~ .field::after,
+.field:has(.field__input:focus)::after {
+  box-shadow: 0 0 0 2px var(--color-dusty-coral) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. PRODUCT CARD  (snippets/card-product.liquid, assets/component-card.css)
+   -------------------------------------------------------------------------- */
+.card-wrapper.product-card-wrapper .card {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-white);
+  transition: box-shadow var(--duration-med) var(--ease-out),
+              transform var(--duration-med) var(--ease-out);
+}
+.card-wrapper.product-card-wrapper:hover .card {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.card .card__inner .card__media {
+  border-radius: var(--radius-md);
+  background-color: var(--color-pearl-beige); /* image-loading placeholder tone */
+}
+
+/* Slower, softer image hover-zoom (was a quick scale(1.03)) */
+.card-wrapper:hover .media.media--hover-effect > img:only-child,
+.card-wrapper:hover .media.media--hover-effect > img:first-child:not(.motion-reduce) {
+  transform: scale(1.045);
+  transition: transform 480ms var(--ease-out);
+}
+
+/* ---- Price: flatten the old "chip inside a chip" (white bg + 20px
+   radius + 2px border) into type-led hierarchy — cleaner next to the
+   review badge ---- */
+.card-information .price__container {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+.card-information .price {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  color: var(--color-charcoal);
+}
+.card-information .price del,
+.card-information .price s {
+  color: var(--color-charcoal-45);
+}
+.card-information .price ins,
+.card-information .price .price-item--sale {
+  color: var(--color-coral-dark);
+  text-decoration: none;
+}
+
+.card__heading .full-unstyled-link {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  color: var(--color-charcoal);
+}
+
+/* ---- Pills (pack-size / discount / gender / material) ---- */
+.product__card-pills .pill {
+  border-radius: var(--radius-xs);
+  font: var(--text-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 0.3rem 0.9rem;
+  background: var(--color-charcoal-08);
+  color: var(--color-charcoal-70);
+  border: none;
+}
+.product__card-pills .pill--discount-1,
+.product__card-pills .pill--discount-2,
+.product__card-pills .pill--discount-3,
+.product__card-pills .pill--discount-4,
+.product__card-pills .pill--discount-5 {
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+}
+.product__card-pills .pill--metallic {
+  background: linear-gradient(120deg, var(--color-aqua-10), var(--color-white) 45%, var(--color-aqua-20));
+  color: var(--color-charcoal);
+  background-size: 200% 100%;
+  animation: mastt-shimmer 3.5s ease-in-out infinite;
+}
+@keyframes mastt-shimmer {
+  0%, 100% { background-position: 0% 0; }
+  50%      { background-position: 100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product__card-pills .pill--metallic { animation: none; }
+}
+
+/* ---- Badges (sale / sold out) ---- */
+.card__badge .badge {
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.5rem 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- Quick add — overlay pill on hover instead of a full-width bar,
+   using the existing .quick-add wrapper (no markup change needed) ---- */
+@media (min-width: 750px) {
+  .card-wrapper .quick-add {
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: var(--space-3);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity var(--duration-fast) var(--ease-out),
+                transform var(--duration-fast) var(--ease-out);
+  }
+  .card-wrapper:hover .quick-add,
+  .card-wrapper:focus-within .quick-add {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card-wrapper .quick-add__submit {
+    border-radius: var(--radius-full);
+    background: var(--color-white);
+    color: var(--color-charcoal);
+    box-shadow: var(--shadow-md);
+    min-height: 4.2rem;
+  }
+  .card-wrapper .quick-add__submit:hover {
+    background: var(--color-charcoal);
+    color: var(--color-pearl-beige);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   7. FAQ ACCORDION  (sections/collapsible-content.liquid)
+   Dawn's default is a flat hairline-divided list. This turns each row into
+   its own soft floating card with a coral accent that appears on the open
+   row — distinct from the generic accordion look, no markup changes needed.
+   -------------------------------------------------------------------------- */
+.collapsible-content__wrapper .grid__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.collapsible-content .accordion {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-charcoal-08);
+  border-left: 3px solid transparent;
+  overflow: hidden;
+  transition: box-shadow var(--duration-med) var(--ease-out),
+              border-color var(--duration-med) var(--ease-out);
+}
+.collapsible-content .accordion:has(details[open]) {
+  box-shadow: var(--shadow-md);
+  border-left-color: var(--color-dusty-coral);
+}
+.collapsible-content .accordion summary {
+  padding: var(--space-4) var(--space-6);
+  cursor: pointer;
+  list-style: none;
+}
+.collapsible-content .accordion summary::-webkit-details-marker { display: none; }
+.collapsible-content .accordion__title {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  font-size: var(--text-base);
+}
+.collapsible-content .accordion summary svg,
+.collapsible-content .accordion summary .icon-caret {
+  transition: transform var(--duration-med) var(--ease-out);
+  color: var(--color-dusty-coral);
+}
+.collapsible-content .accordion details[open] summary svg,
+.collapsible-content .accordion details[open] summary .icon-caret {
+  transform: rotate(180deg);
+}
+.collapsible-content .accordion__content {
+  padding: 0 var(--space-6) var(--space-4);
+  color: var(--color-charcoal-70);
+}
+.collapsible-content .accordion__content a {
+  color: var(--color-coral-dark);
+}
+
+
+/* --------------------------------------------------------------------------
+   8. PROMOTIONAL BADGES  (snippets/product-badges.liquid)
+   Replaces the old image-based flap badges (hotlinked to Kekaa's CDN) with
+   solid on-brand fills — same categories/tags, no external images needed.
+   -------------------------------------------------------------------------- */
+.promotion__badge.bogo__badge        { background: var(--color-charcoal); color: var(--color-white); }
+.promotion__badge.hp__badge          { background: var(--color-coral-dark); color: var(--color-white); }
+.promotion__badge.twentyoff__badge   { background: var(--color-dusty-coral); color: var(--color-charcoal); }
+.promotion__badge.fiftyoff__badge    { background: var(--color-charcoal); color: var(--color-white); }
+.promotion__badge.new__badge         { background: var(--color-aqua); color: var(--color-charcoal); }
+.promotion__badge.exclusive__badge   { background: var(--color-charcoal); color: var(--color-pearl-beige); }
+.promotion__badge.themasttedit__badge{ background: var(--color-blush-pink); color: var(--color-charcoal); }
+.promotion__badge.artisan__badge     { background: var(--color-nude-beige); color: var(--color-charcoal); }
+
+
+/* --------------------------------------------------------------------------
+   9. FOCUS STATES (accessibility — keep visible, on-brand)
+   -------------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+.button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-dusty-coral);
+  outline-offset: 2px;
+}

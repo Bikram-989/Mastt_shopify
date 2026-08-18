@@ -1,0 +1,261 @@
+<style>
+.promo-grid {
+  display: grid;
+  gap: clamp(15px, 12px + 0.9375vw, 30px);
+  height: clamp(400px, 312px + 27.5vw, 840px);
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 55% 45%;
+  grid-template-areas:
+    "large top"
+    "large bottom";
+}
+
+.promo-card-large  { grid-area: large; }
+.promo-card-top    { grid-area: top; }
+.promo-card-bottom { grid-area: bottom; }
+
+.promo-card {
+  position: relative;
+  border-radius: calc(var(--kk-br) * 1.5);
+  overflow: hidden;
+  box-shadow: var(--kk__cs);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  background-size: cover;
+  background-position: center;
+  text-decoration: none;
+}
+
+.promo-content {
+  --inset__amount: clamp(15px, 12px + 0.9375vw, 30px);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: calc(100% - 3rem);
+  color: #fff;
+
+  & * {
+    line-height: 1.2em;
+  }
+
+  span{
+    display: grid;
+    gap: 10px;
+  }
+}
+
+/* Generate placement classes */
+{% assign positions = "top-left top-center top-right center-left center-center center-right bottom-left bottom-center bottom-right" | split: " " %}
+{% for pos in positions %}
+  {% assign coords = pos | split: "-" %}
+.promo-content.pos-{{ pos }} {
+  {% if coords[0] == "top" %}
+    top: var(--inset__amount);
+  {% elsif coords[0] == "center" %}
+    top: 50%; transform: translateY(-50%);
+  {% else %}
+    bottom: var(--inset__amount);
+  {% endif %}
+
+  {% if coords[1] == "left" %}
+    left: var(--inset__amount);
+  {% elsif coords[1] == "center" %}
+    left: 50%; transform: translateX(-50%);
+  {% else %}
+    right: var(--inset__amount);
+  {% endif %}
+}
+{% endfor %}
+
+.promo-content.align-left   { align-items: flex-start; text-align: left; }
+.promo-content.align-center { align-items: center;       text-align: center; }
+.promo-content.align-right  { align-items: flex-end;    text-align: right; }
+
+.promo-content h2 { font-size: calc(clamp(22px, 19.2308px + 0.7692vw, 34px) * 1.25); }
+.promo-content h3 { font-size: clamp(22px, 19.2308px + 0.7692vw, 34px); }
+
+.promo-badge {
+  display: flex;
+  gap: 5px;
+  
+  max-width: fit-content;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%), #FF8A48;
+  padding: 4px 10px;
+  border-radius: var(--kk-br);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  line-height: var(--line-height-x);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0px -10px 15px 2px #BE460069 inset, var(--kk__cs);
+}
+
+.promo-title {
+  max-width: 14ch;
+  color: white;
+  font-style: italic;
+  font-weight: 500;
+  text-shadow: var(--mastt-shadow-lg);
+}
+
+@media (max-width: 1120px) {
+  .promo-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: unset;
+    grid-template-areas: "large top bottom";
+    height: unset;
+  }
+  .promo-card { min-height: 300px; }
+}
+
+@media (max-width: 960px) {
+  .promo-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
+    grid-template-areas:
+      "large"
+      "top"
+      "bottom";
+  }
+}
+</style>
+
+<section class="promo-section kk__wrapper">
+  <div class="promo-grid">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link }}" class="promo-card promo-card-{{ block.type }}" style="background-image: url({{ block.settings.image | img_url: '800x' }});">
+        {% assign p = block.settings.content_placement | split: '-' %}
+        <div class="promo-content pos-{{ p[0] }}-{{ p[1] }} {% if p[1] == 'left' %}align-left{% elsif p[1] == 'center' %}align-center{% else %}align-right{% endif %}">
+          {% capture badge_html %}
+            {% if block.settings.badge_text != blank %}
+            <div class="promo-badge">
+              {% if block.settings.badge_icon %}
+                <img src="{{ block.settings.badge_icon | img_url: '20x' }}" alt="" />
+              {% endif %}
+              {{ block.settings.badge_text }}
+            </div>
+            {% endif %}
+          {% endcapture %}
+
+          {% if block.settings.badge_position == 'before' and block.settings.badge_text != blank %}
+            {{ badge_html }}
+          {% endif %}
+
+          {% if block.type == 'large' %}
+            <h2 class="promo-title">{{ block.settings.title }}</h2>
+          {% elsif block.type == 'bottom' %}
+            <h3 class="promo-title">{{ block.settings.title }}</h3>
+            <p class="promo-subtext">{{ block.settings.subtext }}</p>
+            <span>Coupon Code: <div class="promo-badge"><strong>{{ block.settings.coupon }}</strong></div></span>
+          {% else %}
+            <h3 class="promo-title">{{ block.settings.title }}</h3>
+          {% endif %}
+
+          {% if block.settings.badge_position == 'after' and block.settings.badge_text != blank %}
+            {{ badge_html }}
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Promo Cards Grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "large",
+      "name": "Large Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "badge_text",   "label": "Badge Text",   "default": "SUMMER SALE" },
+        { "type": "image_picker", "id": "badge_icon",   "label": "Badge Icon" },
+        { "type": "select",       "id": "badge_position","label": "Badge Position", "options": [
+          { "value": "before", "label": "Before Content" },
+          { "value": "after",  "label": "After Content" }
+        ], "default": "before" },
+        { "type": "richtext",     "id": "title",       "label": "Title" },
+        { "type": "select",       "id": "content_placement", "label": "Content Placement", "options": [
+          {"value":"top-left","label":"Top Left"},
+          {"value":"top-center","label":"Top Center"},
+          {"value":"top-right","label":"Top Right"},
+          {"value":"center-left","label":"Center Left"},
+          {"value":"center-center","label":"Center Center"},
+          {"value":"center-right","label":"Center Right"},
+          {"value":"bottom-left","label":"Bottom Left"},
+          {"value":"bottom-center","label":"Bottom Center"},
+          {"value":"bottom-right","label":"Bottom Right"}
+        ], "default": "top-left" }
+      ]
+    },
+    {
+      "type": "top",
+      "name": "Top Right Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "badge_text",   "label": "Badge Text" },
+        { "type": "image_picker", "id": "badge_icon",   "label": "Badge Icon" },
+        { "type": "select",       "id": "badge_position","label": "Badge Position", "options": [
+          { "value": "before", "label": "Before Content" },
+          { "value": "after",  "label": "After Content" }
+        ], "default": "before" },
+        { "type": "richtext",     "id": "title","label": "Title" },
+        { "type": "select",       "id": "content_placement","label":"Content Placement","options":[
+          {"value":"top-left","label":"Top Left"},
+          {"value":"top-center","label":"Top Center"},
+          {"value":"top-right","label":"Top Right"},
+          {"value":"center-left","label":"Center Left"},
+          {"value":"center-center","label":"Center Center"},
+          {"value":"center-right","label":"Center Right"},
+          {"value":"bottom-left","label":"Bottom Left"},
+          {"value":"bottom-center","label":"Bottom Center"},
+          {"value":"bottom-right","label":"Bottom Right"}
+        ], "default":"top-left" }
+      ]
+    },
+    {
+      "type": "bottom",
+      "name": "Bottom Right Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url",          "id": "link",  "label": "Link" },
+        { "type": "text",         "id": "badge_text",   "label": "Badge Text" },
+        { "type": "image_picker", "id": "badge_icon",   "label": "Badge Icon" },
+        { "type": "select",       "id": "badge_position","label": "Badge Position", "options": [
+          { "value": "before", "label": "Before Content" },
+          { "value": "after",  "label": "After Content" }
+        ], "default": "before" },
+        { "type": "richtext",     "id": "title","label": "Title" },
+        { "type": "text",         "id": "subtext","label": "Subtext","default":"Only for First 10 Customers"},
+        { "type": "text",         "id": "coupon","label": "Coupon Code","default":"MakeMeRare"},
+        { "type": "select",       "id": "content_placement","label":"Content Placement","options":[
+          {"value":"top-left","label":"Top Left"},
+          {"value":"top-center","label":"Top Center"},
+          {"value":"top-right","label":"Top Right"},
+          {"value":"center-left","label":"Center Left"},
+          {"value":"center-center","label":"Center Center"},
+          {"value":"center-right","label":"Center Right"},
+          {"value":"bottom-left","label":"Bottom Left"},
+          {"value":"bottom-center","label":"Bottom Center"},
+          {"value":"bottom-right","label":"Bottom Right"}
+        ], "default":"bottom-left" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Promo Cards Grid", "blocks": [
+        { "type": "large" },
+        { "type": "top" },
+        { "type": "bottom" }
+    ] }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,159 @@
+<style>
+.section-{{ section.id }} .collection-list__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(10px, 7.2px + 0.875vw, 24px);
+
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1400px) {
+  .section-{{ section.id }} .collection-list__grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: clamp(600px, 411.1111px + 27.7778vw, 800px);
+  }
+}
+
+@media screen and (max-width: 679px) {
+  .section-{{ section.id }} .collection-list__grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: clamp(300px, 211.1111px + 27.7778vw, 400px);
+  }
+
+  .collection-list__label {
+    font-size: 14px;
+  }
+}
+
+.collection-list__card {
+  background: #f9f2e8;
+  background: radial-gradient(rgba(236, 229, 218, 1), rgba(236, 219, 194, 1) 100%);
+  
+  text-align: center;
+  padding: clamp(10px, 8px + 0.625vw, 20px);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--kk__cs);
+
+  border-radius: 200px 200px 80px 80px;
+}
+
+.collection-list__image {
+  width: max(100%, 106px);
+  aspect-ratio: 1;
+  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  
+  box-shadow: var(--mastt-shadow-lg);
+}
+
+.collection-list__image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.collection-list__label {
+  display: inline-block;
+  padding: 0 10px 2px 12px;
+  border: 1.5px solid #472A14;
+
+  background: #ffffff10;
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  color: #472A14;
+
+  border-radius: var(--mastt-radius-pill);
+  box-shadow: var(--mastt-shadow-lg);
+
+  place-self: center;
+}
+</style>
+
+<!-- sections/collection-list.liquid -->
+<section class="kk-collection-list section-{{ section.id }} kk__wrapper">
+  {% if section.settings.title != blank %}
+    <h2 class="collection-list__title kk__heading">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <div class="collection-list__grid">
+    {% for block in section.blocks %}
+      {% assign url = block.settings.collection_url %}
+      {% if url != blank %}
+        <a href="{{ url }}" class="collection-list__card">
+          {% if block.settings.image %}
+            <div class="collection-list__image">
+              <img
+                src="{{ block.settings.image | img_url: '600x600' }}"
+                alt="{{ block.settings.custom_title | default: 'Visit link' | escape }}"
+              >
+            </div>
+          {% endif %}
+
+          <span class="collection-list__label">
+            {{ block.settings.custom_title | default: "Visit link" }}
+          </span>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+
+
+<style>
+  /* same CSS as before… */
+</style>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Categories"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "url",
+          "id": "collection_url",
+          "label": "Collection URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Mastt Collection List",
+      "category": "Collections"
+    }
+  ]
+}
+{% endschema %}
+
+
+

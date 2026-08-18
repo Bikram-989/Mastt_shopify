@@ -1,0 +1,565 @@
+{% comment %}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  Usage:
+  {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+{% endcomment %}
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    data-section="{{ section.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign picker_type = block.settings.picker_type
+
+        if swatch_count > 0 and block.settings.swatch_shape != 'none'
+          if block.settings.picker_type == 'dropdown'
+            assign picker_type = 'swatch_dropdown'
+          else
+            assign picker_type = 'swatch'
+          endif
+        endif
+      -%}
+      {%- if picker_type == 'swatch' -%}
+        <fieldset class="js product-form__input product-form__input--swatch">
+          <legend class="form__label">
+            {{ option.name }}:
+            <span data-selected-value>
+              {{- option.selected_value -}}
+            </span>
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- elsif picker_type == 'button' -%}
+        <fieldset class="js product-form__input product-form__input--pill">
+          <legend class="form__label">{{ option.name }}</legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- else -%}
+        <div class="product-form__input product-form__input--dropdown">
+          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+            {{ option.name }}
+          </label>
+          <div class="select">
+            {%- if picker_type == 'swatch_dropdown' -%}
+              <span
+                data-selected-value
+                class="dropdown-swatch"
+              >
+                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+              </span>
+            {%- endif -%}
+            <select
+              id="Option-{{ section.id }}-{{ forloop.index0 }}"
+              class="select__select"
+              name="options[{{ option.name | escape }}]"
+              form="{{ product_form_id }}"
+            >
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </select>
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+
+    {%- if product.metafields.custom.size_chart != blank -%}
+      <template id="kk-sizeguide-template">
+        <span class="kk-sizeline" aria-hidden="true"></span>
+        <modal-opener class="kk-sizechart__opener" data-modal="#SizeChartModal">
+          <button type="button" class="kk-sizechart__trigger link" aria-haspopup="dialog">Size Guide</button>
+        </modal-opener>
+      </template>
+    {%- endif -%}
+
+{%- comment -%}
+  ============================================================
+  kekaa — ring size logic (consolidated)
+    PART 1  Gender-based default variant + product-form id sync
+            (shares ONE trimmed variant array; previously each
+             block serialised the whole product object)
+    PART 2  US / IND size-unit toggle (display only)
+  ============================================================
+{%- endcomment -%}
+
+<style>
+  .size-unit-toggle {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 1.2rem;
+    border: 0.1rem solid rgba(var(--color-foreground, 18 18 18), 0.25);
+    border-radius: 6px;
+    overflow: hidden;
+    vertical-align: middle;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+  .size-unit-toggle button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    letter-spacing: 0.04rem;
+    color: rgba(var(--color-foreground, 18 18 18), 0.6);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .size-unit-toggle button.is-active {
+    background: var(--kk-cta-secondary);
+    color: rgb(var(--color-button-text, 255 255 255));
+  }
+  /* let the toggle sit next to the option name */
+  .product-form__input legend.form__label,
+  .product-form__input label.form__label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    width: 100%;
+  }
+  /* Hide the keyboard focus ring when a size is selected by script or mouse,
+     but keep it for genuine Tab navigation (accessibility). Adjust the
+     property to match whatever your theme uses for the ring if needed. */
+  .product-form__input input[type="radio"]:focus:not(:focus-visible),
+  .product-form__input input[type="radio"]:focus:not(:focus-visible) + label {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .kk-sizeline {
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    height: 0.1rem;
+    margin: 0 1rem;
+    background: rgba(var(--color-foreground, 18 18 18), 0.25);
+  }
+  .kk-sizechart__opener {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+  .kk-sizechart__trigger {
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+/* ============================================================
+   PART 1 — Default variant by "Shop for" + product-form id sync
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var PRODUCT_ID = {{ product.id | json }};
+
+  // ---- Shared, trimmed variant data (one serialisation, not two) ----
+  var variants = [
+    {%- for v in product.variants -%}
+      { id: {{ v.id }}, available: {{ v.available }}, options: {{ v.options | json }} }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ];
+  if (!variants.length) return;
+
+  // "Shop for" is a LIST of METAOBJECT references, so each entry is an object
+  // (e.g. {reference:'Femle', type:'Her'}), not a plain string. Walk the whole
+  // structure, collect every string value, and match the gender token exactly.
+  var shopForRaw = {{ product.metafields.custom.shop_for.value | json }};
+  var tokens = [];
+  (function collect(x) {
+    if (x == null) return;
+    if (typeof x === 'string') { tokens.push(x.trim().toLowerCase()); return; }
+    if (Array.isArray(x)) { x.forEach(collect); return; }
+    if (typeof x === 'object') { Object.keys(x).forEach(function (k) { collect(x[k]); }); }
+  })(shopForRaw);
+
+  // Exact membership (not substring) so "women" never trips the "men" check.
+  var MALE   = ['him', 'his', 'men', 'man', 'male'];
+  var FEMALE = ['her', 'hers', 'women', 'woman', 'female'];
+  var hitsAny = function (set) {
+    return tokens.some(function (t) { return set.indexOf(t) !== -1; });
+  };
+  // him first, so a unisex item tagged with both defaults to men's US 8.
+  var shopFor = hitsAny(MALE) ? 'him' : hitsAny(FEMALE) ? 'her' : '';
+
+  // Target US size per gender. Your products use TWO label formats:
+  //   men's   -> "US 8 (IND 17-19: Standard Fit)"
+  //   women's -> bare numbers like "6"
+  // matchesSize handles both: an exact bare number OR a "US <n>" token.
+  // (s === targetSize avoids "6" matching "16"/"26"; \b avoids "US 8" hitting "US 18".)
+  var sizeTargets = { him: '8', her: '6' };
+  var targetSize = sizeTargets[shopFor] || null;
+
+  var norm = function (s) { return String(s).trim().toLowerCase(); };
+  var reUS = targetSize ? new RegExp('\\bus\\s*' + targetSize + '\\b') : null;
+  var matchesSize = function (opt) {
+    if (!targetSize) return false;
+    var s = norm(opt);
+    return s === targetSize || reUS.test(s);   // "6"  OR  "US 6 (...)"
+  };
+  var hasPreferredSize = function (v) {
+    return targetSize && v.options.some(matchesSize);
+  };
+  var hasKeyword = function (v, kw) {
+    return v.options.some(function (opt) { return norm(opt).indexOf(kw) !== -1; });
+  };
+
+  function selectDefaultVariant() {
+    // Apply the gender default ONCE per product per page load. The window flag
+    // survives the theme's section re-render (a normal var would not), so our
+    // own dispatched change can't make this re-run and fight the shopper's
+    // later choice. This is what stops the "snaps back to 6/8" lock.
+    if (window.__kkRingDefaultFor === PRODUCT_ID) return;
+
+    var root = document.querySelector('variant-selects');
+    if (!root) return;
+
+    // Priority: preferred size + in stock > preferred size > standard/regular
+    //           > first available > first.
+    var target =
+      variants.find(function (v) { return hasPreferredSize(v) && v.available; }) ||
+      variants.find(hasPreferredSize) ||
+      variants.find(function (v) { return hasKeyword(v, 'standard') || hasKeyword(v, 'regular'); }) ||
+      variants.find(function (v) { return v.available; }) ||
+      variants[0];
+    if (!target) return;
+
+    // Skip the work if it's already selected -- but only skip, never abort the
+    // whole feature, when we can't read the current variant.
+    var currentData = root.querySelector('[data-selected-variant]');
+    if (currentData) {
+      try {
+        var current = JSON.parse(currentData.textContent);
+        if (current && current.id === target.id) {
+          window.__kkRingDefaultFor = PRODUCT_ID; // already right; don't try again
+          return;
+        }
+      } catch (e) { /* fall through and set it */ }
+    }
+
+    // Mark done BEFORE we mutate / dispatch, so the re-render this triggers
+    // re-runs the script harmlessly instead of looping.
+    window.__kkRingDefaultFor = PRODUCT_ID;
+
+    var selects = root.querySelectorAll('select');
+    var fieldsets = root.querySelectorAll('fieldset');
+    var changed = null;
+
+    target.options.forEach(function (value, i) {
+      if (selects[i] && selects[i].value !== value) {
+        selects[i].value = value;
+        changed = selects[i];
+      }
+      if (fieldsets[i]) {
+        fieldsets[i].querySelectorAll('input').forEach(function (input) {
+          var shouldCheck = input.value === value;
+          if (input.checked !== shouldCheck) {
+            input.checked = shouldCheck;
+            if (shouldCheck) changed = input;
+          }
+        });
+      }
+    });
+
+    // Trigger the theme's variant update (re-render price / media / availability).
+    // Focus ring from this programmatic select is handled by suppressAutoFocusRing().
+    (changed || root).dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  // Blur any focus that lands inside the size picker until the shopper makes a
+  // real interaction (pointer or key). This kills the keyboard-style ring left
+  // by the programmatic default-select regardless of WHEN the theme focuses it,
+  // while genuine Tab navigation afterwards still shows the ring normally.
+  function suppressAutoFocusRing() {
+    if (window.__kkRingFocusGuard) return;
+    window.__kkRingFocusGuard = true;
+
+    var userActed = false;
+    var markActed = function () { userActed = true; };
+    document.addEventListener('pointerdown', markActed, true);
+    document.addEventListener('keydown', markActed, true);
+
+    document.addEventListener('focusin', function (e) {
+      if (userActed) return;
+      var root = document.querySelector('variant-selects');
+      if (root && root.contains(e.target) && typeof e.target.blur === 'function') {
+        e.target.blur();
+      }
+    }, true);
+  }
+
+  // Keep the product form's hidden id in step with the inputs.
+  // NOTE: most OS 2.0 themes already do this natively on variant change --
+  // if yours updates [name="id"] without help, you can delete this listener.
+  function syncVariantId(e) {
+    var root = document.querySelector('variant-selects');
+    if (!root) return;
+    if (e && e.target && !root.contains(e.target)) return; // ignore unrelated changes
+
+    var form = document.querySelector('product-form form');
+    var idInput = form && form.querySelector('[name="id"]');
+    if (!idInput) return;
+
+    var selected = [];
+    root.querySelectorAll('select').forEach(function (s) { selected.push(s.value); });
+    root.querySelectorAll('fieldset').forEach(function (fs) {
+      var checked = fs.querySelector('input:checked');
+      if (checked) selected.push(checked.value);
+    });
+
+    var match = variants.find(function (v) {
+      return v.options.every(function (opt, i) { return opt === selected[i]; });
+    });
+    if (match) idInput.value = match.id;
+  }
+
+  function boot() {
+    // Bind the id-sync listener only once, even if the theme re-runs this
+    // script on section re-render (document survives, so the listener persists).
+    if (!window.__kkRingSyncBound) {
+      document.addEventListener('change', syncVariantId);
+      window.__kkRingSyncBound = true;
+    }
+    suppressAutoFocusRing(); // active before we select, so it catches the focus
+    selectDefaultVariant();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+
+/* ============================================================
+   PART 2 — US / IND size-unit toggle (display only)
+   Rewrites visible labels only; the underlying variant option
+   value stays canonical, so PART 1's matching is unaffected by
+   the active unit. Logic unchanged from your version.
+   ============================================================ */
+(function () {
+  var STORAGE_KEY = 'preferred-size-unit';
+  var state = { mode: 'US' }; // US is the default
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'US' || saved === 'IND') state.mode = saved;
+  } catch (e) {}
+
+  // Matches values like: "US 7 (IND 14-16: Slim Fit)"
+  var RE = /^\s*US\s*([0-9.]+)\s*\(\s*IND\s*([0-9.\s\-\u2013]+?)\s*:\s*([^)]+?)\s*\)\s*$/i;
+
+  function parse(raw) {
+    if (!raw) return null;
+    var m = String(raw).match(RE);
+    if (!m) return null;
+    var us = m[1].trim();
+    var ind = m[2].replace(/\s+/g, ''); // "14 - 16" -> "14-16"
+    var fit = m[3].trim();
+    return {
+      US: 'US ' + us + ': ' + fit,
+      IND: 'IND ' + ind + ': ' + fit
+    };
+  }
+
+  function wanted(raw) {
+    var p = parse(raw);
+    return p ? p[state.mode] : null;
+  }
+
+  // Update visible text. Dawn's pill labels hold the value as a bare text node
+  // alongside a hidden accessibility <span>, so we target the text node and
+  // never touch hidden / swatch elements.
+  var SWATCH_SEL = '.swatch, [class*="swatch"]';
+  function isHidden(node) {
+    return node.matches('.visually-hidden, .visuallyhidden, [hidden], [aria-hidden="true"]');
+  }
+  function setText(el, text) {
+    // 1) Preferred: the visible value is a bare text node.
+    var textNodes = [];
+    Array.prototype.slice.call(el.childNodes).forEach(function (n) {
+      if (n.nodeType === 3 && n.textContent.trim() !== '') textNodes.push(n);
+    });
+    if (textNodes.length) {
+      if (textNodes[0].textContent !== text) textNodes[0].textContent = text;
+      for (var i = 1; i < textNodes.length; i++) textNodes[i].textContent = ''; // dedupe
+      return;
+    }
+    // 2) Fallback: the value lives inside a visible element.
+    var span = el.querySelector('[data-size-label]');
+    if (!span) {
+      var kids = Array.prototype.slice.call(el.children);
+      for (var j = 0; j < kids.length; j++) {
+        if (!isHidden(kids[j]) && !kids[j].matches(SWATCH_SEL)) { span = kids[j]; break; }
+      }
+      if (span) span.setAttribute('data-size-label', '');
+    }
+    if (!span) {
+      span = document.createElement('span');
+      span.setAttribute('data-size-label', '');
+      el.appendChild(span);
+    }
+    if (span.textContent !== text) span.textContent = text;
+  }
+
+  function escapeId(id) {
+    return (window.CSS && CSS.escape) ? CSS.escape(id) : id;
+  }
+
+  function transform(root) {
+    // Pill / swatch radios + their labels
+    root.querySelectorAll('input[type="radio"]').forEach(function (input) {
+      var want = wanted(input.value);
+      if (!want) return;
+      var label = input.id
+        ? root.querySelector('label[for="' + escapeId(input.id) + '"]')
+        : input.nextElementSibling;
+      if (label) setText(label, want);
+    });
+
+    // Dropdown <option>s
+    root.querySelectorAll('select option').forEach(function (opt) {
+      var want = wanted(opt.value);
+      if (want && opt.textContent !== want) opt.textContent = want;
+    });
+
+    // "Selected value" text shown in swatch legends
+    root.querySelectorAll('fieldset').forEach(function (fs) {
+      var span = fs.querySelector('[data-selected-value]');
+      if (!span || span.children.length) return; // skip swatch-image spans
+      var checked = fs.querySelector('input:checked');
+      if (!checked) return;
+      var want = wanted(checked.value);
+      if (want) setText(span, want);
+    });
+  }
+
+  function buildToggle() {
+    var wrap = document.createElement('div');
+    wrap.className = 'size-unit-toggle';
+    wrap.setAttribute('role', 'group');
+    wrap.setAttribute('aria-label', 'Switch size units');
+
+    ['US', 'IND'].forEach(function (unit) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = unit;
+      btn.dataset.unit = unit;
+      if (state.mode === unit) btn.classList.add('is-active');
+      btn.addEventListener('click', function () {
+        if (state.mode === unit) return;
+        state.mode = unit;
+        try { localStorage.setItem(STORAGE_KEY, unit); } catch (e) {}
+        document.querySelectorAll('.size-unit-toggle button').forEach(function (b) {
+          b.classList.toggle('is-active', b.dataset.unit === unit);
+        });
+        var root = document.querySelector('variant-selects');
+        if (root) write(function () { transform(root); });
+      });
+      wrap.appendChild(btn);
+    });
+    return wrap;
+  }
+
+  function injectToggles(root) {
+    root.querySelectorAll('.product-form__input').forEach(function (group) {
+      // Only add a toggle to option groups that actually use the US/IND convention.
+      var match = false;
+      group.querySelectorAll('input[type="radio"]').forEach(function (i) { if (parse(i.value)) match = true; });
+      group.querySelectorAll('select option').forEach(function (o) { if (parse(o.value)) match = true; });
+      if (!match) return;
+
+      var label = group.querySelector('legend.form__label, label.form__label');
+      if (!label) return;
+
+      if (!label.querySelector('.size-unit-toggle')) {
+        label.appendChild(buildToggle());
+      }
+
+      var tpl = document.getElementById('kk-sizeguide-template');
+      if (tpl && !label.querySelector('.kk-sizechart__opener')) {
+        label.appendChild(tpl.content.cloneNode(true));
+      }
+    });
+  }
+
+  var observer;
+  var container;
+  var scheduled = false;
+
+  // Run DOM writes with the observer paused so our own edits never trigger
+  // a re-process (which caused the flicker on toggle).
+  function write(fn) {
+    if (observer) observer.disconnect();
+    try { fn(); }
+    finally {
+      if (observer && container) {
+        observer.observe(container, { childList: true, subtree: true });
+      }
+    }
+  }
+
+  function run() {
+    var root = document.querySelector('variant-selects');
+    if (!root) return;
+    write(function () {
+      injectToggles(root);
+      transform(root);
+    });
+  }
+
+  function schedule() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(function () { scheduled = false; run(); });
+  }
+
+  function init() {
+    var root = document.querySelector('variant-selects');
+    if (!root) return;
+    // Observe a stable ancestor so re-labelling survives variant re-renders.
+    container = document.querySelector('product-info')
+      || root.closest('section, .product, main')
+      || document.body;
+    observer = new MutationObserver(schedule);
+    run();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+  </variant-selects>
+{%- endunless -%}

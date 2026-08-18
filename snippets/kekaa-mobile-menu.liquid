@@ -1,0 +1,711 @@
+{% comment %}
+  ============================================================
+  MASTT — Custom Mobile Mega Menu
+  File: snippets/kekaa-mobile-menu.liquid (filename kept as-is; internal only)
+
+  HOW TO INSTALL:
+  1. In Shopify Admin → Online Store → Themes → Edit Code
+  2. Create a new file under snippets/ named: kekaa-mobile-menu.liquid
+  3. Paste this entire file into it
+  4. Open sections/header.liquid and find the line that renders
+     the mobile drawer (look for <details id="Details-menu-drawer")
+     Replace it with: {% render 'kekaa-mobile-menu' %}
+  5. Optionally remove the Navi Plus app from your theme.liquid
+     to stop loading its JS bundle.
+  ============================================================
+{% endcomment %}
+
+{% comment %} ── DATA: Edit your nav items here ── {% endcomment %}
+{% assign menu_tabs = "Shop,Collections,Styles,Mastt Cares" | split: "," %}
+
+<style>
+  /* ── Reset & base ───────────────────────────────────────── */
+  #kk-menu-overlay,
+  #kk-menu-drawer,
+  #kk-menu-drawer * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Overlay ────────────────────────────────────────────── */
+  #kk-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9998;
+    transition: opacity 0.25s ease;
+    opacity: 0;
+  }
+  #kk-menu-overlay.kk-open {
+    display: block;
+    opacity: 1;
+  }
+
+  /* ── Drawer shell ───────────────────────────────────────── */
+  #kk-menu-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(88vw, 420px);
+    height: 100dvh;
+    background: #fff;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    font-family: inherit;
+  }
+  #kk-menu-drawer.kk-open {
+    transform: translateX(0);
+  }
+
+  /* ── Header bar ─────────────────────────────────────────── */
+  .kk-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+  .kk-drawer-logo {
+    height: 32px;
+    width: auto;
+  }
+  .kk-drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    color: #222;
+    border-radius: 50%;
+    transition: background 0.15s;
+  }
+  .kk-drawer-close:hover { background: #f5f5f5; }
+  .kk-drawer-close svg { width: 20px; height: 20px; }
+
+  /* ── Tabs ───────────────────────────────────────────────── */
+  .kk-tabs {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .kk-tabs::-webkit-scrollbar { display: none; }
+  .kk-tab {
+    flex: 1;
+    min-width: max-content;
+    padding: 13px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .kk-tab.kk-active {
+    color: #1a1a1a;
+    border-bottom-color: #1a1a1a;
+  }
+
+  /* ── Scrollable body ────────────────────────────────────── */
+  .kk-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .kk-drawer-body::-webkit-scrollbar { display: none; }
+
+  /* ── Tab panels ─────────────────────────────────────────── */
+  .kk-panel {
+    display: none;
+    padding: 0;
+  }
+  .kk-panel.kk-active { display: block; }
+
+  /* ── PANEL 1: Shop by Category (grid tiles like Palmonas) ── */
+  .kk-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #999;
+    padding: 18px 20px 10px;
+  }
+
+  .kk-category-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #f0f0f0;
+    margin: 0 0 1px;
+  }
+  .kk-cat-tile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 16px 14px 16px 18px;
+    text-decoration: none;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 72px;
+    transition: background 0.12s;
+  }
+  .kk-cat-tile:hover { background: #fafafa; }
+  .kk-cat-tile-name {
+    flex: 1;
+    line-height: 1.35;
+    padding-right: 8px;
+  }
+  .kk-cat-tile-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 4px;
+  }
+  .kk-cat-tile-placeholder {
+    width: 52px;
+    height: 52px;
+    background: #f8f8f8;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kk-cat-tile-placeholder svg {
+    width: 28px;
+    height: 28px;
+    opacity: 0.18;
+  }
+  .kk-view-all {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    font-size: 13px;
+    color: #555;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ── Expandable category with sub-links ─────────────────── */
+  .kk-accordion {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .kk-accordion-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+  }
+  .kk-accordion-toggle svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+    color: #aaa;
+  }
+  .kk-accordion-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+  .kk-accordion-body {
+    display: none;
+    padding: 0 20px 12px 20px;
+  }
+  .kk-accordion-body.kk-open { display: block; }
+  .kk-sub-link {
+    display: block;
+    padding: 8px 0 8px 12px;
+    font-size: 13px;
+    color: #555;
+    text-decoration: none;
+    border-left: 2px solid #f0f0f0;
+    margin-bottom: 2px;
+    transition: color 0.1s, border-color 0.1s;
+  }
+  .kk-sub-link:hover {
+    color: #1a1a1a;
+    border-left-color: #1a1a1a;
+  }
+
+  /* ── Simple link list (Collections, Styles, Cares) ──────── */
+  .kk-link-list {
+    padding: 8px 0;
+  }
+  .kk-link-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    font-size: 14px;
+    color: #1a1a1a;
+    text-decoration: none;
+    border-bottom: 1px solid #f9f9f9;
+    transition: background 0.12s;
+  }
+  .kk-link-item:hover { background: #fafafa; }
+  .kk-link-item svg {
+    width: 16px;
+    height: 16px;
+    color: #ccc;
+    flex-shrink: 0;
+  }
+
+  /* ── Material pills row ─────────────────────────────────── */
+  .kk-material-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 4px 20px 16px;
+  }
+  .kk-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    font-size: 12px;
+    color: #444;
+    text-decoration: none;
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+  }
+  .kk-pill:hover {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+  }
+
+  /* ── Footer account/social strip ───────────────────────── */
+  .kk-drawer-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: #fafafa;
+  }
+  .kk-footer-account {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #555;
+    text-decoration: none;
+  }
+  .kk-footer-account svg { width: 18px; height: 18px; }
+  .kk-footer-social {
+    display: flex;
+    gap: 12px;
+  }
+  .kk-footer-social a {
+    display: flex;
+    color: #666;
+    transition: color 0.15s;
+  }
+  .kk-footer-social a:hover { color: #1a1a1a; }
+  .kk-footer-social svg { width: 18px; height: 18px; }
+
+  /* ── Hamburger button (replaces Dawn's) ─────────────────── */
+  #kk-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: inherit;
+  }
+  #kk-hamburger svg { width: 22px; height: 22px; }
+
+  @media (min-width: 750px) {
+    #kk-hamburger { display: none; }
+    #kk-menu-overlay,
+    #kk-menu-drawer { display: none !important; }
+  }
+</style>
+
+{%- comment -%} ── Hamburger trigger (insert where Dawn's burger button is) {%- endcomment -%}
+<button id="kk-hamburger" aria-label="Open menu" aria-controls="kk-menu-drawer" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+
+{%- comment -%} ── Overlay ── {%- endcomment -%}
+<div id="kk-menu-overlay" aria-hidden="true"></div>
+
+{%- comment -%} ── Drawer ── {%- endcomment -%}
+<nav id="kk-menu-drawer" aria-label="Mobile navigation" aria-hidden="true">
+
+  {%- comment -%} Header {%- endcomment -%}
+  <div class="kk-drawer-header">
+    <a href="/">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 120 | image_tag: class: 'kk-drawer-logo', alt: shop.name }}
+      {%- else -%}
+        <span style="font-size:15px;font-weight:600;letter-spacing:0.08em;">{{ shop.name | upcase }}</span>
+      {%- endif -%}
+    </a>
+    <button class="kk-drawer-close" id="kk-close-btn" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  {%- comment -%} Tabs {%- endcomment -%}
+  <div class="kk-tabs" role="tablist">
+    <button class="kk-tab kk-active" role="tab" aria-selected="true"  data-tab="shop">Shop</button>
+    <button class="kk-tab"           role="tab" aria-selected="false" data-tab="collections">Collections</button>
+    <button class="kk-tab"           role="tab" aria-selected="false" data-tab="styles">Outfit Styles</button>
+    <button class="kk-tab"           role="tab" aria-selected="false" data-tab="cares">Mastt Cares</button>
+  </div>
+
+  {%- comment -%} Scrollable body {%- endcomment -%}
+  <div class="kk-drawer-body">
+
+    {%- comment -%} ── TAB 1: SHOP ── {%- endcomment -%}
+    <div class="kk-panel kk-active" id="kk-panel-shop" role="tabpanel">
+
+      <p class="kk-section-label">Shop by Category</p>
+
+      <div class="kk-category-grid">
+
+        {%- comment -%} Anklet {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.t.category=aa-6-1&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Anklets</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="18" r="3"/><path d="M9 18 C9 10, 15 10, 15 18"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Bracelet {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.t.category=aa-6-3&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Bracelets</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="5" r="1" fill="currentColor"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Earrings {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.t.category=aa-6-6&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Earrings</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="6" r="2"/><path d="M12 8 L10 16 Q10 19 12 19 Q14 19 14 16 L12 8Z"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Rings {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.t.category=aa-6-9&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Rings</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Necklace {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.t.category=aa-6-8&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Necklaces</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 5 Q12 18 19 5"/><circle cx="12" cy="18" r="2.5"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Sets {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.t.category=aa-6-7&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Jewellery Sets</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="9" r="4"/><circle cx="15" cy="15" r="4"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Men's {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/mens-jewelry">
+          <span class="kk-cat-tile-name">Men's Jewellery</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="3" width="8" height="3" rx="1.5"/><path d="M8 5 L5 20 L19 20 L16 5"/></svg>
+          </span>
+        </a>
+
+        {%- comment -%} Kids {%- endcomment -%}
+        <a class="kk-cat-tile" href="/collections/all?filter.p.m.custom.shop_for=gid://shopify/Metaobject/100552900694&sort_by=best-selling">
+          <span class="kk-cat-tile-name">Kids' Jewellery</span>
+          <span class="kk-cat-tile-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2 v3 M12 19 v3 M2 12 h3 M19 12 h3"/></svg>
+          </span>
+        </a>
+
+      </div>
+
+      <a class="kk-view-all" href="/collections/all">View all</a>
+
+      {%- comment -%} Shop by Material {%- endcomment -%}
+      <p class="kk-section-label">Shop by Material</p>
+      <div class="kk-material-row">
+        <a class="kk-pill" href="/collections/all?sort_by=best-selling&filter.p.m.custom.jewellery_material=gid%3A%2F%2Fshopify%2FMetaobject%2F100634427478">Genuine Stone</a>
+        <a class="kk-pill" href="/collections/all?sort_by=best-selling&filter.p.m.custom.jewellery_material=gid%3A%2F%2Fshopify%2FMetaobject%2F100634361942">925 Sterling Silver</a>
+        <a class="kk-pill" href="/collections/all?sort_by=best-selling&filter.p.m.custom.jewellery_material=gid%3A%2F%2Fshopify%2FMetaobject%2F100634460246">Premium Base Metal</a>
+      </div>
+
+      {%- comment -%} Shop for (by audience) ── accordion {%- endcomment -%}
+      <p class="kk-section-label">Shop for</p>
+
+      {% assign shop_for_groups = "Anklet,Bracelet,Earrings,Necklace,Rings,Sets" | split: "," %}
+      {% assign shop_for_ids = "aa-6-1,aa-6-3,aa-6-6,aa-6-8,aa-6-9,aa-6-7" | split: "," %}
+
+      {% for group in shop_for_groups %}
+        {% assign gid = shop_for_ids[forloop.index0] %}
+        <div class="kk-accordion">
+          <button class="kk-accordion-toggle" aria-expanded="false" data-accordion>
+            {{ group }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="kk-accordion-body">
+            {% if group == "Anklet" %}
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&sort_by=best-selling">Women</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552900694&sort_by=best-selling">Kids (Girls)</a>
+            {% elsif group == "Bracelet" %}
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&sort_by=best-selling">Women</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552769622&sort_by=best-selling">Unisex</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552704086&sort_by=best-selling">Men</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552900694&sort_by=best-selling">Kids (Girls)</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552867926&sort_by=best-selling">Kids (Boys)</a>
+            {% elsif group == "Earrings" %}
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&sort_by=best-selling">Women</a>
+            {% elsif group == "Necklace" %}
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&sort_by=best-selling">Women</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552769622&sort_by=best-selling">Unisex</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552704086&sort_by=best-selling">Men</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552900694&sort_by=best-selling">Kids (Girls)</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552867926&sort_by=best-selling">Kids (Boys)</a>
+            {% elsif group == "Rings" %}
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&sort_by=best-selling">Women</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552769622&sort_by=best-selling">Unisex</a>
+              <a class="kk-sub-link" href="/collections/ring?filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552704086&sort_by=best-selling">Men</a>
+            {% elsif group == "Sets" %}
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&sort_by=best-selling">Women</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552769622&sort_by=best-selling">Unisex</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552704086&sort_by=best-selling">Men</a>
+              <a class="kk-sub-link" href="/collections/all?filter.p.t.category={{ gid }}&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552900694&sort_by=best-selling">Kids (Girls)</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>{%- comment -%} /panel-shop {%- endcomment -%}
+
+    {%- comment -%} ── TAB 2: COLLECTIONS ── {%- endcomment -%}
+    <div class="kk-panel" id="kk-panel-collections" role="tabpanel">
+      <div class="kk-link-list">
+        <a class="kk-link-item" href="/collections">
+          All Collections
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/designer-bracelet-for-women">
+          Designer Bracelets for Women
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/genuine-stone-earring">
+          Genuine Stone Earrings
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/mens-jewelry">
+          Men's Jewelry
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    {%- comment -%} ── TAB 3: OUTFIT STYLES ── {%- endcomment -%}
+    <div class="kk-panel" id="kk-panel-styles" role="tabpanel">
+      <div class="kk-link-list">
+        <a class="kk-link-item" href="/collections/daily-wear-jewelry">
+          Daily Wear
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/summer-wear-jewelry">
+          Summer Wear
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/office-wear-jewelry">
+          Office Wear
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/party-wear-jewelry">
+          Party Wear
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/collections/wedding-wear-jewelry">
+          Wedding Wear
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    {%- comment -%} ── TAB 4: MASTT CARES ── {%- endcomment -%}
+    <div class="kk-panel" id="kk-panel-cares" role="tabpanel">
+      <div class="kk-link-list">
+        <a class="kk-link-item" href="https://mastt.shiprocket.co/tracking" target="_blank" rel="noopener">
+          Track Order
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/policies/refund-policy">
+          Refund Policy
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/policies/privacy-policy">
+          Privacy Policy
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/policies/shipping-policy">
+          Shipping Policy
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/policies/terms-of-service">
+          Terms of Use
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/pages/warranty-registration">
+          Warranty Registration
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="kk-link-item" href="/apps/return_prime">
+          Easy Exchange
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>{%- comment -%} /drawer-body {%- endcomment -%}
+
+  {%- comment -%} Footer strip {%- endcomment -%}
+  <div class="kk-drawer-footer">
+    <a class="kk-footer-account" href="/account/login">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20 C4 16, 20 16, 20 20"/></svg>
+      Log in
+    </a>
+    <div class="kk-footer-social">
+      <a href="https://www.instagram.com/mastt.co/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      {%- comment -%} Facebook + Pinterest: add back once handles are confirmed {%- endcomment -%}
+    </div>
+  </div>
+
+</nav>
+
+<script>
+  (function() {
+    'use strict';
+
+    const drawer  = document.getElementById('kk-menu-drawer');
+    const overlay = document.getElementById('kk-menu-overlay');
+    const burger  = document.getElementById('kk-hamburger');
+    const closeBtn = document.getElementById('kk-close-btn');
+    let lastFocus = null;
+
+    function openMenu() {
+      drawer.classList.add('kk-open');
+      overlay.classList.add('kk-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      burger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      lastFocus = document.activeElement;
+      closeBtn.focus();
+    }
+
+    function closeMenu() {
+      drawer.classList.remove('kk-open');
+      overlay.classList.remove('kk-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus();
+    }
+
+    burger.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && drawer.classList.contains('kk-open')) closeMenu();
+    });
+
+    // Tabs
+    document.querySelectorAll('.kk-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        // Deactivate all
+        document.querySelectorAll('.kk-tab').forEach(function(t) {
+          t.classList.remove('kk-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.kk-panel').forEach(function(p) {
+          p.classList.remove('kk-active');
+        });
+        // Activate clicked
+        tab.classList.add('kk-active');
+        tab.setAttribute('aria-selected', 'true');
+        var panelId = 'kk-panel-' + tab.dataset.tab;
+        var panel = document.getElementById(panelId);
+        if (panel) panel.classList.add('kk-active');
+      });
+    });
+
+    // Accordions
+    document.querySelectorAll('[data-accordion]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        // Close all
+        document.querySelectorAll('[data-accordion]').forEach(function(b) {
+          b.setAttribute('aria-expanded', 'false');
+          b.nextElementSibling.classList.remove('kk-open');
+        });
+        // Toggle clicked
+        if (!expanded) {
+          btn.setAttribute('aria-expanded', 'true');
+          btn.nextElementSibling.classList.add('kk-open');
+        }
+      });
+    });
+
+    // Hide Dawn's own mobile menu trigger if it exists
+    var dawnMenuBtn = document.querySelector('[aria-controls="menu-drawer"]');
+    if (dawnMenuBtn) dawnMenuBtn.style.display = 'none';
+
+  })();
+</script>

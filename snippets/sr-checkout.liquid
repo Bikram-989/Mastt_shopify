@@ -1,0 +1,90 @@
+<script type="application/javascript">
+  checkoutBuyer = "https://fastrr-boost-ui.pickrr.com/";
+</script>
+<input type="hidden" value="www.mastt.co" id="sellerDomain">
+<link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/shopify.css">
+<script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shopify.js" defer></script>
+<script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shiprocketMarketing.js"></script>
+<input type="hidden" value="rz" id="template">
+<!--
+  <input type="hidden" value="percent" id="discountType"/>
+  <input type="hidden" value="5" id="discValue"/>
+
+-->
+
+<script>
+// Select the node that will be observed for mutations
+let fastrrBtn = '<div id="headless-button" class="shiprocket-headless" data-type="mini-cart"></div>'
+let buttonAdded = false
+let parsedBtnCode = new DOMParser().parseFromString(fastrrBtn, 'text/html').querySelectorAll('.shiprocket-headless')[0];
+const headlessNode = document.querySelector('html');
+
+// Options for the observer (which mutations to observe)
+const configuration = { attributes: true, childList: true, subtree: true };
+
+// Callback function to execute when mutations are observed
+const headlessCallback = (mutationList, observer) => {
+  for (const mutation of mutationList) {
+    
+  let sidecart = document.querySelector('.rebuy-cart__flyout')
+    
+  let sideCartButton = document.querySelector('.rebuy-button.rebuy-cart__checkout-button.block')
+    
+    if(sidecart) {
+      if(!document.getElementById('headless-button')) {
+      
+      sideCartButton.before(parsedBtnCode)
+      }
+    }
+
+  }
+};
+
+// Create an observer instance linked to the callback function
+const observer1 = new MutationObserver(headlessCallback);
+
+// Start observing the target node for configured mutations
+observer1.observe(headlessNode, configuration);
+
+</script>
+<style>
+.sr-headless-checkout {
+  border-radius: clamp(9px, 7.8px + 0.375vw, 15px);
+  background-color:rgb(18, 18, 18) !important ;
+  
+  font-size: clamp(18px, 17.2px + 0.25vw, 22px);
+  font-family: Inter;
+  font-weight: 700;
+  letter-spacing: 0.75px;
+  color: #fff;
+
+  padding-block: 0px !important;
+  {% comment %} margin-bottom: unset !important; {% endcomment %}
+}
+.shiprocket-headless{
+  width:100%;
+}
+.shiprocket-headless[data-type="product"] .sr-headless-checkout{
+  height: 100% !important ;
+  border-radius: clamp(9px, 7.8px + 0.375vw, 15px);
+  background-color: #00324C !important ;
+  box-shadow: 0 4px #0078b7; 
+}
+    /* .sr-discount-label{
+     font-size:0px !important;
+    }
+     .sr-discount-label:before{
+      content:"EXTRA 5% OFF on PERFUMES";
+      font-size: 9px;
+      color: #000;
+      text-transform: none;
+      top: -8px;
+      left: 6px;
+      background-color: #53FF73;
+      border-radius: 3px;
+      padding: 0 10px;
+    } */
+  .rebuy-cart__checkout-button{
+  display:none !important;
+  }
+</style>

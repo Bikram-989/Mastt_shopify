@@ -1,0 +1,22 @@
+<input class="checkoutmodal-state" id="checkoutModal" type="checkbox"
+  onclick="oneCheckout.checkoutModalToggled(this)" />
+<div class="checkoutmodal">
+  <div class="overlay"></div>
+  <div class="inner">
+    <div class="splash-screen">
+      <div class="splash-screen">
+        <div class="checkout-progressbar dc-none">
+          <img src="{{ 'IMG_7304.PNG' | asset_url }}">
+          <div class="linewrap">
+            <div class="line"></div>
+          </div>
+          <img src="{{ '1checkout_logo.png' | asset_url }}">
+        </div>
+        <span id="checkoutLoadingMessage">Crafting your cart</span>
+        <!-- <div class="bounce-loader"></div>
+        <p style="margin: 0;">Preparing your order...</p> -->
+      </div>
+    </div>
+    <div class="iframe-container"></div>
+  </div>
+</div>

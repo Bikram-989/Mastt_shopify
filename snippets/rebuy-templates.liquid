@@ -1,0 +1,448 @@
+{% comment %}
+Rebuy Custom Templates - Horizontal Bundle Layout (Mobile Optimized: 3-in-row)
+Unique ID/Class version to prevent conflicts.
+{% endcomment %}
+
+<script id="rebuy-dynamic-bundle-template" type="text/template">
+<div id="rc-b1g1-widget" class="rc-b1g1-widget">
+  <h2 id="rc-b1g1-title" class="rc-b1g1-title">Frequently Bought Together</h2>
+  <div class="rc-b1g1-message">
+Buy 1 Get 1 Free. Limited time only.
+  </div>
+
+  <div id="rc-b1g1-container" class="rc-b1g1-container">
+    <div id="rc-b1g1-flex-row" class="rc-b1g1-flex-row">
+      
+      <div id="rc-b1g1-products-section" class="rc-b1g1-products-section">
+        <template v-for="(product, index) in products">
+          <div class="rc-b1g1-item"
+               v-bind:class="{'rc-b1g1-item-unselected': !product.selected}"
+               v-bind:data-product-index="index">
+            
+            <div class="rc-b1g1-checkbox-wrapper">
+              <input type="checkbox"
+                     v-model="product.selected"
+                     class="rc-b1g1-checkbox"
+                     v-bind:aria-label="'Select ' + product.title">
+            </div>
+            
+            <div class="rc-b1g1-content">
+              <div class="rc-b1g1-image-container">
+                <a :href="product.url" class="rc-b1g1-link">
+                  <img :src="itemImage(product, product.selected_variant, '240x240')"
+                       :alt="product.title"
+                       class="rc-b1g1-image"
+                       loading="lazy">
+                </a>
+              </div>
+            </div>
+            
+            <div class="rc-b1g1-details">
+              <h3 class="rc-b1g1-product-title">
+                <a :href="product.url"
+                   class="rc-b1g1-title-link"
+                   v-html="product.title"></a>
+              </h3>
+
+              <div class="rc-b1g1-price-container">
+                <span class="rc-b1g1-price-amount"
+                      v-html="formatMoney(variantPrice(product, product.selected_variant))"></span>
+              </div>
+            
+              <div class="rc-b1g1-options" v-if="showVariantSelect(product)">
+                <select class="rc-b1g1-variant-select"
+                        v-bind:aria-label="'Variant of ' + product.title"
+                        v-model="product.selected_variant_id"
+                        v-on:change="selectVariant(product)">
+                  <template v-for="variant in product.variants">
+                    <option v-bind:value="variant.id" v-text="variant.title"></option>
+                  </template>
+                </select>
+              </div>
+            </div>
+          </div>
+        
+          <div class="rc-b1g1-divider" v-if="index < products.length - 1">
+            <span class="rc-b1g1-plus-icon" aria-hidden="true">+</span>
+          </div>
+        </template>
+      </div>
+    
+      <div id="rc-b1g1-summary" class="rc-b1g1-summary">
+        <div class="rc-b1g1-badge"
+             v-if="products && products.filter(function(p) { return p.selected; }).length >= 2">
+          <span class="rc-b1g1-badge-text"> B1G1 FREE</span>
+        </div>
+      
+        <div id="rc-b1g1-total-block" class="rc-b1g1-total-block">
+          <template v-if="products && products.filter(function(p) { return p.selected; }).length >= 2">
+            <div class="rc-b1g1-row-original">
+              <span class="rc-b1g1-label-orig">Original:</span>
+              <span class="rc-b1g1-total-orig-price" v-html="formatMoney(subtotal())"></span>
+            </div>
+            <div class="rc-b1g1-row-final">
+              <span class="rc-b1g1-label-final">Total:</span>
+              <span class="rc-b1g1-total-final-price" v-html="formatMoney(subtotal())"></span>
+            </div>
+          </template>
+          
+          <template v-else>
+            <span class="rc-b1g1-label-single">Total:</span>
+            <span class="rc-b1g1-total-single-price" v-html="formatMoney(subtotal())"></span>
+          </template>
+        </div>
+      
+        <div id="rc-b1g1-actions" class="rc-b1g1-actions">
+          <button id="rc-b1g1-atc-btn"
+                  class="rc-b1g1-atc-btn"
+                  v-on:click="addSelectedProductsToCart()"
+                  aria-label="Add selected products to cart">
+            Add to cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+
+<script>
+(function() {
+  'use strict';
+
+  // --- Configuration ---
+  const CONFIG = {
+    SELECTORS: {
+      WIDGET: '#rc-b1g1-widget',
+      PRODUCT_ITEM: '.rc-b1g1-item',
+      CHECKBOX: '.rc-b1g1-checkbox',
+      VARIANT_SELECT: '.rc-b1g1-variant-select',
+      PRICE_CONTAINER: '.rc-b1g1-price-container',
+      PRICE_AMOUNT: '.rc-b1g1-price-amount',
+      DISCOUNT_BADGE: '.rc-b1g1-badge .rc-b1g1-badge-text',
+      ORIGINAL_TOTAL: '.rc-b1g1-total-orig-price',
+      DISCOUNTED_TOTAL: '.rc-b1g1-total-final-price',
+      SINGLE_TOTAL: '.rc-b1g1-total-single-price'
+    },
+    CLASSES: {
+      FREE_PRODUCT: 'rc-b1g1-is-free',
+      FREE_BADGE: 'rc-b1g1-free-tag',
+      STRIKETHROUGH: 'rc-b1g1-strike',
+      FREE_TEXT_PRICE: 'rc-b1g1-text-zero'
+    }
+  };
+
+  // --- Helper: Price Formatting ---
+  const PriceHelper = {
+    parse(priceStr) {
+      if (!priceStr) return 0;
+      const clean = priceStr.replace(/[^0-9.]/g, ''); 
+      return parseFloat(clean) || 0;
+    },
+    format(amount) {
+      // Convert units to cents for Rebuy
+      const cents = amount * 100;
+      if (window.Rebuy && window.Rebuy.util && window.Rebuy.util.formatMoney) {
+        return window.Rebuy.util.formatMoney(cents);
+      }
+      return '₹' + amount.toFixed(2);
+    }
+  };
+
+  // --- Main Controller ---
+  class B1G1Controller {
+    constructor() {
+      this.isInitialized = false;
+      this.timer = null;
+    }
+
+    init() {
+      const widget = document.querySelector(CONFIG.SELECTORS.WIDGET);
+      if (!widget) { setTimeout(() => this.init(), 200); return; }
+      if (this.isInitialized) return;
+      this.isInitialized = true;
+      this.setupListeners();
+      this.update();
+    }
+
+    setupListeners() {
+      document.addEventListener('change', (e) => {
+        if (e.target.matches(CONFIG.SELECTORS.CHECKBOX) || 
+            e.target.matches(CONFIG.SELECTORS.VARIANT_SELECT)) {
+          this.scheduleUpdate(); 
+        }
+      });
+    }
+
+    scheduleUpdate() {
+      if (this.timer) clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.update(), 50);
+    }
+
+    update() {
+      const productItems = Array.from(document.querySelectorAll(CONFIG.SELECTORS.PRODUCT_ITEM));
+      if (productItems.length === 0) return;
+
+      this.resetVisuals(productItems);
+
+      const selectedItems = [];
+      productItems.forEach((item, index) => {
+        const checkbox = item.querySelector(CONFIG.SELECTORS.CHECKBOX);
+        const priceEl = item.querySelector(CONFIG.SELECTORS.PRICE_AMOUNT);
+        
+        if (checkbox && checkbox.checked && priceEl) {
+          const currentPrice = PriceHelper.parse(priceEl.innerText);
+          selectedItems.push({ index, element: item, price: currentPrice, priceElement: priceEl });
+        }
+      });
+
+      const numFree = Math.floor(selectedItems.length / 2);
+      
+      if (numFree > 0) {
+        selectedItems.sort((a, b) => a.price - b.price);
+        const freeItems = selectedItems.slice(0, numFree);
+        let totalDiscountAmount = 0;
+        
+        freeItems.forEach(item => {
+          this.makeItemFree(item);
+          totalDiscountAmount += item.price;
+        });
+
+        const badge = document.querySelector(CONFIG.SELECTORS.DISCOUNT_BADGE);
+        if (badge) badge.innerText = `B1G1 FREE`;
+
+        const allSelectedTotal = selectedItems.reduce((sum, item) => sum + item.price, 0);
+        const finalTotal = allSelectedTotal - totalDiscountAmount;
+
+        const originalTotalEl = document.querySelector(CONFIG.SELECTORS.ORIGINAL_TOTAL);
+        const discountedTotalEl = document.querySelector(CONFIG.SELECTORS.DISCOUNTED_TOTAL);
+
+        if (originalTotalEl) originalTotalEl.innerHTML = PriceHelper.format(allSelectedTotal);
+        if (discountedTotalEl) discountedTotalEl.innerHTML = PriceHelper.format(finalTotal);
+      } 
+      else {
+        const total = selectedItems.reduce((sum, item) => sum + item.price, 0);
+        const singleTotalEl = document.querySelector(CONFIG.SELECTORS.SINGLE_TOTAL);
+        if (singleTotalEl) singleTotalEl.innerHTML = PriceHelper.format(total);
+      }
+    }
+
+    resetVisuals(items) {
+      items.forEach(item => {
+        item.classList.remove(CONFIG.CLASSES.FREE_PRODUCT);
+        item.querySelector('.' + CONFIG.CLASSES.FREE_BADGE)?.remove();
+        const priceContainer = item.querySelector(CONFIG.SELECTORS.PRICE_CONTAINER);
+        if (priceContainer) {
+          const zeroPrice = priceContainer.querySelector('.' + CONFIG.CLASSES.FREE_TEXT_PRICE);
+          if (zeroPrice) zeroPrice.remove();
+          const originalPriceSpan = priceContainer.querySelector(CONFIG.SELECTORS.PRICE_AMOUNT);
+          if (originalPriceSpan) originalPriceSpan.classList.remove(CONFIG.CLASSES.STRIKETHROUGH);
+        }
+      });
+    }
+
+    makeItemFree(itemData) {
+      const item = itemData.element;
+      item.classList.add(CONFIG.CLASSES.FREE_PRODUCT);
+
+      if (!item.querySelector('.' + CONFIG.CLASSES.FREE_BADGE)) {
+        const badge = document.createElement('div');
+        badge.className = CONFIG.CLASSES.FREE_BADGE;
+        badge.innerText = 'FREE';
+        item.appendChild(badge);
+      }
+
+      const priceContainer = item.querySelector(CONFIG.SELECTORS.PRICE_CONTAINER);
+      const originalPriceSpan = itemData.priceElement;
+
+      if (priceContainer && originalPriceSpan) {
+        originalPriceSpan.classList.add(CONFIG.CLASSES.STRIKETHROUGH);
+        if (!priceContainer.querySelector('.' + CONFIG.CLASSES.FREE_TEXT_PRICE)) {
+          const freePriceSpan = document.createElement('span');
+          freePriceSpan.className = CONFIG.CLASSES.FREE_TEXT_PRICE;
+          freePriceSpan.innerHTML = PriceHelper.format(0); 
+          priceContainer.appendChild(freePriceSpan);
+        }
+      }
+    }
+  }
+
+  const controller = new B1G1Controller();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => controller.init());
+  } else {
+    controller.init();
+  }
+  window.rebuyB1G1Controller = controller;
+})();
+</script>
+
+<style>
+/* --- Scoped Unique Styles --- */
+:root {
+  --rc-primary: #f0a500; /* Matching the yellow button in your screenshot */
+  --rc-primary-hover: #d18e00;
+  --rc-success: #27ae60;
+  --rc-text: #333;
+  --rc-bg-light: #fdf6e7;
+  --rc-bg-white: #fff;
+  --rc-border: #ddd;
+  --rc-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+#rc-b1g1-widget { font-family: sans-serif; max-width: 1200px; margin: 0 auto; box-sizing: border-box; }
+#rc-b1g1-widget *, #rc-b1g1-widget *::before, #rc-b1g1-widget *::after { box-sizing: border-box; }
+
+#rc-b1g1-title { text-align: center; font-size: clamp(20px, 4vw, 36px); margin: 0 0 10px; color: var(--rc-text); font-weight: 700; }
+.rc-b1g1-message { margin: 0 0 15px;
+    color: RED;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: normal; }
+
+#rc-b1g1-container { background-color: var(--rc-bg-light); border-radius: 8px; padding: 20px; width: 90%; margin: 0 auto; }
+#rc-b1g1-flex-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; }
+
+/* Product Strip (Desktop) */
+#rc-b1g1-products-section { display: flex; flex-wrap: nowrap; align-items: center; gap: 0; overflow-x: auto; padding: 5px; flex: 1; }
+
+.rc-b1g1-item { 
+  display: flex; flex-direction: column; background: var(--rc-bg-white); 
+  border-radius: 6px; max-width: 200px; min-width: 160px; 
+  box-shadow: var(--rc-shadow); position: relative; flex-shrink: 0; 
+  transition: all 0.3s ease; padding: 10px; border: 1px solid transparent;
+}
+
+.rc-b1g1-item-unselected { opacity: 0.6; filter: grayscale(100%); }
+.rc-b1g1-is-free { border: 2px solid var(--rc-success) !important; box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2) !important; }
+
+.rc-b1g1-checkbox-wrapper { position: absolute; top: 8px; left: 8px; z-index: 5; }
+.rc-b1g1-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #0066cc; }
+
+.rc-b1g1-free-tag { 
+  position: absolute; top: -10px; right: -5px; 
+  background: #000; color: white; /* Black tag like screenshot */
+  padding: 4px 8px; border-radius: 12px; font-size: 10px; 
+  font-weight: bold; text-transform: uppercase; z-index: 10; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.rc-b1g1-image { max-width: 100%; height: auto; border-radius: 4px; max-height: 150px; object-fit: contain; margin-bottom: 10px;}
+.rc-b1g1-product-title { font-size: 14px; margin: 0 0 5px; color: #333 !important; font-weight: 600; line-height: 1.3; min-height: 38px; }
+.rc-b1g1-title-link { color: inherit; text-decoration: none; display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;}
+
+.rc-b1g1-price-container { font-size: 15px; font-weight: 700; color: #333; margin: 0 0 8px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.rc-b1g1-strike { text-decoration: line-through; color: #999; font-size: 13px; font-weight: 400; }
+.rc-b1g1-text-zero { color: var(--rc-success) !important; font-weight: bold; font-size: 16px; }
+
+.rc-b1g1-variant-select { width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; background: #fff; height: 30px; }
+
+.rc-b1g1-divider { display: flex; align-items: center; justify-content: center; width: 30px; }
+.rc-b1g1-plus-icon { font-size: 20px; color: #888; font-weight: bold; }
+
+/* Summary Box */
+#rc-b1g1-summary { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; min-width: 220px; padding: 15px; background: transparent; }
+.rc-b1g1-badge { background: #000; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+
+#rc-b1g1-total-block { font-size: 16px; color: #333; text-align: center; width: 100%; display: flex; flex-direction: column; gap: 2px; }
+
+.rc-b1g1-row-original { display: flex; justify-content: center; gap: 8px; font-size: 14px; color: #888; text-decoration: line-through; }
+.rc-b1g1-row-final { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #333; }
+.rc-b1g1-label-single, .rc-b1g1-label-final { font-weight: 700; }
+
+.rc-b1g1-atc-btn { 
+  margin-top: 10px; padding: 12px 20px; background: var(--rc-primary); 
+  color: #000; border: 2px solid #000; border-radius: 8px; 
+  cursor: pointer; font-size: 16px; font-weight: 700; 
+  transition: all 0.2s; width: 100%; box-shadow: 2px 2px 0px #000; 
+}
+.rc-b1g1-atc-btn:hover { background: var(--rc-primary-hover); transform: translate(1px, 1px); box-shadow: 1px 1px 0px #000; }
+
+/* --- MOBILE STYLES (The fix) --- */
+@media (max-width: 768px) { 
+  #rc-b1g1-container { 
+    width: 96%; 
+    padding: 4px; 
+  }
+  
+  #rc-b1g1-flex-row { 
+    flex-direction: column; /* Stack products above summary */
+    gap: 15px;
+  }
+  
+  /* Products Section: Horizontal Row */
+  #rc-b1g1-products-section { 
+    width: 100%; 
+    flex-direction: row; /* Force horizontal */
+    flex-wrap: nowrap; /* Do not wrap items */
+    justify-content: space-between; 
+    gap: 4px;
+    overflow-x: hidden; /* Prevent scrolling */
+  }
+
+  /* Product Item: 3 fit in 1 row */
+  .rc-b1g1-item {
+    width: 32%; /* Fits 3 items approx */
+    min-width: 0; /* Allows shrinking to fit */
+    max-width: none;
+    padding: 6px;
+    flex: 1 1 0px; /* Equal width distribution */
+  }
+
+  /* Scaled down elements for mobile */
+  .rc-b1g1-checkbox-wrapper { top: 4px; left: 4px; }
+  .rc-b1g1-checkbox { width: 16px; height: 16px; }
+  
+  .rc-b1g1-image { 
+    max-height: 80px; /* Smaller image */
+    margin-bottom: 6px;
+  }
+  
+  .rc-b1g1-product-title {
+    font-size: 11px; /* Tiny font */
+    min-height: 28px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  .rc-b1g1-price-container {
+    font-size: 12px;
+    margin-bottom: 4px;
+    gap: 3px;
+  }
+  
+  .rc-b1g1-variant-select {
+    font-size: 10px;
+    padding: 0 2px;
+    height: 24px;
+  }
+
+  /* Dividers (+): Make them tiny so they fit */
+  .rc-b1g1-divider {
+    width: 8px;
+    min-width: 8px;
+  }
+  .rc-b1g1-plus-icon {
+    font-size: 12px;
+  }
+
+  /* Summary Section: Full width below */
+  #rc-b1g1-summary { 
+    width: 100%; 
+    flex-direction: column; 
+    padding: 0;
+    margin-top: 5px;
+  }
+  
+  .rc-b1g1-atc-btn { width: 100%; padding: 10px; font-size: 14px; }
+}
+</style>

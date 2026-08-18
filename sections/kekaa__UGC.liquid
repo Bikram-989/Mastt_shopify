@@ -1,0 +1,350 @@
+<style>
+.kk-ugc {
+  margin-block: clamp(40px, 32px + 2.5vw, 80px);
+}
+
+.kk-ugc__container {
+  --media__width: clamp(240px, 28vw, 320px);
+  --aspect-ratio: calc(16 / 9);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: calc(var(--media__width) * 3 + 48px); /* 3 cards + spacing */
+  height: calc(var(--media__width) * var(--aspect-ratio));
+  margin-inline: auto;
+  
+  position: relative;
+}
+
+.kk-ugc__item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  
+  border-radius: 25px;
+  overflow: hidden;
+
+  width: var(--media__width);
+  aspect-ratio: 9 / 16;
+  height: auto;
+
+  transition: transform 0.5s ease, width 0.5s ease;
+}
+
+.kk-ugc__item.left {
+  transform: translateX(-150%) scale(1);
+}
+
+.kk-ugc__item.center {
+  transform: translateX(0) scale(1);
+}
+
+.kk-ugc__item.right {
+  transform: translateX(150%) scale(1);
+}
+
+
+.kk-ugc__item video,
+.kk-ugc__item iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.kk-ugc__item .video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.kk-ugc__item video:not([src]) + .video-thumbnail {
+  display: block; 
+}
+
+.kk-ugc__arrow {
+  --arrow__size: 50px;
+  display: block !important;
+  
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+
+  width: var(--arrow__size);
+  aspect-ratio: 1;
+  
+  transform: translateY(-50%);
+  border-radius: 50%;
+  box-shadow: var(--mastt-shadow-lg);
+  
+  cursor: pointer;
+  border: none;
+  color: #fff;
+}
+
+.kk-ugc__arrow.left {
+  right: calc(100% - (var(--arrow__size) / 2));
+  background: url('https://cdn.shopify.com/s/files/1/0615/9921/9798/files/arrow__left.png?v=1746368582');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.kk-ugc__arrow.right {
+  left: calc(100% - (var(--arrow__size) / 2));
+  background: url('https://cdn.shopify.com/s/files/1/0615/9921/9798/files/arrow__right.png?v=1746368582');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.kk-ugc__item .kk-ugc__mute-toggle {
+  display: flex; /* Always show the mute toggle */
+  justify-content: center;
+  align-items: center;
+  
+  position: absolute; /* Position it relative to the video */
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+  
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  
+  width: 40px;
+  aspect-ratio: 1;
+  font-size: 20px;
+}
+
+
+
+@media (width < 768px) {
+  .kk-ugc__container {
+    overflow-x: hidden;
+    touch-action: pan-y; /* Allow vertical scrolling while enabling horizontal swipes */
+  }
+  /* .kk-ugc {
+    margin-inline: calc((var(--gutter) * -1) / 2);
+  }
+  .kk-ugc__item {
+    max-width: 100%;
+    aspect-ratio: 9 / 16;
+  } */
+  .kk-ugc__arrow{
+    --arrow__size: 35px;
+  }
+
+  .kk-ugc__arrow.left {
+    right: calc(100% - (var(--arrow__size) *1.5));
+  }
+
+  .kk-ugc__arrow.right {
+    left: calc(100% - (var(--arrow__size) *1.5));
+  }
+}
+</style>
+
+{% assign has_valid_video = false %}
+{% assign valid_videos = 0 %}
+
+{% for block in section.blocks %}
+  {% if block.settings.video_url != blank %}
+    {% assign has_valid_video = true %}
+    {% assign valid_videos = valid_videos | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% if has_valid_video %}
+<div class="kk-ugc">
+  <div class="kk-ugc__container">
+    {% if valid_videos > 1 %}
+      <div class="kk-ugc__arrow left"></div>
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% if block.settings.video_url != blank %}
+        <div class="kk-ugc__item">
+          {% if block.settings.video_url contains "youtube" %}
+            <iframe class="block-video" src="https://www.youtube.com/embed/{{ block.settings.video_url | split: '/' | last }}?autoplay=1&loop=1&playlist={{ block.settings.video_url | split: '/' | last }}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          {% else %}
+            <video class="block-video" src="{{ block.settings.video_url }}" muted playsinline loop></video>
+          {% endif %}
+          <button class="kk-ugc__mute-toggle">🔇</button>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if valid_videos > 1 %}
+      <div class="kk-ugc__arrow right"></div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const items = Array.from(document.querySelectorAll('.kk-ugc__item'));
+  const videos = Array.from(document.querySelectorAll('.block-video'));
+  const leftArrow = document.querySelector('.kk-ugc__arrow.left');
+  const rightArrow = document.querySelector('.kk-ugc__arrow.right');
+  const muteButtons = document.querySelectorAll('.kk-ugc__mute-toggle');
+  const container = document.querySelector('.kk-ugc__container');
+
+  let currentIndex = Math.floor(items.length / 2);
+  let swipeDelay = false;
+
+  function updateVideoPositions() {
+    items.forEach((item, index) => {
+      item.classList.remove('center', 'left', 'right');
+      item.style.zIndex = '';
+      item.style.transform = '';
+
+      if (index === currentIndex) {
+        item.classList.add('center');
+        item.style.transform = 'translateX(0)';
+        item.style.zIndex = '5';
+      } else if (index === (currentIndex - 1 + items.length) % items.length) {
+        item.classList.add('left');
+        item.style.transform = 'translateX(-110%)';
+      } else if (index === (currentIndex + 1) % items.length) {
+        item.classList.add('right');
+        item.style.transform = 'translateX(110%)';
+      } else {
+        item.style.transform = `translateX(${index < currentIndex ? '-200%' : '200%'})`;
+      }
+
+      const muteButton = item.querySelector('.kk-ugc__mute-toggle');
+      muteButton.style.display = 'flex';
+    });
+  }
+
+  function playVideo() {
+    pauseAllVideos();
+    const video = videos[currentIndex];
+    if (video && video.tagName.toLowerCase() === 'video') {
+      video.currentTime = localStorage.getItem(`videoTime_${currentIndex}`) || 0;
+      video.play();
+    }
+    updateMuteButtons();
+  }
+
+  function pauseAllVideos() {
+    videos.forEach((video, index) => {
+      if (video && video.tagName.toLowerCase() === 'video') {
+        localStorage.setItem(`videoTime_${index}`, video.currentTime);
+        video.pause();
+      }
+    });
+  }
+
+  function nextVideo() {
+    if (swipeDelay || items.length <= 1) return;
+    swipeDelay = true;
+    currentIndex = (currentIndex + 1) % items.length;
+    updateVideoPositions();
+    playVideo();
+    setTimeout(() => { swipeDelay = false; }, 500);
+  }
+
+  function previousVideo() {
+    if (swipeDelay || items.length <= 1) return;
+    swipeDelay = true;
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    updateVideoPositions();
+    playVideo();
+    setTimeout(() => { swipeDelay = false; }, 500);
+  }
+
+  function toggleMute() {
+    const allMuted = videos.every(video => video.muted);
+    videos.forEach(video => {
+      if (video.tagName.toLowerCase() === 'video') {
+        video.muted = !allMuted;
+      }
+    });
+    updateMuteButtons();
+  }
+
+  function updateMuteButtons() {
+    const allMuted = videos.every(video => video.muted);
+    muteButtons.forEach(muteButton => {
+      muteButton.textContent = allMuted ? '🔇' : '🔊';
+    });
+  }
+
+  if (items.length > 1) {
+    container.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    container.addEventListener('touchmove', (e) => {
+      const endX = e.touches[0].clientX;
+      const distanceX = Math.abs(startX - endX);
+
+      if (distanceX > 50) {
+        if (startX > endX) {
+          nextVideo();
+        } else {
+          previousVideo();
+        }
+      }
+    });
+
+    if (leftArrow) leftArrow.addEventListener('click', previousVideo);
+    if (rightArrow) rightArrow.addEventListener('click', nextVideo);
+  }
+
+  muteButtons.forEach(muteButton => {
+    muteButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMute();
+    });
+  });
+
+  updateVideoPositions();
+  playVideo();
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "KK UGC",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video URL",
+          "info": "Enter the URL for the video."
+        },
+        {
+          "type": "image_picker",
+          "id": "thumbnail",
+          "label": "Video Thumbnail",
+          "info": "Upload a thumbnail image for the video."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "KK UGC",
+      "category": "Custom"
+    }
+  ],
+  "max_blocks": 3
+}
+{% endschema %}
+
+
