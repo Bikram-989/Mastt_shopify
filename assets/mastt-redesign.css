@@ -542,7 +542,66 @@ body, p {
 
 
 /* --------------------------------------------------------------------------
-   10. FOCUS STATES (accessibility — keep visible, on-brand)
+   10. FOOTER  (sections/footer.liquid, assets/section-footer.css)
+   Runs on the dark scheme (scheme-2) as the closing bookend to the pearl
+   hero. Dawn's own borders/text already derive from --color-foreground, so
+   they invert correctly — what needs help is the type treatment and the
+   link affordances, which were tuned for a light ground.
+   -------------------------------------------------------------------------- */
+.footer .footer-block__heading {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  opacity: 0.75;
+}
+
+/* Menu + policy links: coral on hover (6.2:1 on charcoal), with an underline
+   so hover isn't signalled by colour alone */
+.footer .list-menu__item--link,
+.footer .footer__list-social a,
+.footer .policies a {
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer .list-menu__item--link:hover,
+.footer .policies a:hover {
+  color: var(--color-dusty-coral);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Social icons: lift + tint rather than Dawn's default opacity shift */
+.footer .list-social__item .icon {
+  transition: color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.footer .list-social__link:hover .icon {
+  color: var(--color-dusty-coral);
+  transform: translateY(-2px);
+}
+
+/* Brand block: the GST/address paragraph is fine print, not body copy */
+.footer .footer-block__details-content {
+  font-size: 1.3rem;
+  line-height: 1.7;
+}
+
+.footer .copyright__content {
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+/* Payment icons read as decorative here — keep them from dominating */
+.footer .list-payment__item svg {
+  opacity: 0.85;
+}
+
+
+/* --------------------------------------------------------------------------
+   11. FOCUS STATES (accessibility — keep visible, on-brand)
    -------------------------------------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
