@@ -1,1 +1,523 @@
-{"sections":{"main":{"type":"main-product","blocks":{"custom_liquid_U939en":{"type":"custom_liquid","disabled":true,"settings":{"custom_liquid":"<span class=\"product-tags\">\n\t<div class=\"new-arrival\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0578/3912/4549/files/cc_logo_yellow.svg?v=1721099570\">\n      EASY RETURNS\n    </div>\n\t<div class=\"tag__blue\"><img src=\"https://cdn.shopify.com/s/files/1/0578/3912/4549/files/Free-shipping.svg?v=1722576920\">\nMONEY-BACK GUARANTEE\n</div>\n  </span>"}},"badges_share_tTj9H9":{"type":"badges_share","settings":{"sale_text":"Pick Any 2, Pay for 1","variant_text":"Amethyst","share_label":""}},"title":{"type":"title","settings":{}},"price":{"type":"price","settings":{}},"custom_liquid_XMeAWr":{"type":"custom_liquid","name":"Countdown","disabled":true,"settings":{"custom_liquid":"<!-- Compact Elegant Countdown Timer with Bold Digits -->\n<div class=\"countdown-container\">\n  <span class=\"countdown-label\">Offer Ends </span>\n  <div id=\"countdown\" class=\"countdown-display\"></div>\n</div>\n\n<!-- Styles -->\n<style>\n  .countdown-container {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    font-weight: 500;\n    font-family: var(--font-body-family);\n    padding: 6px 0;\n  }\n  \n  .countdown-label {\n    color: #00324C;\n    font-weight: 600;\n    font-size: 16px;\n    letter-spacing: 0.3px;\n  }\n  \n  .countdown-display {\n    display: flex;\n    gap: 5px;\n    align-items: center;\n  }\n  \n  .time-segment {\n    display: flex;\n    gap: 0px;\n    border-radius: 5px;\n    overflow: hidden;\n  }\n  \n  .flip-digit {\n    background-color: #00324C;\n    color: white;\n    min-width: 20px;\n    height: 26px;\n    font-size: 14px;\n    font-family: 'Courier New', monospace;\n    font-weight: 700; /* Made digits bold */\n    border-radius: 0px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    overflow: hidden;\n\n    &:first-child{\n      place-content: end;\n      padding-right: 2px;\n    }\n    &:last-child{\n      place-content: start;\n      padding-left: 2px;\n    }\n  }\n  \n  .digit-inner {\n    line-height: 1rem;\n    display: block;\n    transform-origin: bottom;\n    backface-visibility: hidden;\n    transform: rotateX(0deg);\n    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n    font-weight: inherit; /* Inherit boldness */\n  }\n  \n  .flipping {\n    animation: flip 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;\n  }\n  \n  @keyframes flip {\n    0% {\n      transform: rotateX(0deg);\n    }\n    50% {\n      transform: rotateX(-90deg);\n    }\n    100% {\n      transform: rotateX(0deg);\n    }\n  }\n  \n  .time-separator {\n    color: #666;\n    font-size: 14px;\n    font-weight: bold;\n    margin: 0 1px;\n    align-self: flex-end;\n    padding-bottom: 2px;\n  }\n</style>\n\n<!-- Script (unchanged from previous version) -->\n<script>\n  const config = {\n    animateAllDigits: false,\n    endOfDay: true\n  };\n  \n  const countdownEl = document.getElementById('countdown');\n  let previousValues = [\"00\", \"00\", \"00\", \"00\"];\n  let digitElements = [];\n  \n  function initTimer() {\n    countdownEl.innerHTML = '';\n    digitElements = [];\n    \n    const timeUnits = ['days', 'hours', 'minutes', 'seconds'];\n    \n    timeUnits.forEach((unit, index) => {\n      if (index > 0) {\n        const separator = document.createElement('span');\n        separator.className = 'time-separator';\n        separator.textContent = ':';\n        countdownEl.appendChild(separator);\n      }\n      \n      const segment = document.createElement('div');\n      segment.className = 'time-segment';\n      \n      for (let i = 0; i < 2; i++) {\n        const digit = document.createElement('div');\n        digit.className = 'flip-digit';\n        \n        const inner = document.createElement('span');\n        inner.className = 'digit-inner';\n        inner.textContent = '0';\n        \n        digit.appendChild(inner);\n        segment.appendChild(digit);\n        digitElements.push(inner);\n      }\n      \n      countdownEl.appendChild(segment);\n    });\n  }\n  \n  function updateTimer() {\n    const now = new Date();\n    let end = new Date();\n    \n    if (config.endOfDay) {\n      end.setHours(23, 59, 59, 999);\n    } else {\n      end = new Date(now.getTime() + 24 * 60 * 60 * 1000);\n    }\n    \n    let diff = end - now;\n    if (diff < 0) diff = 0;\n    \n    const seconds = Math.floor((diff / 1000) % 60);\n    const minutes = Math.floor((diff / 1000 / 60) % 60);\n    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);\n    const days = Math.floor(diff / (1000 * 60 * 60 * 24));\n    \n    const format = (num) => num.toString().padStart(2, '0');\n    const values = [format(days), format(hours), format(minutes), format(seconds)];\n    \n    values.forEach((val, i) => {\n      const tensDigit = val[0];\n      const unitsDigit = val[1];\n      const prevVal = previousValues[i];\n      \n      if (tensDigit !== prevVal[0]) {\n        const tensElement = digitElements[i * 2];\n        tensElement.textContent = tensDigit;\n        if (config.animateAllDigits || i === 3) {\n          tensElement.classList.add('flipping');\n          setTimeout(() => tensElement.classList.remove('flipping'), 600);\n        }\n      }\n      \n      if (unitsDigit !== prevVal[1]) {\n        const unitsElement = digitElements[i * 2 + 1];\n        unitsElement.textContent = unitsDigit;\n        if (config.animateAllDigits || i === 3) {\n          unitsElement.classList.add('flipping');\n          setTimeout(() => unitsElement.classList.remove('flipping'), 600);\n        }\n      }\n    });\n    \n    previousValues = values;\n  }\n  \n  initTimer();\n  updateTimer();\n  setInterval(updateTimer, 1000);\n</script>"}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","swatch_shape":"circle"}},"size_chart_xDhMbE":{"type":"size_chart","settings":{"trigger_label":"Size Guide","fallback_type":""}},"quantity_selector":{"type":"quantity_selector","disabled":true,"settings":{}},"custom_liquid_Y6Y988":{"type":"custom_liquid","name":"Blinking Offer","disabled":true,"settings":{"custom_liquid":"<div class=\"offer-wrap\">\n    <span class=\"offer-blinker\"></span>\n    <span>BUY 2 GET 15% OFF, BUY 3 GET 20% OFF</span>\n</div>\n\n<style>\n\n.offer-wrap{\n    --offer-color: #006FCA;\n    display: flex; \n    align-items: center;\n    gap: 8.25px;\n    max-width: fit-content;\n\n    padding: clamp(7px, 6.6px + 0.125vw, 9px) clamp(10px, 9.4px + 0.1875vw, 13px); \n    background: #E2F2FF;\n    border: solid 2px hsl(from var(--offer-color) h s l / 0.1);\n    border-radius: 10px;\n\n    font-size: clamp(12px, .7rem + .25vw, 16px); \n    font-weight: 600; \n    color: var(--offer-color);    \n}\n\n.offer-blinker{\n    width: 8.25px;\n    aspect-ratio: 1;\n    border-radius: 2px;\n    background-color: var(--offer-color);\n    animation: blink 1s infinite;\n    rotate: 45deg;\n}\n\n@keyframes blink {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0;\n  }\n}\n</style>"}},"custom_liquid_DzKG4G":{"type":"custom_liquid","name":"Blinking Offer","disabled":true,"settings":{"custom_liquid":"<div style=\"margin-top: 0; font-size: clamp(12px, .7rem + .25vw, 16px); padding-bottom: 2px; font-weight: 400; color: red; display: flex; align-items: center;\">\n  <span style=\"display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: red; margin-right: 5px; animation: blink 1s infinite;\"></span>\n  <span>Buy 2 Get 15% off, Buy 3 Get 20% off💥</span>\n</div>\n\n<style>\n@keyframes blink {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0;\n  }\n}\n</style>"}},"custom_liquid_BnnLW4":{"type":"custom_liquid","name":"[Offers]","settings":{"custom_liquid":"OFFERS"}},"bank_offer_ErpjpG":{"type":"bank_offer","disabled":true,"settings":{"icon":"shopify://shop_images/bank-hdfc.svg","title":"HDFC Cards- ₹500 Instant OFF","description":"<p>Minimum order value <strong>₹3499</strong>.</p>"}},"bank_offer_NdLxpq":{"type":"bank_offer","disabled":true,"settings":{"icon":"shopify://shop_images/bank-sbi.svg","title":"Extra 12% Instant OFF on SBI Rupay Card","description":"<p>Minimum order value <strong>₹2499.</strong></p>"}},"coupon_offer_fLgiaq":{"type":"coupon_offer","settings":{"headline":"Buy 1 Get 1 Free","code":"BOGO","details":"<p>Note: You need to add minimum 2 products</p>","auto_apply":false}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":true,"show_gift_card_recipient":true}},"product_grouping_picker_TGgxeH":{"type":"product_grouping_picker","settings":{"heading":"Product Grouping Picker","picker_type":"dynamic","dynamic_threshold":10,"grouping_label":"You may also like","option_type_metafield_key":"product_grouping_gemstone","option_value_metafield_key":"product_grouping_gemstone_value"}},"features_yaiGKM":{"type":"features","settings":{"feature_1_text":"Skin Safe","feature_1_image":"shopify://shop_images/skin-safe.png","feature_2_text":"Anti-Tarnish","feature_2_image":"shopify://shop_images/anti-tarnish.png","feature_3_text":"Thick Plating","feature_3_image":"shopify://shop_images/thick-plating.png","feature_4_text":"Easy Exchange","feature_4_image":"shopify://shop_images/easy-return.png"}},"collapsible_tab_QJfrPU":{"type":"collapsible_tab","settings":{"heading":"Product Details","icon":"price_tag","content":"{{ product.description }}","page":""}},"collapsible_tab_wbDrDk":{"type":"collapsible_tab","settings":{"heading":"Return & Refund Policy","icon":"return","content":"<p>We have a 7-Day Return policy, for more refer to this link <a href=\"https://www.mastt.co/policies/refund-policy\" target=\"_blank\" title=\"https://www.mastt.co/policies/refund-policy\">here</a>.</p>","page":""}},"collapsible_tab_jdkJmg":{"type":"collapsible_tab","settings":{"heading":"Customer Care","icon":"heart","content":"<p>Mastt Cares - For order related query, please mail us at <strong>info@mastt.co</strong><br/>We reply within 24 working hours from Monday to Saturday.</p>","page":""}},"collapsible_tab_iAX7yX":{"type":"collapsible_tab","settings":{"heading":"Shipping Info","icon":"truck","content":"<ul><li>Orders processed and shipped same day for orders between Monday-Saturday before 4 PM.</li><li>ETA: Delivered within 3-5 working days.</li><li>Free delivery on all orders.</li><li>For more- Refer to the link <a href=\"https://www.mastt.co/policies/shipping-policy\" target=\"_blank\" title=\"https://www.mastt.co/policies/shipping-policy\">here</a></li></ul>","page":""}},"complementary_7EUazW":{"type":"complementary","disabled":true,"settings":{"block_heading":"Pairs well with","make_collapsible_row":false,"icon":"price_tag","product_list_limit":4,"products_per_page":2,"pagination_style":"dots","image_ratio":"square","enable_quick_add":true}}},"block_order":["custom_liquid_U939en","badges_share_tTj9H9","title","price","custom_liquid_XMeAWr","variant_picker","size_chart_xDhMbE","quantity_selector","custom_liquid_Y6Y988","custom_liquid_DzKG4G","custom_liquid_BnnLW4","bank_offer_ErpjpG","bank_offer_NdLxpq","coupon_offer_fLgiaq","buy_buttons","product_grouping_picker_TGgxeH","features_yaiGKM","collapsible_tab_QJfrPU","collapsible_tab_wbDrDk","collapsible_tab_jdkJmg","collapsible_tab_iAX7yX","complementary_7EUazW"],"settings":{"enable_sticky_info":true,"color_scheme":"scheme-1","media_size":"medium","constrain_to_viewport":true,"media_fit":"cover","gallery_layout":"overlay","mobile_thumbnails":"hide","media_position":"left","image_zoom":"hover","hide_variants":true,"enable_video_looping":false,"padding_top":0,"padding_bottom":0}},"1765432784f68427fe":{"type":"apps","settings":{"include_margins":true}},"176543348451589833":{"type":"apps","settings":{"include_margins":true}},"174594043442de62c9":{"type":"apps","settings":{"include_margins":true}},"1765432523dfe615b7":{"type":"apps","settings":{"include_margins":false}},"related-products":{"type":"related-products","disabled":true,"settings":{"heading":"You may also like","heading_size":"h2","products_to_show":4,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":false,"padding_top":36,"padding_bottom":28}},"featured_collection_8haAj6":{"type":"featured-collection","disabled":true,"name":"t:sections.featured-collection.presets.name","settings":{"collection":"bracelet","products_to_show":4,"enable_dark_mode":false,"title":"Featured collection","heading_size":"h1","description":"","show_description":false,"description_style":"body","columns_desktop":4,"enable_desktop_slider":false,"full_width":false,"show_view_all":false,"view_all_style":"solid","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"standard","columns_mobile":"2","swipe_on_mobile":true,"padding_top":36,"padding_bottom":36}},"ss_testimonial_9_pqaYt3":{"type":"ss-testimonial-9","blocks":{"testimonial_CYDK4M":{"type":"testimonial","settings":{"title":"Love necklace","text":"The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.","hide_avatar":false,"author":"Lara S.","stars_count":5}},"testimonial_gQ9HD9":{"type":"testimonial","settings":{"title":"COMPANY NAME","text":"The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.","hide_avatar":false,"author":"Lara S.","stars_count":5}},"testimonial_EPgzqQ":{"type":"testimonial","settings":{"title":"Rose quartz bracelet","text":"Bought the rose quartz bracelet as a self-love gift and honestly, I haven’t taken it off since.","avatar":"shopify://shop_images/5_45a8feb7-beae-411f-8dda-aef6b29597cc.jpg","hide_avatar":false,"author":"Lara S.","stars_count":5}},"testimonial_UhbnyC":{"type":"testimonial","settings":{"title":"COMPANY NAME","text":"The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.","hide_avatar":false,"author":"Lara S.","stars_count":5}},"testimonial_bPzmhr":{"type":"testimonial","settings":{"title":"COMPANY NAME","text":"The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.","hide_avatar":false,"author":"Lara S.","stars_count":5}},"testimonial_kBkTGh":{"type":"testimonial","settings":{"title":"COMPANY NAME","text":"The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.","hide_avatar":false,"author":"Lara S.","stars_count":5}}},"block_order":["testimonial_CYDK4M","testimonial_gQ9HD9","testimonial_EPgzqQ","testimonial_UhbnyC","testimonial_bPzmhr","testimonial_kBkTGh"],"disabled":true,"name":"SS - Testimonial #9","settings":{"heading":"<h2>Over <strong>250+</strong> reviews on <em>Google</em> from our customers</h2>","heading_custom":false,"heading_font":"montserrat_n4","heading_size":24,"heading_size_mobile":18,"heading_height":80,"heading_align":"center","bottom":"","bottom_custom":false,"bottom_font":"josefin_sans_n4","bottom_size":8,"bottom_size_mobile":6,"bottom_height":70,"bottom_align":"center","bottom_mt":24,"rating":4.7,"rating_hide":false,"rating_align":"center","rating_custom":false,"rating_font":"josefin_sans_n4","rating_size":18,"rating_size_mobile":12,"rating_height":110,"rating_mt":16,"stars_count":5,"stars_size":16,"slider_view":"5","slider_view_mobile":2,"slider_gap":20,"slider_gap_mobile":4,"slider_mt":8,"card_padding_vertical":24,"card_padding_vertical_mobile":8,"card_padding_horizontal":24,"card_padding_horizontal_mobile":16,"card_radius":10,"card_border_thickness":0,"card_shadow":false,"title_custom":false,"title_font":"josefin_sans_n4","title_size":12,"title_size_mobile":10,"title_height":80,"text_custom":true,"text_font":"montserrat_n5","text_size":18,"text_size_mobile":14,"text_height":110,"text_mt":20,"avatar_size":62,"avatar_size_mobile":28,"author_custom":false,"author_font":"josefin_sans_n4","author_size":18,"author_size_mobile":8,"author_height":70,"author_mt":6,"navigation_mt":4,"arrow_size":34,"arrow_size_mobile":28,"arrow_icon_size":34,"arrow_icon_size_mobile":34,"arrow_border_thickness":0,"arrow_show_desktop":true,"arrow_show_mobile":true,"progress_width":150,"progress_width_mobile":150,"progress_height":6,"progress_height_mobile":6,"progress_show_desktop":true,"progress_show_mobile":true,"card_bg_color":"#FFFFFF","card_border_color":"#201B19","card_shadow_color":"#201B19","title_color":"#201B19","text_color":"#201B19","author_color":"#6B5F5B","arrow_color":"#201B19","arrow_hover_color":"#D6887C","arrow_bg_color":"#ffffff","arrow_bg_hover_color":"#F5E7DF","arrow_border_color":"#E5DED8","arrow_border_hover_color":"#D6887C","progress_bg_color":"#E3C4BC","progress_color":"#D6887C","heading_color":"#201B19","bottom_color":"#201B19","rating_text_color":"#201B19","stars_color":"#f4ac03","background_color":"#F5E7DF","background_gradient":"","border_color":"#201B19","margin_top":0,"margin_bottom":0,"padding_top":36,"padding_bottom":36,"padding_horizontal":4,"padding_horizontal_mobile":1.5,"full_width":false,"content_width":190,"border_thickness":0,"lazy":true}},"175622883674c57dbf":{"type":"apps","settings":{"include_margins":true}},"1769228079dba78ad6":{"type":"apps","settings":{"include_margins":true}},"17721909190e3a3760":{"type":"apps","settings":{"include_margins":true}}},"order":["main","1765432784f68427fe","176543348451589833","174594043442de62c9","1765432523dfe615b7","related-products","featured_collection_8haAj6","ss_testimonial_9_pqaYt3","175622883674c57dbf","1769228079dba78ad6","17721909190e3a3760"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "custom_liquid_U939en": {
+          "type": "custom_liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<span class=\"product-tags\">\n\t<div class=\"new-arrival\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0578/3912/4549/files/cc_logo_yellow.svg?v=1721099570\">\n      EASY RETURNS\n    </div>\n\t<div class=\"tag__blue\"><img src=\"https://cdn.shopify.com/s/files/1/0578/3912/4549/files/Free-shipping.svg?v=1722576920\">\nMONEY-BACK GUARANTEE\n</div>\n  </span>"
+          }
+        },
+        "badges_share_tTj9H9": {
+          "type": "badges_share",
+          "settings": {
+            "sale_text": "Pick Any 2, Pay for 1",
+            "variant_text": "Amethyst",
+            "share_label": ""
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "custom_liquid_XMeAWr": {
+          "type": "custom_liquid",
+          "name": "Countdown",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<!-- Compact Elegant Countdown Timer with Bold Digits -->\n<div class=\"countdown-container\">\n  <span class=\"countdown-label\">Offer Ends </span>\n  <div id=\"countdown\" class=\"countdown-display\"></div>\n</div>\n\n<!-- Styles -->\n<style>\n  .countdown-container {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    font-weight: 500;\n    font-family: var(--font-body-family);\n    padding: 6px 0;\n  }\n  \n  .countdown-label {\n    color: #00324C;\n    font-weight: 600;\n    font-size: 16px;\n    letter-spacing: 0.3px;\n  }\n  \n  .countdown-display {\n    display: flex;\n    gap: 5px;\n    align-items: center;\n  }\n  \n  .time-segment {\n    display: flex;\n    gap: 0px;\n    border-radius: 5px;\n    overflow: hidden;\n  }\n  \n  .flip-digit {\n    background-color: #00324C;\n    color: white;\n    min-width: 20px;\n    height: 26px;\n    font-size: 14px;\n    font-family: 'Courier New', monospace;\n    font-weight: 700; /* Made digits bold */\n    border-radius: 0px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    position: relative;\n    overflow: hidden;\n\n    &:first-child{\n      place-content: end;\n      padding-right: 2px;\n    }\n    &:last-child{\n      place-content: start;\n      padding-left: 2px;\n    }\n  }\n  \n  .digit-inner {\n    line-height: 1rem;\n    display: block;\n    transform-origin: bottom;\n    backface-visibility: hidden;\n    transform: rotateX(0deg);\n    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n    font-weight: inherit; /* Inherit boldness */\n  }\n  \n  .flipping {\n    animation: flip 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;\n  }\n  \n  @keyframes flip {\n    0% {\n      transform: rotateX(0deg);\n    }\n    50% {\n      transform: rotateX(-90deg);\n    }\n    100% {\n      transform: rotateX(0deg);\n    }\n  }\n  \n  .time-separator {\n    color: #666;\n    font-size: 14px;\n    font-weight: bold;\n    margin: 0 1px;\n    align-self: flex-end;\n    padding-bottom: 2px;\n  }\n</style>\n\n<!-- Script (unchanged from previous version) -->\n<script>\n  const config = {\n    animateAllDigits: false,\n    endOfDay: true\n  };\n  \n  const countdownEl = document.getElementById('countdown');\n  let previousValues = [\"00\", \"00\", \"00\", \"00\"];\n  let digitElements = [];\n  \n  function initTimer() {\n    countdownEl.innerHTML = '';\n    digitElements = [];\n    \n    const timeUnits = ['days', 'hours', 'minutes', 'seconds'];\n    \n    timeUnits.forEach((unit, index) => {\n      if (index > 0) {\n        const separator = document.createElement('span');\n        separator.className = 'time-separator';\n        separator.textContent = ':';\n        countdownEl.appendChild(separator);\n      }\n      \n      const segment = document.createElement('div');\n      segment.className = 'time-segment';\n      \n      for (let i = 0; i < 2; i++) {\n        const digit = document.createElement('div');\n        digit.className = 'flip-digit';\n        \n        const inner = document.createElement('span');\n        inner.className = 'digit-inner';\n        inner.textContent = '0';\n        \n        digit.appendChild(inner);\n        segment.appendChild(digit);\n        digitElements.push(inner);\n      }\n      \n      countdownEl.appendChild(segment);\n    });\n  }\n  \n  function updateTimer() {\n    const now = new Date();\n    let end = new Date();\n    \n    if (config.endOfDay) {\n      end.setHours(23, 59, 59, 999);\n    } else {\n      end = new Date(now.getTime() + 24 * 60 * 60 * 1000);\n    }\n    \n    let diff = end - now;\n    if (diff < 0) diff = 0;\n    \n    const seconds = Math.floor((diff / 1000) % 60);\n    const minutes = Math.floor((diff / 1000 / 60) % 60);\n    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);\n    const days = Math.floor(diff / (1000 * 60 * 60 * 24));\n    \n    const format = (num) => num.toString().padStart(2, '0');\n    const values = [format(days), format(hours), format(minutes), format(seconds)];\n    \n    values.forEach((val, i) => {\n      const tensDigit = val[0];\n      const unitsDigit = val[1];\n      const prevVal = previousValues[i];\n      \n      if (tensDigit !== prevVal[0]) {\n        const tensElement = digitElements[i * 2];\n        tensElement.textContent = tensDigit;\n        if (config.animateAllDigits || i === 3) {\n          tensElement.classList.add('flipping');\n          setTimeout(() => tensElement.classList.remove('flipping'), 600);\n        }\n      }\n      \n      if (unitsDigit !== prevVal[1]) {\n        const unitsElement = digitElements[i * 2 + 1];\n        unitsElement.textContent = unitsDigit;\n        if (config.animateAllDigits || i === 3) {\n          unitsElement.classList.add('flipping');\n          setTimeout(() => unitsElement.classList.remove('flipping'), 600);\n        }\n      }\n    });\n    \n    previousValues = values;\n  }\n  \n  initTimer();\n  updateTimer();\n  setInterval(updateTimer, 1000);\n</script>"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "size_chart_xDhMbE": {
+          "type": "size_chart",
+          "settings": {
+            "trigger_label": "Size Guide",
+            "fallback_type": ""
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "custom_liquid_Y6Y988": {
+          "type": "custom_liquid",
+          "name": "Blinking Offer",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<div class=\"offer-wrap\">\n    <span class=\"offer-blinker\"></span>\n    <span>BUY 2 GET 15% OFF, BUY 3 GET 20% OFF</span>\n</div>\n\n<style>\n\n.offer-wrap{\n    --offer-color: #006FCA;\n    display: flex; \n    align-items: center;\n    gap: 8.25px;\n    max-width: fit-content;\n\n    padding: clamp(7px, 6.6px + 0.125vw, 9px) clamp(10px, 9.4px + 0.1875vw, 13px); \n    background: #E2F2FF;\n    border: solid 2px hsl(from var(--offer-color) h s l / 0.1);\n    border-radius: 10px;\n\n    font-size: clamp(12px, .7rem + .25vw, 16px); \n    font-weight: 600; \n    color: var(--offer-color);    \n}\n\n.offer-blinker{\n    width: 8.25px;\n    aspect-ratio: 1;\n    border-radius: 2px;\n    background-color: var(--offer-color);\n    animation: blink 1s infinite;\n    rotate: 45deg;\n}\n\n@keyframes blink {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0;\n  }\n}\n</style>"
+          }
+        },
+        "custom_liquid_DzKG4G": {
+          "type": "custom_liquid",
+          "name": "Blinking Offer",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<div style=\"margin-top: 0; font-size: clamp(12px, .7rem + .25vw, 16px); padding-bottom: 2px; font-weight: 400; color: red; display: flex; align-items: center;\">\n  <span style=\"display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: red; margin-right: 5px; animation: blink 1s infinite;\"></span>\n  <span>Buy 2 Get 15% off, Buy 3 Get 20% off💥</span>\n</div>\n\n<style>\n@keyframes blink {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0;\n  }\n}\n</style>"
+          }
+        },
+        "custom_liquid_BnnLW4": {
+          "type": "custom_liquid",
+          "name": "[Offers]",
+          "settings": {
+            "custom_liquid": "OFFERS"
+          }
+        },
+        "bank_offer_ErpjpG": {
+          "type": "bank_offer",
+          "disabled": true,
+          "settings": {
+            "icon": "shopify://shop_images/bank-hdfc.svg",
+            "title": "HDFC Cards- ₹500 Instant OFF",
+            "description": "<p>Minimum order value <strong>₹3499</strong>.</p>"
+          }
+        },
+        "bank_offer_NdLxpq": {
+          "type": "bank_offer",
+          "disabled": true,
+          "settings": {
+            "icon": "shopify://shop_images/bank-sbi.svg",
+            "title": "Extra 12% Instant OFF on SBI Rupay Card",
+            "description": "<p>Minimum order value <strong>₹2499.</strong></p>"
+          }
+        },
+        "coupon_offer_fLgiaq": {
+          "type": "coupon_offer",
+          "settings": {
+            "headline": "Buy 1 Get 1 Free",
+            "code": "BOGO",
+            "details": "<p>Note: You need to add minimum 2 products</p>",
+            "auto_apply": false
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "product_grouping_picker_TGgxeH": {
+          "type": "product_grouping_picker",
+          "settings": {
+            "heading": "Product Grouping Picker",
+            "picker_type": "dynamic",
+            "dynamic_threshold": 10,
+            "grouping_label": "You may also like",
+            "option_type_metafield_key": "product_grouping_gemstone",
+            "option_value_metafield_key": "product_grouping_gemstone_value"
+          }
+        },
+        "features_yaiGKM": {
+          "type": "features",
+          "settings": {
+            "feature_1_text": "Skin Safe",
+            "feature_1_image": "shopify://shop_images/skin-safe.png",
+            "feature_2_text": "Anti-Tarnish",
+            "feature_2_image": "shopify://shop_images/anti-tarnish.png",
+            "feature_3_text": "Thick Plating",
+            "feature_3_image": "shopify://shop_images/thick-plating.png",
+            "feature_4_text": "Easy Exchange",
+            "feature_4_image": "shopify://shop_images/easy-return.png"
+          }
+        },
+        "collapsible_tab_QJfrPU": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Product Details",
+            "icon": "price_tag",
+            "content": "{{ product.description }}",
+            "page": ""
+          }
+        },
+        "collapsible_tab_wbDrDk": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Return & Refund Policy",
+            "icon": "return",
+            "content": "<p>We have a 7-Day Return policy, for more refer to this link <a href=\"https://www.mastt.co/policies/refund-policy\" target=\"_blank\" title=\"https://www.mastt.co/policies/refund-policy\">here</a>.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_jdkJmg": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Customer Care",
+            "icon": "heart",
+            "content": "<p>Mastt Cares - For order related query, please mail us at <strong>info@mastt.co</strong><br/>We reply within 24 working hours from Monday to Saturday.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_iAX7yX": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping Info",
+            "icon": "truck",
+            "content": "<ul><li>Orders processed and shipped same day for orders between Monday-Saturday before 4 PM.</li><li>ETA: Delivered within 3-5 working days.</li><li>Free delivery on all orders.</li><li>For more- Refer to the link <a href=\"https://www.mastt.co/policies/shipping-policy\" target=\"_blank\" title=\"https://www.mastt.co/policies/shipping-policy\">here</a></li></ul>",
+            "page": ""
+          }
+        },
+        "complementary_7EUazW": {
+          "type": "complementary",
+          "disabled": true,
+          "settings": {
+            "block_heading": "Pairs well with",
+            "make_collapsible_row": false,
+            "icon": "price_tag",
+            "product_list_limit": 4,
+            "products_per_page": 2,
+            "pagination_style": "dots",
+            "image_ratio": "square",
+            "enable_quick_add": true
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_U939en",
+        "badges_share_tTj9H9",
+        "title",
+        "price",
+        "custom_liquid_XMeAWr",
+        "variant_picker",
+        "size_chart_xDhMbE",
+        "quantity_selector",
+        "custom_liquid_Y6Y988",
+        "custom_liquid_DzKG4G",
+        "custom_liquid_BnnLW4",
+        "bank_offer_ErpjpG",
+        "bank_offer_NdLxpq",
+        "coupon_offer_fLgiaq",
+        "buy_buttons",
+        "product_grouping_picker_TGgxeH",
+        "features_yaiGKM",
+        "collapsible_tab_QJfrPU",
+        "collapsible_tab_wbDrDk",
+        "collapsible_tab_jdkJmg",
+        "collapsible_tab_iAX7yX",
+        "complementary_7EUazW"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "gallery_layout": "overlay",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "hover",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "1765432784f68427fe": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "176543348451589833": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "174594043442de62c9": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1765432523dfe615b7": {
+      "type": "apps",
+      "settings": {
+        "include_margins": false
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "featured_collection_8haAj6": {
+      "type": "featured-collection",
+      "disabled": true,
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "bracelet",
+        "products_to_show": 4,
+        "enable_dark_mode": false,
+        "title": "Featured collection",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "ss_testimonial_9_pqaYt3": {
+      "type": "ss-testimonial-9",
+      "blocks": {
+        "testimonial_CYDK4M": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love necklace",
+            "text": "The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.",
+            "hide_avatar": false,
+            "author": "Lara S.",
+            "stars_count": 5
+          }
+        },
+        "testimonial_gQ9HD9": {
+          "type": "testimonial",
+          "settings": {
+            "title": "COMPANY NAME",
+            "text": "The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.",
+            "hide_avatar": false,
+            "author": "Lara S.",
+            "stars_count": 5
+          }
+        },
+        "testimonial_EPgzqQ": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Rose quartz bracelet",
+            "text": "Bought the rose quartz bracelet as a self-love gift and honestly, I haven’t taken it off since.",
+            "avatar": "shopify://shop_images/5_45a8feb7-beae-411f-8dda-aef6b29597cc.jpg",
+            "hide_avatar": false,
+            "author": "Lara S.",
+            "stars_count": 5
+          }
+        },
+        "testimonial_UhbnyC": {
+          "type": "testimonial",
+          "settings": {
+            "title": "COMPANY NAME",
+            "text": "The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.",
+            "hide_avatar": false,
+            "author": "Lara S.",
+            "stars_count": 5
+          }
+        },
+        "testimonial_bPzmhr": {
+          "type": "testimonial",
+          "settings": {
+            "title": "COMPANY NAME",
+            "text": "The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.",
+            "hide_avatar": false,
+            "author": "Lara S.",
+            "stars_count": 5
+          }
+        },
+        "testimonial_kBkTGh": {
+          "type": "testimonial",
+          "settings": {
+            "title": "COMPANY NAME",
+            "text": "The real gem is the integrated smartphone app with guided classes and body tracking. I really like it.",
+            "hide_avatar": false,
+            "author": "Lara S.",
+            "stars_count": 5
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_CYDK4M",
+        "testimonial_gQ9HD9",
+        "testimonial_EPgzqQ",
+        "testimonial_UhbnyC",
+        "testimonial_bPzmhr",
+        "testimonial_kBkTGh"
+      ],
+      "disabled": true,
+      "name": "SS - Testimonial #9",
+      "settings": {
+        "heading": "<h2>Over <strong>250+</strong> reviews on <em>Google</em> from our customers</h2>",
+        "heading_custom": false,
+        "heading_font": "montserrat_n4",
+        "heading_size": 24,
+        "heading_size_mobile": 18,
+        "heading_height": 80,
+        "heading_align": "center",
+        "bottom": "",
+        "bottom_custom": false,
+        "bottom_font": "josefin_sans_n4",
+        "bottom_size": 8,
+        "bottom_size_mobile": 6,
+        "bottom_height": 70,
+        "bottom_align": "center",
+        "bottom_mt": 24,
+        "rating": 4.7,
+        "rating_hide": false,
+        "rating_align": "center",
+        "rating_custom": false,
+        "rating_font": "josefin_sans_n4",
+        "rating_size": 18,
+        "rating_size_mobile": 12,
+        "rating_height": 110,
+        "rating_mt": 16,
+        "stars_count": 5,
+        "stars_size": 16,
+        "slider_view": "5",
+        "slider_view_mobile": 2,
+        "slider_gap": 20,
+        "slider_gap_mobile": 4,
+        "slider_mt": 8,
+        "card_padding_vertical": 24,
+        "card_padding_vertical_mobile": 8,
+        "card_padding_horizontal": 24,
+        "card_padding_horizontal_mobile": 16,
+        "card_radius": 10,
+        "card_border_thickness": 0,
+        "card_shadow": false,
+        "title_custom": false,
+        "title_font": "josefin_sans_n4",
+        "title_size": 12,
+        "title_size_mobile": 10,
+        "title_height": 80,
+        "text_custom": true,
+        "text_font": "montserrat_n5",
+        "text_size": 18,
+        "text_size_mobile": 14,
+        "text_height": 110,
+        "text_mt": 20,
+        "avatar_size": 62,
+        "avatar_size_mobile": 28,
+        "author_custom": false,
+        "author_font": "josefin_sans_n4",
+        "author_size": 18,
+        "author_size_mobile": 8,
+        "author_height": 70,
+        "author_mt": 6,
+        "navigation_mt": 4,
+        "arrow_size": 34,
+        "arrow_size_mobile": 28,
+        "arrow_icon_size": 34,
+        "arrow_icon_size_mobile": 34,
+        "arrow_border_thickness": 0,
+        "arrow_show_desktop": true,
+        "arrow_show_mobile": true,
+        "progress_width": 150,
+        "progress_width_mobile": 150,
+        "progress_height": 6,
+        "progress_height_mobile": 6,
+        "progress_show_desktop": true,
+        "progress_show_mobile": true,
+        "card_bg_color": "#FFFFFF",
+        "card_border_color": "#201B19",
+        "card_shadow_color": "#201B19",
+        "title_color": "#201B19",
+        "text_color": "#201B19",
+        "author_color": "#6B5F5B",
+        "arrow_color": "#201B19",
+        "arrow_hover_color": "#D6887C",
+        "arrow_bg_color": "#ffffff",
+        "arrow_bg_hover_color": "#F5E7DF",
+        "arrow_border_color": "#E5DED8",
+        "arrow_border_hover_color": "#D6887C",
+        "progress_bg_color": "#E3C4BC",
+        "progress_color": "#D6887C",
+        "heading_color": "#201B19",
+        "bottom_color": "#201B19",
+        "rating_text_color": "#201B19",
+        "stars_color": "#f4ac03",
+        "background_color": "#F5E7DF",
+        "background_gradient": "",
+        "border_color": "#201B19",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_horizontal": 4,
+        "padding_horizontal_mobile": 1.5,
+        "full_width": false,
+        "content_width": 190,
+        "border_thickness": 0,
+        "lazy": true
+      }
+    },
+    "175622883674c57dbf": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1769228079dba78ad6": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "17721909190e3a3760": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1765432784f68427fe",
+    "176543348451589833",
+    "174594043442de62c9",
+    "1765432523dfe615b7",
+    "related-products",
+    "featured_collection_8haAj6",
+    "ss_testimonial_9_pqaYt3",
+    "175622883674c57dbf",
+    "1769228079dba78ad6",
+    "17721909190e3a3760"
+  ]
+}
