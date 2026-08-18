@@ -117,6 +117,31 @@
                       </ul>
                     {%- endif -%}
 
+                  {%- when 'mastt_cares' -%}
+                    {%- comment -%}
+                      Support column that renders its own links rather than
+                      reading a Shopify navigation menu, so it works on a
+                      fresh store with no menus created yet. Each row is
+                      hidden when its URL field is left empty.
+                    {%- endcomment -%}
+                    <ul class="footer-block__details-content list-unstyled">
+                      {%- assign care_labels = block.settings.link_labels | split: ',' -%}
+                      {%- assign care_urls = block.settings.link_urls | split: ',' -%}
+                      {%- for label in care_labels -%}
+                        {%- assign care_url = care_urls[forloop.index0] | strip -%}
+                        {%- if care_url != blank -%}
+                          <li class="footer-menu-item">
+                            <a
+                              href="{{ care_url }}"
+                              class="link link--text list-menu__item list-menu__item--link"
+                            >
+                              {{ label | strip | escape }}
+                            </a>
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+
                   {%- when 'brand_information' -%}
                     <div class="footer-block__brand-info">
                       {%- if settings.brand_image != blank -%}
@@ -359,6 +384,32 @@
           "id": "menu",
           "default": "footer",
           "label": "t:sections.footer.blocks.link_list.settings.menu.label"
+        }
+      ]
+    },
+    {
+      "type": "mastt_cares",
+      "name": "Mastt Cares",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Mastt Cares",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "link_labels",
+          "label": "Link labels",
+          "info": "Comma separated. Must line up with the URLs below.",
+          "default": "About Us, Track Order, Terms of Use, Refund Policy, Privacy Policy, Shipping Policy, Warranty Registration"
+        },
+        {
+          "type": "textarea",
+          "id": "link_urls",
+          "label": "Link URLs",
+          "info": "Comma separated, in the same order as the labels. Leave an entry empty to hide that row.",
+          "default": "/pages/about-us, https://mastt.shiprocket.co/tracking, /policies/terms-of-service, /policies/refund-policy, /policies/privacy-policy, /policies/shipping-policy, /pages/warranty-registration"
         }
       ]
     },
