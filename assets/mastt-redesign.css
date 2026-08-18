@@ -404,7 +404,11 @@ h1, h2, h3, h4, h5, h6,
    block via `bottom: 100%`, which lands it over the bottom of the image
    whatever the aspect ratio — and, unlike anchoring to .card-wrapper, it
    can never cover the product title. */
-.card-wrapper .card__content:has(.quick-add) {
+/* Positioned unconditionally — no :has() dependency, and harmless on cards
+   that have no quick-add. The image stays clickable because the media's own
+   title-link overlay lives inside .card__inner (which is .ratio, already
+   position:relative), so it is unaffected by this. */
+.card-wrapper .card__content {
   position: relative;
 }
 
@@ -418,6 +422,10 @@ h1, h2, h3, h4, h5, h6,
     margin: 0;
     opacity: 0;
     transform: translateY(8px);
+    /* opacity:0 alone still swallows clicks — without this the invisible
+       button sits over the image and blocks the link through to the
+       product page. */
+    pointer-events: none;
     transition: opacity var(--duration-med) var(--ease-out),
                 transform var(--duration-med) var(--ease-out);
   }
@@ -426,6 +434,7 @@ h1, h2, h3, h4, h5, h6,
   .card-wrapper:focus-within .quick-add {
     opacity: 1;
     transform: translateY(0);
+    pointer-events: auto;
   }
 }
 
