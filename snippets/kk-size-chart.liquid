@@ -35,9 +35,9 @@
   background: none; border: 0; padding: 0; cursor: pointer;
   font-size: 1.35rem; letter-spacing: .02rem; color: rgb(var(--color-foreground));
   text-decoration: underline; text-underline-offset: .3rem;
-  text-decoration-color: #C8A46B; text-decoration-thickness: .1rem;
+  text-decoration-color: #D6887C; text-decoration-thickness: .1rem;
 }
-.kk-sizechart__trigger:hover { color: #C8A46B; }
+.kk-sizechart__trigger:hover { color: #D6887C; }
 
 /* Modal shell (reuses Dawn's modal-dialog behaviour) */
 .kk-sizechart-modal { display: none; }
@@ -87,10 +87,10 @@
 .kk-sizechart__step-num {
   position: absolute; top: .6rem; left: .6rem; width: 2.2rem; height: 2.2rem; z-index: 1;
   display: flex; align-items: center; justify-content: center; border-radius: calc(var(--kk-br) / 2);
-  background: #C8A46B; color: #fff; font-size: 1.2rem; font-weight: 600;
+  background: #D6887C; color: #fff; font-size: 1.2rem; font-weight: 600;
 }
 .kk-sizechart__step-caption { width: 100%; display: flex; place-content: center; }
-.kk-sizechart__step-caption p { margin-top: .6rem; font-size: 1.5rem; line-height: 1.35; color: #000; font-weight: 500; max-width: 16ch; text-wrap-style: balance; }
+.kk-sizechart__step-caption p { margin-top: .6rem; font-size: 1.5rem; line-height: 1.35; color: #201B19; font-weight: 500; max-width: 16ch; text-wrap-style: balance; }
 
 /* Magnifier lens (created in JS, appended inside the hovered media; clipped to
    the square by the media's overflow:hidden). pointer-events:none so the media
@@ -123,9 +123,9 @@
   background: rgba(var(--color-foreground), .04);
   border-bottom-color: rgba(var(--color-foreground), .16);
 }
-.kk-sizechart__col--primary { font-weight: 600; background: rgba(200,164,107,.12); }
+.kk-sizechart__col--primary { font-weight: 600; background: rgba(214,136,124,.14); }
 .kk-sizechart__table tbody tr:hover td,
-.kk-sizechart__table tbody tr:hover .kk-sizechart__col--primary { background: rgba(200,164,107,.18); }
+.kk-sizechart__table tbody tr:hover .kk-sizechart__col--primary { background: rgba(214,136,124,.22); }
 .kk-sizechart__fit { display: block; margin-top: .1rem; font-size: 1.05rem; opacity: .55; }
 
 /* Footer */
@@ -133,10 +133,10 @@
 .kk-sizechart__note {
   display: inline-flex; align-items: center; gap: .6rem;
   margin: 0; padding: .6rem 1rem; border-radius: var(--kk-br);
-  background: rgba(200,164,107,.16); color: rgb(var(--color-foreground));
+  background: rgba(214,136,124,.16); color: rgb(var(--color-foreground));
   font-size: 1rem; font-weight: 600; line-height: 1.3;
 }
-.kk-sizechart__note-icon { display: inline-flex; flex: none; color: #C8A46B; }
+.kk-sizechart__note-icon { display: inline-flex; flex: none; color: #D6887C; }
 .kk-sizechart__note-icon svg { width: 1.25rem; height: 1.25rem; display: block; }
 .kk-sizechart__disclaimer {
   margin: .9rem 0 0; font-size: 1rem; line-height: 1.4;
