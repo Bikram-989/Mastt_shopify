@@ -1,81 +1,93 @@
 <style>
-h1,
-h2,
-h3,
-p{
-  margin: 0;
-}
-.usp-wrapper {
-  display: grid;
-  place-content: center;
+/* Redesigned for Mastt: was a "diamond" icon overlapping a solid backdrop
+   panel. Now a quiet trust-strip — ringed icon badges cycling through the
+   four secondary brand colors, thin hairline dividers between items on
+   desktop, no backdrop panel. Same block loop / settings, visual only. */
 
-  padding-bottom: calc(clamp(15px, 13px + 0.625vw, 25px) * 2);
+h1, h2, h3, p { margin: 0; }
+
+.usp-wrapper {
+  padding-block: clamp(48px, 34px + 4vw, 96px);
+}
+
+.usp-wrapper .kk__heading {
+  text-align: center;
+  margin-bottom: clamp(32px, 22px + 3vw, 56px) !important;
 }
 
 .usp-container {
-  --diamond: clamp(125px, 105px + 6.25vw, 225px);
-    
   display: grid;
-  grid-template-columns: repeat(4, var(--diamond));
-  column-gap: clamp(15px, 13px + 0.625vw, 25px);
-  row-gap: calc((var(--diamond)/2) + clamp(15px, 12px + 0.9375vw, 30px));
-  margin-top: clamp(78px, 71.6px + 2vw, 110px);
-  
-  position: relative;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1120px;
+  margin: 0 auto;
+  position: static;
 }
-
-.usp-container::before {
-  content: '';
-  inset: calc(clamp(15px, 13px + 0.625vw, 25px) * (-1));
-  top: 25%;
-  position: absolute;
-  border-radius: 20px;
-  background: var(--color-blush-pink, #EC9F93);
-  box-shadow: var(--kk__cs);
-}
-
-{%- comment -%} Simplified for Mastt: same gradient at all sizes, no external texture image. {%- endcomment -%}
 
 .usp {
   position: relative;
-  max-width: var(--diamond);
-  background: var(--color-white, #fff);
-  border-radius: 0 0 20px 20px;
+  max-width: none;
+  background: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4px clamp(14px, 8px + 1.8vw, 32px);
+}
+
+.usp:not(:nth-child(4n+1))::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14%;
+  height: 72%;
+  width: 1px;
+  background: rgba(32, 27, 25, .12);
 }
 
 .usp-icon {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: var(--diamond);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: static;
+  width: clamp(58px, 48px + 2.6vw, 76px);
   aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-
-  padding: 25px;
+  transform: none;
+  padding: clamp(14px, 11px + 0.8vw, 18px);
+  margin-bottom: clamp(14px, 10px + 1vw, 20px);
   background: var(--color-white, #fff);
   border-radius: 50%;
-  box-shadow: var(--mastt-shadow-lg);
+  box-shadow: 0 0 0 3px var(--usp-ring, var(--color-dusty-coral, #D6887C)), var(--shadow-sm);
+  transition: transform 320ms cubic-bezier(.16,1,.3,1);
 }
 
-.usp-icon img{
+.usp:hover .usp-icon {
+  transform: translateY(-4px);
+}
+
+.usp:nth-child(4n+1) .usp-icon { --usp-ring: var(--color-dusty-coral, #D6887C); }
+.usp:nth-child(4n+2) .usp-icon { --usp-ring: var(--color-aqua, #78AAB1); }
+.usp:nth-child(4n+3) .usp-icon { --usp-ring: var(--color-blush-pink, #EC9F93); }
+.usp:nth-child(4n+4) .usp-icon { --usp-ring: var(--color-nude-beige, #E3C4BC); }
+
+.usp-icon img {
   width: 100%;
   aspect-ratio: 1;
+  object-fit: contain;
 }
 
 .usp-content {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   flex-direction: column;
   align-items: center;
-  margin-top: calc(var(--diamond) / 2.5);
-  padding: 0 10px 15px 10px;
-
+  margin-top: 0;
+  padding: 0;
   isolation: isolate;
 }
 
-.usp-title{
-  font-size: clamp(14px, 12px + 0.625vw, 24px);
+.usp-title {
+  font-size: clamp(15px, 13px + 0.5vw, 19px);
   font-family: var(--font-heading-family);
   font-style: italic;
   font-weight: 500;
@@ -84,21 +96,26 @@ p{
 
 .usp-content p {
   text-align: center;
-  font-size: clamp(10px, 8.4px + 0.5vw, 18px);
+  font-size: clamp(12px, 11px + 0.3vw, 14px);
   line-height: 1.5em;
+  color: var(--color-charcoal-70, #6B5F5B);
+  max-width: 24ch;
 }
 
-@media (width < 1050px){
+@media (width < 1050px) {
   .usp-container {
     grid-template-columns: repeat(2, 1fr);
+    row-gap: clamp(28px, 20px + 2vw, 40px);
   }
-}
-
-@media (width < 576px){  
-  .usp-container::before{
-    top: calc(-25% + 10px);
-    margin-inline: -50px;
-    border-radius: 0;
+  .usp:not(:nth-child(4n+1))::before { display: none; }
+  .usp:nth-child(even)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14%;
+    height: 72%;
+    width: 1px;
+    background: rgba(32, 27, 25, .12);
   }
 }
 </style>
