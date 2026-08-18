@@ -18,7 +18,8 @@ Accepts:
 
 {%- if priority_badge == blank -%}
   {%- comment -%} No explicit !tag priority marker — fall back to the first matching tag, checked in this priority order. {%- endcomment -%}
-  {%- for candidate in 'bogo,halfprice,20off,50off,new,excl,medit,art' | split: ',' -%}
+  {%- assign badge_priority_order = 'bogo,halfprice,20off,50off,new,excl,medit,art' | split: ',' -%}
+  {%- for candidate in badge_priority_order -%}
     {%- if priority_badge == blank and product.tags contains candidate -%}
       {%- assign priority_badge = candidate -%}
     {%- endif -%}

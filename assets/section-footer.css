@@ -522,26 +522,28 @@
   
 }
 
-.footer__content-top {  
+.footer__content-top {
   padding: clamp(30px, 26px + 1.25vw, 50px);
 
-  border-radius: 20px;
-  background-color: var(--kk-charcoal);
-  background-image: linear-gradient(0deg, #191305 0%, #24180A 50%, #191305 100%);
-  box-shadow: var(--kk__cs);
-  
-  color: #fff;
+  border-radius: var(--radius-lg, 24px);
+  /* Inherit the section's colour scheme rather than painting a hardcoded
+     brown-olive gradient over it — that panel was what made the footer read
+     as a different theme, and it forced text light while the scheme could
+     be either. */
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: inherit;
 }
 
+/* Bottom bar carries the policy links + payment icons — it needs to show */
 .footer__content-bottom{
-  display: none;
+  display: block;
 }
 
-.footer{
-  .grid__item{
-    max-width: fit-content;
-  }
-}
+/* `max-width: fit-content` here was shrink-wrapping each footer column, which
+   pushed the brand block hard left and the link column hard right with a gulf
+   between them. Let the grid distribute normally instead. */
 
 .footer__blocks-wrapper{
   justify-content: space-between;

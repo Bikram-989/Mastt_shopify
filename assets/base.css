@@ -3709,14 +3709,14 @@ body:has(product-info){
 
 .kk__cta__s{
   border: 1px solid rgba(255,255,255,0.2);
-  background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 30%), #016766;
-  box-shadow: 0px -10px 15px 2px #00BEBB35 inset;
+  background: var(--color-aqua);
+  color: var(--color-charcoal);
 }
 
 .badge{
-  border: 1px solid rgba(255,255,255,0.15);
-  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%), #FF8A48;
-  box-shadow: 0px -10px 15px 2px #BE460069 inset;
+  border: none;
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
 }
 
 .kk__sale__badge,
@@ -3740,10 +3740,11 @@ body:has(product-info){
 }
 
 .kk__sale__badge{
-  box-shadow: 0px -10px 15px 2px hsl(from var(--kk-accent-alt) h s 40%) inset, var(--kk__cs);
-  border: 1px solid rgba(255,255,255,0.15);
-  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%), var(--kk-accent-alt);
-  color: white;
+  /* was white-on-aqua (2.6:1, fails AA). Charcoal on aqua is 6.8:1. */
+  box-shadow: var(--kk__cs);
+  border: none;
+  background: var(--color-aqua);
+  color: var(--color-charcoal);
   font-weight: 600;
 }
 
@@ -3790,9 +3791,10 @@ body:has(product-info){
   column-gap: 10px;
 
   /* border-bottom: var(--mastt-border-hairline); */
-  border-radius: var(--kk-br);
-  padding: 10px;
-  background: hsl(from var(--kk-accent) h s 15%);
+  border-radius: var(--radius-md);
+  padding: 16px 10px;
+  background: var(--color-pearl-beige);
+  border: 1px solid var(--color-charcoal-08);
 }
 
 .product-features li{
@@ -3807,7 +3809,7 @@ body:has(product-info){
   line-height: var(--line-height-x);
   text-align: center;
 
-  color: #ffcf64;
+  color: var(--color-charcoal);
 }
 
 .product-features img{
@@ -3893,8 +3895,9 @@ body:has(product-info){
 }
 
 .badge{
-  background: #FF8A48;
-  border-radius: 10px;
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+  border-radius: var(--radius-full);
 
   font-family: var(--font-body-family);
   font-size: 10px;
@@ -3903,7 +3906,7 @@ body:has(product-info){
 }
 
 .card__media{
-  backdrop-filter: drop-shadow(0px 4px 14px #472A1435);
+  backdrop-filter: drop-shadow(0px 4px 14px rgba(32, 27, 25, 0.2));
 }
 
 .collapsible-row-layout .accordion .accordion__content p{
@@ -4355,7 +4358,7 @@ media-gallery{
 }
 
 .pills-top .pill-pack__of {
-  --pill-color: #016766; color: var(--pill-color); background: hsl(from var(--pill-color) h 26% 84%); background: #c8dcdb;
+  --pill-color: var(--color-aqua-dark); color: var(--pill-color); background: var(--color-aqua-10);
 }
 .pills-top .pill-gender {
   --pill-color: #696969; color: var(--pill-color); background: hsl(from var(--pill-color) h 0% 88%); background: #e0e0e0;

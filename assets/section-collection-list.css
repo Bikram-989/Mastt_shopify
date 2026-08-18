@@ -86,12 +86,12 @@
     padding: 7px 20px 8px 25px;
     
     background: #ffffff10;
-    border: 1.5px solid #472A14;
+    border: 1.5px solid var(--color-charcoal);
     border-radius: var(--mastt-radius-pill);
 
     box-shadow:
-      0 4px 44px #472A1440,
-      0 4px 13px #472A1435; 
+      0 4px 44px rgba(32, 27, 25, 0.25),
+      0 4px 13px rgba(32, 27, 25, 0.2); 
 
     a{
       line-height: var(--line-height-x);

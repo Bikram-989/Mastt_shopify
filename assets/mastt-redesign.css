@@ -115,16 +115,15 @@
   --font-heading-family: 'Fraunces', serif;
 }
 
+/* NOTE: deliberately no `color` here. Dawn drives text colour per section
+   through --color-foreground (set by the .color-scheme-N class), so pinning
+   charcoal globally makes text invisible on every dark section — the footer,
+   dark hero overlays, scheme-2/5 bands. Set colour on components instead. */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: var(--font-heading-family);
   font-weight: 500;
   letter-spacing: -0.01em;
-  color: var(--color-charcoal);
-}
-
-body, p {
-  color: var(--color-charcoal);
 }
 
 /* "Eyebrow" label style — echoes the tracked-caps "JEWELLERY" / tagline
@@ -546,7 +545,7 @@ body, p {
 .header__menu-item,
 .header__active-menu-item {
   font-family: var(--font-body-family);
-  color: var(--color-charcoal);
+  color: rgb(var(--color-foreground));
 }
 
 .header__inline-menu .header__menu-item {
@@ -691,7 +690,114 @@ body, p {
 
 
 /* --------------------------------------------------------------------------
-   11. FOCUS STATES (accessibility — keep visible, on-brand)
+   11. PRODUCT PAGE + COLLECTION PAGE
+   -------------------------------------------------------------------------- */
+
+/* ---- Buy button hierarchy: Add to Cart is the coral primary, Buy it now
+   is charcoal. Shopify's dynamic checkout button ships its own teal, so it
+   needs an explicit override to join the system. ---- */
+.product-form__submit {
+  background-color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+}
+
+.shopify-payment-button__button--unbranded,
+button.shopify-payment-button__button--unbranded {
+  background-color: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  border-radius: var(--radius-full);
+  min-height: 4.8rem;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  box-shadow: none;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.shopify-payment-button__button--unbranded:hover,
+button.shopify-payment-button__button--unbranded:hover {
+  background-color: color-mix(in srgb, var(--color-charcoal) 88%, white);
+  transform: translateY(-1px);
+}
+
+.shopify-payment-button__more-options {
+  color: var(--color-charcoal-70);
+}
+
+/* ---- Variant pills ---- */
+.product-form__input--pill input[type='radio'] + label {
+  border-radius: var(--radius-full);
+  border-color: var(--color-charcoal-15);
+  font-family: var(--font-body-family);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.product-form__input--pill input[type='radio']:checked + label {
+  background-color: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  border-color: var(--color-charcoal);
+}
+
+.product-form__input--pill input[type='radio']:hover + label {
+  border-color: var(--color-dusty-coral);
+}
+
+/* ---- PDP accordion rows (Product Details / Shipping / etc.) ---- */
+.product__accordion .accordion__title,
+.product .accordion__title {
+  font-family: var(--font-heading-family);
+}
+
+.product__accordion summary .svg-wrapper,
+.product .accordion summary .icon-caret {
+  color: var(--color-dusty-coral);
+}
+
+/* ---- Collection page: facet sidebar ---- */
+.facets__form .facets__summary,
+.facets__heading,
+.facets__summary {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.facets__price input,
+.facets-wrapper .field__input {
+  border-radius: var(--radius-sm);
+}
+
+.active-facets__button,
+.active-facets__button-remove {
+  border-radius: var(--radius-full);
+}
+
+/* Checkbox accent so filters read as brand, not browser-default blue */
+.facets input[type='checkbox'],
+.facets-wrapper input[type='checkbox'] {
+  accent-color: var(--color-dusty-coral);
+}
+
+/* Cards with no image yet shouldn't read as broken white boxes — give the
+   media well the brand tone so the grid still looks intentional. */
+.card__media,
+.card .media {
+  background-color: var(--color-pearl-beige);
+}
+
+.collection .loading-overlay__spinner path,
+.facets-container .loading-overlay__spinner path {
+  fill: var(--color-dusty-coral);
+}
+
+
+/* --------------------------------------------------------------------------
+   12. FOCUS STATES (accessibility — keep visible, on-brand)
    -------------------------------------------------------------------------- */
 a:focus-visible,
 button:focus-visible,

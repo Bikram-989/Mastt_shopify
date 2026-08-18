@@ -1280,7 +1280,7 @@ input.mobile-facets__checkbox {
   .product-count h2,
   span.active-facets__button-inner,
   .active-facets__button-wrapper a{
-    color: #00324C;
+    color: rgb(var(--color-foreground));
   }
   
   .active-facets{
