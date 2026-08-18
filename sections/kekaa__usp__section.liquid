@@ -30,9 +30,7 @@ p{
   top: 25%;
   position: absolute;
   border-radius: 20px;
-  background: #ED9958;
-
-  background: linear-gradient(rgba(237, 153,88, 0.85), rgba(237, 153,88, 0.85));
+  background: var(--color-blush-pink, #EC9F93);
   box-shadow: var(--kk__cs);
 }
 
@@ -41,7 +39,7 @@ p{
 .usp {
   position: relative;
   max-width: var(--diamond);
-  background: #ECDEC9;
+  background: var(--color-white, #fff);
   border-radius: 0 0 20px 20px;
 }
 
@@ -53,10 +51,11 @@ p{
   width: var(--diamond);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  
+
   padding: 25px;
-  background: url('https://cdn.shopify.com/s/files/1/0615/9921/9798/files/diamond.svg?v=1745850904') no-repeat center;
-  background-size: contain;
+  background: var(--color-white, #fff);
+  border-radius: 50%;
+  box-shadow: var(--mastt-shadow-lg);
 }
 
 .usp-icon img{
@@ -77,9 +76,10 @@ p{
 
 .usp-title{
   font-size: clamp(14px, 12px + 0.625vw, 24px);
+  font-family: var(--font-heading-family);
   font-style: italic;
   font-weight: 500;
-  color: #472A14;
+  color: var(--color-charcoal, #201B19);
 }
 
 .usp-content p {

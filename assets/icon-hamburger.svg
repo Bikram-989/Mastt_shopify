@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="icon icon-hamburger" viewBox="0 0 24 24">
-<path d="M3.97485 5.97485H19.9748" stroke="#00324C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M3.97485 11.9749H19.9748" stroke="#00324C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M3.97485 17.9749H19.9748" stroke="#00324C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.97485 5.97485H19.9748" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.97485 11.9749H19.9748" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.97485 17.9749H19.9748" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

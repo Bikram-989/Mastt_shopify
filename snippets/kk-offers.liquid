@@ -180,7 +180,7 @@
         <div class="bank-offers">
           <div class="offer-title">
             <div class="icon">
-              <img src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/bank.svg" alt="Bank">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 10l9-6 9 6"/><path d="M4 10h16v9H4z"/><path d="M9 19v-6M15 19v-6"/></svg>
             </div>
             <div>Bank Offers (<span class="count-s">{{ bank_offers.size }}</span>)</div>
           </div>
@@ -204,7 +204,7 @@
         <div class="coupon-offers">
           <div class="offer-title">
             <div class="icon">
-              <img src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/coupon.svg" alt="Coupon">
+              {{ 'icon-price-tag.svg' | inline_asset_content }}
             </div>
             <div>Coupons (<span class="count-s">{{ coupon_offers.size }}</span>)</div>
           </div>
@@ -227,7 +227,7 @@
                         {% if o.settings.auto_apply %}
                           <span class="code-pill__label">APPLY</span>
                         {% else %}
-                          <img src="https://cdn.shopify.com/s/files/1/0615/9921/9798/files/copy.svg" alt="">
+                          <img src="{{ 'icon-copy.svg' | asset_url }}" alt="">
                         {% endif %}
                       </span>
                     </button>
@@ -349,7 +349,7 @@
               b.classList.add('copied');
               b.disabled = true;
               const img = b.querySelector('.code-pill__action img');
-              if (img) img.src = 'https://cdn.shopify.com/s/files/1/0615/9921/9798/files/tick.svg?v=1752007232';
+              if (img) img.src = '{{ "icon-checkmark.svg" | asset_url }}';
             }).catch(function () {});
           });
         });
