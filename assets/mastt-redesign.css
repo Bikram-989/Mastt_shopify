@@ -291,6 +291,38 @@ h1, h2, h3, h4, h5, h6,
   color: var(--color-charcoal);
 }
 
+/* ---- Card content order, per the approved card design ----
+   Liquid emits price → title → material pills. The design calls for
+   material eyebrow → title → price, so reorder with flex rather than
+   touching the template. */
+.card__content .card__information {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.card__information .product__card-pills.pills-bottom { order: -2; }
+.card__information .card__heading { order: -1; margin: 0; }
+.card__information .price-with-rating { order: 0; }
+.card__information .card-information { order: 1; }
+
+/* Material line reads as a tracked eyebrow, not a chip, when it sits above
+   the title — matches the logo's own tracked-caps voice. */
+.card__information .pills-bottom .pill {
+  background: none;
+  padding: 0;
+  color: var(--color-coral-dark);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wider);
+}
+
+.card__information .pills-bottom .pill--metallic {
+  background: none;
+  animation: none;
+  color: var(--color-coral-dark);
+}
+
 /* ---- Pills (pack-size / discount / gender / material) ---- */
 .product__card-pills .pill {
   border-radius: var(--radius-xs);
@@ -371,36 +403,47 @@ h1, h2, h3, h4, h5, h6,
    its own soft floating card with a coral accent that appears on the open
    row — distinct from the generic accordion look, no markup changes needed.
    -------------------------------------------------------------------------- */
-/* Two columns on desktop so a long FAQ doesn't push the footer miles down.
-   Rows fill column-wise via CSS columns, which keeps each card intact and
-   lets them re-flow naturally as they open and close. */
+/* Single centred column, matching the approved reference. (An earlier pass
+   ran this two-up; the reference reads better because an open answer no
+   longer shunts the neighbouring column around.) */
 .collapsible-content__wrapper .grid__item {
   display: block;
-  column-gap: var(--space-4);
+  max-width: 104rem;
+  margin-inline: auto;
 }
 
-@media screen and (min-width: 990px) {
-  .collapsible-content__wrapper .grid__item {
-    column-count: 2;
-  }
+/* "SUPPORT" eyebrow above the heading */
+.collapsible-content .caption-with-letter-spacing {
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-aqua-dark);
+  margin-bottom: 0.6rem;
+}
+
+.collapsible-content .collapsible-content__heading {
+  text-align: center;
+  margin-bottom: clamp(28px, 20px + 2vw, 48px);
 }
 
 .collapsible-content .accordion {
-  /* keep each card whole when the list splits across two columns */
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 
   background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-charcoal-08);
-  border-left: 3px solid transparent;
+  border-left: 4px solid transparent;
   overflow: hidden;
   transition: box-shadow var(--duration-med) var(--ease-out),
               border-color var(--duration-med) var(--ease-out);
 }
+.collapsible-content .accordion:last-child { margin-bottom: 0; }
+
+/* Open row earns the coral spine + a slightly lifted shadow */
 .collapsible-content .accordion:has(details[open]) {
   box-shadow: var(--shadow-md);
   border-left-color: var(--color-dusty-coral);
@@ -637,13 +680,32 @@ h1, h2, h3, h4, h5, h6,
    they invert correctly — what needs help is the type treatment and the
    link affordances, which were tuned for a light ground.
    -------------------------------------------------------------------------- */
+/* Column headings in coral — the one warm accent against the charcoal,
+   and the cue that ties the footer back to the rest of the palette. */
 .footer .footer-block__heading {
-  font-family: var(--font-body-family);
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  opacity: 0.75;
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-dusty-coral);
+  opacity: 1;
+  margin-bottom: 1.4rem;
+}
+
+/* Body text sits at pearl, links a touch softer so headings lead */
+.footer .footer-block__details-content,
+.footer .list-menu__item--link,
+.footer .copyright__content {
+  color: rgba(var(--color-foreground), 0.82);
+}
+
+/* Divider above the bottom bar + copyright/GST on one row */
+.footer .footer__content-bottom {
+  border-top: 1px solid rgba(var(--color-foreground), 0.14);
+  margin-top: clamp(24px, 16px + 2vw, 40px);
+  padding-top: clamp(18px, 12px + 1.4vw, 28px);
 }
 
 /* Menu + policy links: coral on hover (6.2:1 on charcoal), with an underline
