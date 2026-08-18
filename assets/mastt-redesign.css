@@ -261,26 +261,6 @@ h1, h2, h3, h4, h5, h6,
   transform: translateY(-4px);
 }
 
-/* Coral hairline that draws itself just inside the edge on hover */
-.card-wrapper.product-card-wrapper .card::after {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  z-index: 3;
-  pointer-events: none;
-  border: 1px solid var(--color-dusty-coral);
-  border-radius: calc(var(--radius-md) - 4px) calc(var(--card-petal) - 6px)
-                 calc(var(--radius-md) - 4px) calc(var(--radius-md) - 4px);
-  opacity: 0;
-  transition: opacity var(--duration-med) var(--ease-out),
-              inset var(--duration-med) var(--ease-out);
-}
-
-.card-wrapper.product-card-wrapper:hover .card::after {
-  opacity: 0.55;
-  inset: 9px;
-}
-
 .card .card__inner .card__media,
 .card__media--placeholder {
   border-radius: var(--radius-md) var(--card-petal, var(--radius-md)) 0 0;
@@ -418,35 +398,63 @@ h1, h2, h3, h4, h5, h6,
   box-shadow: var(--shadow-sm);
 }
 
-/* ---- Quick add ----
-   Previously absolutely positioned at the bottom of .card-wrapper, which
-   anchored it over the TITLE rather than the image and hid the product name
-   on hover. The quick-add markup is a sibling of the media, not a child, so
-   there's no reliable element to overlay — it now sits in normal flow under
-   the price. Always visible, so it works on touch too. */
-.card-wrapper .quick-add {
-  position: static;
-  margin-top: var(--space-3);
-  opacity: 1;
-  transform: none;
+/* ---- Quick add: floats over the bottom of the image on hover ----
+   The quick-add markup is a sibling of the media, so there's no media
+   element to anchor to. Instead it's pinned to the TOP edge of the text
+   block via `bottom: 100%`, which lands it over the bottom of the image
+   whatever the aspect ratio — and, unlike anchoring to .card-wrapper, it
+   can never cover the product title. */
+.card-wrapper .card__content:has(.quick-add) {
+  position: relative;
+}
+
+@media (min-width: 750px) {
+  .card-wrapper .quick-add {
+    position: absolute;
+    bottom: calc(100% + var(--space-3));
+    left: var(--space-3);
+    right: var(--space-3);
+    z-index: 4;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity var(--duration-med) var(--ease-out),
+                transform var(--duration-med) var(--ease-out);
+  }
+
+  .card-wrapper:hover .quick-add,
+  .card-wrapper:focus-within .quick-add {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Touch: no hover to rely on, so keep it in flow and always reachable */
+@media (max-width: 749px) {
+  .card-wrapper .quick-add {
+    position: static;
+    margin-top: var(--space-3);
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .card-wrapper .quick-add__submit {
   border-radius: var(--radius-full);
-  background: var(--color-dusty-coral);
+  background: var(--color-white);
   color: var(--color-charcoal);
   border: 1px solid transparent;
-  box-shadow: none;
+  box-shadow: var(--shadow-md);
   min-height: 4.2rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: background-color var(--duration-fast) var(--ease-out),
-              box-shadow var(--duration-fast) var(--ease-out);
+              color var(--duration-fast) var(--ease-out);
 }
 
 .card-wrapper .quick-add__submit:hover {
-  background: var(--color-coral-dark);
-  box-shadow: var(--shadow-coral-glow);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
 }
 
 /* ---- Placeholder for products with no image yet ---- */
@@ -949,7 +957,40 @@ button.shopify-payment-button__button--unbranded:hover {
 
 
 /* --------------------------------------------------------------------------
-   12. FOCUS STATES (accessibility — keep visible, on-brand)
+   12. SECTION HEADINGS  (.kk__heading — shared by every custom homepage
+   section: Categories, Our Promise, Outfit-Style, Promo grid)
+   One editorial treatment applied everywhere, so the page reads as a single
+   composition rather than four sections that happen to sit together. The
+   rule beneath each heading carries the logo's dot separator at its centre.
+   -------------------------------------------------------------------------- */
+.kk__heading {
+  position: relative;
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgb(var(--color-foreground));
+  padding-bottom: 1.8rem;
+}
+
+/* Hairline rule, split either side of a coral dot */
+.kk__heading::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0.4rem;
+  transform: translateX(-50%);
+  width: 8.4rem;
+  height: 5px;
+  background:
+    linear-gradient(var(--color-charcoal-15), var(--color-charcoal-15)) left center / calc(50% - 9px) 1px no-repeat,
+    linear-gradient(var(--color-charcoal-15), var(--color-charcoal-15)) right center / calc(50% - 9px) 1px no-repeat,
+    radial-gradient(circle, var(--color-dusty-coral) 2.5px, transparent 2.6px) center / 100% 100% no-repeat;
+}
+
+
+/* --------------------------------------------------------------------------
+   13. FOCUS STATES (accessibility — keep visible, on-brand)
    -------------------------------------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
