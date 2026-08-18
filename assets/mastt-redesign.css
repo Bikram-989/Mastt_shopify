@@ -436,7 +436,113 @@ body, p {
 
 
 /* --------------------------------------------------------------------------
-   9. FOCUS STATES (accessibility — keep visible, on-brand)
+   9. HEADER  (sections/header.liquid — styles live in base.css §header)
+   Nav links pick up the logo's own tracked-caps "JEWELLERY" treatment
+   instead of the serif heading face, with a coral underline that wipes in
+   from the left. Icons shift color rather than scaling (no layout jitter),
+   and the sticky bar gains a shadow only once it detaches from the top.
+   -------------------------------------------------------------------------- */
+.header-wrapper--border-bottom {
+  border-bottom: 1px solid var(--color-charcoal-08);
+}
+
+/* Dawn adds .shopify-section-header-sticky once the header detaches */
+.shopify-section-header-sticky .header-wrapper {
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--duration-med) var(--ease-out);
+}
+
+/* ---- Nav links ---- */
+.header__menu-item,
+.header__active-menu-item {
+  font-family: var(--font-body-family);
+  color: var(--color-charcoal);
+}
+
+.header__inline-menu .header__menu-item {
+  position: relative;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 1.2rem 1.4rem;
+}
+
+/* Underline wipes in from the left. Scoped to the top row only — the markup
+   nests ul > li > [header-menu > details >] summary|a, so these paths pick
+   out the top-level items without reaching submenu rows. */
+.header__inline-menu > .list-menu--inline > li > a.header__menu-item::after,
+.header__inline-menu > .list-menu--inline > li > header-menu > details > .header__menu-item::after {
+  content: '';
+  position: absolute;
+  left: 1.4rem;
+  right: 1.4rem;
+  bottom: 0.6rem;
+  height: 1.5px;
+  background: var(--color-dusty-coral);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-med) var(--ease-out);
+}
+
+.header__inline-menu > .list-menu--inline > li > a.header__menu-item:hover::after,
+.header__inline-menu > .list-menu--inline > li > header-menu > details > .header__menu-item:hover::after,
+.header__inline-menu > .list-menu--inline > li > header-menu > details[open] > .header__menu-item::after {
+  transform: scaleX(1);
+}
+
+.header__inline-menu .header__menu-item:hover {
+  color: var(--color-charcoal);
+}
+
+/* Dawn underlines the active item with a plain border — swap for the accent */
+.header__active-menu-item {
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--color-dusty-coral);
+  padding-bottom: 2px;
+}
+
+/* Dropdown/submenu rows stay sentence-case and quieter than the top row */
+.header__submenu .header__menu-item {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--color-charcoal-70);
+}
+
+.header__submenu .header__menu-item:hover {
+  color: var(--color-charcoal);
+  background: var(--color-charcoal-08);
+}
+
+/* ---- Icons: color shift, not scale (scaling nudges neighbours) ---- */
+.header__icon .icon {
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.header__icon:hover .icon,
+.modal__close-button:hover .icon {
+  transform: none;
+  color: var(--color-dusty-coral);
+}
+
+/* ---- Cart count bubble ---- */
+.cart-count-bubble {
+  background-color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+  font-weight: 700;
+  height: 1.8rem;
+  min-width: 1.8rem;
+  width: auto;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 2px var(--color-white);
+}
+
+
+/* --------------------------------------------------------------------------
+   10. FOCUS STATES (accessibility — keep visible, on-brand)
    -------------------------------------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
