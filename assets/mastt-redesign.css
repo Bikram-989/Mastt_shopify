@@ -365,35 +365,54 @@ h1, h2, h3, h4, h5, h6,
   box-shadow: var(--shadow-sm);
 }
 
-/* ---- Quick add — overlay pill on hover instead of a full-width bar,
-   using the existing .quick-add wrapper (no markup change needed) ---- */
-@media (min-width: 750px) {
-  .card-wrapper .quick-add {
-    position: absolute;
-    left: var(--space-3);
-    right: var(--space-3);
-    bottom: var(--space-3);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity var(--duration-fast) var(--ease-out),
-                transform var(--duration-fast) var(--ease-out);
-  }
-  .card-wrapper:hover .quick-add,
-  .card-wrapper:focus-within .quick-add {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .card-wrapper .quick-add__submit {
-    border-radius: var(--radius-full);
-    background: var(--color-white);
-    color: var(--color-charcoal);
-    box-shadow: var(--shadow-md);
-    min-height: 4.2rem;
-  }
-  .card-wrapper .quick-add__submit:hover {
-    background: var(--color-charcoal);
-    color: var(--color-pearl-beige);
-  }
+/* ---- Quick add ----
+   Previously absolutely positioned at the bottom of .card-wrapper, which
+   anchored it over the TITLE rather than the image and hid the product name
+   on hover. The quick-add markup is a sibling of the media, not a child, so
+   there's no reliable element to overlay — it now sits in normal flow under
+   the price. Always visible, so it works on touch too. */
+.card-wrapper .quick-add {
+  position: static;
+  margin-top: var(--space-3);
+  opacity: 1;
+  transform: none;
+}
+
+.card-wrapper .quick-add__submit {
+  border-radius: var(--radius-full);
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+  border: 1px solid transparent;
+  box-shadow: none;
+  min-height: 4.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.card-wrapper .quick-add__submit:hover {
+  background: var(--color-coral-dark);
+  box-shadow: var(--shadow-coral-glow);
+}
+
+/* ---- Placeholder for products with no image yet ---- */
+.card__media--placeholder {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: linear-gradient(150deg,
+              var(--color-pearl-beige) 0%,
+              var(--color-nude-beige) 100%);
+}
+
+.card__media--placeholder .placeholder-svg {
+  width: 58%;
+  height: auto;
+  opacity: 0.32;
+  fill: var(--color-charcoal);
 }
 
 
@@ -576,6 +595,24 @@ h1, h2, h3, h4, h5, h6,
    -------------------------------------------------------------------------- */
 .header-wrapper--border-bottom {
   border-bottom: 1px solid var(--color-charcoal-08);
+}
+
+/* ---- Wordmark ----
+   Shown as text until the logo image is uploaded. Takes the blush pink of
+   the script in the logo lockup so the text stand-in still reads as Mastt. */
+.header__heading-link .h2,
+.header__heading .h2,
+.header__heading-link {
+  color: var(--color-blush-pink);
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  letter-spacing: 0.01em;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.header__heading-link:hover .h2,
+.header__heading-link:hover {
+  color: var(--color-dusty-coral);
 }
 
 /* Dawn adds .shopify-section-header-sticky once the header detaches */

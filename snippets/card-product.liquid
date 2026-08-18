@@ -126,6 +126,17 @@ Custom Card Render Logic
 
 {% render 'product-badges', product: card_product, context: 'card' %}
 
+        {%- else -%}
+          {%- comment -%}
+            No image yet — render a branded placeholder so the grid keeps its
+            rhythm instead of collapsing to a blank white box.
+          {%- endcomment -%}
+          <div class="card__media card__media--placeholder">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg card__placeholder-svg' }}
+          </div>
+
+{% render 'product-badges', product: card_product, context: 'card' %}
+
         {%- endif -%}
         <div class="card__content">
           <div class="card__information">  
@@ -264,6 +275,15 @@ Custom Card Render Logic
         <span class="pill">{{ mat | upcase }}</span>
       {%- endif -%}
     {%- endfor -%}
+  </div>
+{%- elsif card_product.type != blank -%}
+  {%- comment -%}
+    Material pills come from a "Title | Material" naming convention. Products
+    that don't use it fall back to the product type so the card still gets its
+    eyebrow line instead of collapsing.
+  {%- endcomment -%}
+  <div class="product__card-pills pills-bottom">
+    <span class="pill">{{ card_product.type | upcase }}</span>
   </div>
 {%- endif -%}
 
