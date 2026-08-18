@@ -1,4 +1,11 @@
 <style>
+/* Outfit-Style Collections — rebuilt for Mastt.
+   The previous build needed three uploaded artwork files per tile (leaf
+   shape, static badge icon, rotating text SVG). None of those exist in
+   this store, so every tile rendered as a "No image" placeholder.
+   This version needs nothing but an optional photo: the tile shape, the
+   accent ring and the label are all drawn in CSS/text, so it looks
+   finished on day one and the label is real selectable text. */
 
 .shopify-section:has(.style-collection) .kk__wrapper{
   padding-block: calc(var(--spacer) / 2);
@@ -8,138 +15,153 @@
 .style-collection .kk__heading{
   display: none;
 }
+
 .style-collection {
-  --badge__size: clamp(110px, 96px + 4.375vw, 180px);
-  
+  --tile-gap: clamp(14px, 10px + 1.2vw, 26px);
+
   display: grid;
-  grid-template: 1fr 1fr / 1fr 1fr;
-  gap: clamp(15px, 12px + 0.9375vw, 30px);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--tile-gap);
   place-content: center;
-  align-items: center;
-  
+  align-items: stretch;
+
   position: relative;
-  max-width: clamp(300px, calc(100% - var(--badge__size) * 2), 900px);
+  max-width: clamp(300px, calc(100% - 120px), 900px);
   width: 100%;
   margin: 0 auto;
 }
 
+/* ---- Tile ---- */
 .style-collection__leaf {
   position: relative;
+  display: block;
   width: 100%;
   aspect-ratio: 1;
+  overflow: hidden;
+  text-decoration: none;
+
+  background-color: var(--color-nude-beige, #E3C4BC);
+  background-image: var(--leaf-image, linear-gradient(150deg, var(--color-nude-beige, #E3C4BC), var(--color-blush-pink, #EC9F93)));
   background-repeat: no-repeat;
-  background-size: var(--bg-size);
-  background-position: var(--focus-x) var(--focus-y);
-  transition: transform 420ms cubic-bezier(.16,1,.3,1), box-shadow 420ms cubic-bezier(.16,1,.3,1);
+  background-size: var(--bg-size, cover);
+  background-position: var(--focus-x, 50%) var(--focus-y, 50%);
+
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(32,27,25,.1));
+  transition: transform 420ms cubic-bezier(.16,1,.3,1),
+              box-shadow 420ms cubic-bezier(.16,1,.3,1);
 }
 
 .style-collection__leaf:hover {
-  transform: scale(1.025);
+  transform: translateY(-5px);
   box-shadow: var(--shadow-lg, 0 20px 48px -8px rgba(32,27,25,.22));
 }
 
-.style-collection__heading,
-.style-collection__leaf,
-.style-collection__badge{
-  box-shadow: var(--shadow-sm, var(--kk__cs));
-}
+/* Petal geometry — each tile rounds hard on its outer corner and gently
+   on the three facing the centre, so the four together read as a flower. */
+.style-collection__leaf.pos--tl { border-radius: 60% 18px 18px 18px; }
+.style-collection__leaf.pos--tr { border-radius: 18px 60% 18px 18px; }
+.style-collection__leaf.pos--bl { border-radius: 18px 18px 18px 60%; }
+.style-collection__leaf.pos--br { border-radius: 18px 18px 60% 18px; }
 
-.style-collection__leaf{ border-radius: 250px; }
-
-.style-collection__leaf:has(.badge__tl) { border-top-left-radius: var(--radius-md, 16px); }
-.style-collection__leaf:has(.badge__tr) { border-top-right-radius: var(--radius-md, 16px); }
-.style-collection__leaf:has(.badge__bl) { border-bottom-left-radius: var(--radius-md, 16px); }
-.style-collection__leaf:has(.badge__br) { border-bottom-right-radius: var(--radius-md, 16px); }
-
-.badge__tl{ left: calc(0% - (var(--badge__size)/2)); top: calc(45% - (var(--badge__size)/2)); }
-.badge__tr{ right: calc(0% - (var(--badge__size)/2)); top: calc(45% - (var(--badge__size)/2)); }
-.badge__bl{ left: calc(0% - (var(--badge__size)/2)); bottom: calc(45% - (var(--badge__size)/2)); }
-.badge__br{ right: calc(0% - (var(--badge__size)/2)); bottom: calc(45% - (var(--badge__size)/2)); }
-
-.style-collection__badge {
-  position: absolute;
-  width: var(--badge__size);
-  aspect-ratio: 1;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: var(--badge-icon);
-  transition: transform .5s ease, box-shadow .5s ease;
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--color-white, #fff),
-              0 0 0 6px var(--badge-ring, var(--color-dusty-coral, #D6887C)),
-              var(--shadow-md, 0 8px 24px -4px rgba(32,27,25,.16));
-}
-
-.style-collection__badge.badge__tl { --badge-ring: var(--color-dusty-coral, #D6887C); }
-.style-collection__badge.badge__tr { --badge-ring: var(--color-aqua, #78AAB1); }
-.style-collection__badge.badge__bl { --badge-ring: var(--color-blush-pink, #EC9F93); }
-.style-collection__badge.badge__br { --badge-ring: var(--color-nude-beige, #E3C4BC); }
-
-.style-collection__badge:hover {
-  transform: scale(1.2);
-}
-  
-.style-collection__badge::before {
+/* Scrim keeps the label legible over any uploaded photo */
+.style-collection__leaf::after {
   content: '';
-  width: inherit; aspect-ratio: inherit;
-  position: absolute; inset: 0; z-index: 10;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: var(--badge-text-image);
-  animation: badgeRotate 12s linear infinite;
-  transform-origin: center;
-}
-  
-.style-collection__badge:hover::before {
-  animation-play-state: paused;
-}
-  
-@keyframes badgeRotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(32,27,25,.72) 0%, rgba(32,27,25,.10) 52%, rgba(32,27,25,0) 100%);
 }
 
+/* ---- Label ---- */
+.style-collection__label {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px clamp(16px, 10px + 1.4vw, 28px);
+  text-align: center;
+}
+
+.style-collection__label-title {
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(16px, 13px + 1vw, 24px);
+  line-height: 1.2;
+  color: var(--color-pearl-beige, #F5E7DF);
+  text-shadow: 0 2px 12px rgba(32,27,25,.45);
+}
+
+.style-collection__label-cta {
+  display: inline-block;
+  font-family: var(--font-body-family);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider, .14em);
+  color: var(--color-charcoal, #201B19);
+  background: var(--tile-accent, var(--color-dusty-coral, #D6887C));
+  padding: 5px 12px;
+  border-radius: var(--radius-full, 999px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 320ms cubic-bezier(.16,1,.3,1),
+              transform 320ms cubic-bezier(.16,1,.3,1);
+}
+
+.style-collection__leaf:hover .style-collection__label-cta,
+.style-collection__leaf:focus-visible .style-collection__label-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Accent ring hugging the outer petal curve, cycling the secondary palette */
+.style-collection__leaf::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  z-index: 2;
+  pointer-events: none;
+  border: 1.5px solid var(--tile-accent, var(--color-dusty-coral, #D6887C));
+  border-radius: inherit;
+  opacity: .55;
+  transition: opacity 320ms ease, inset 420ms cubic-bezier(.16,1,.3,1);
+}
+
+.style-collection__leaf:hover::before {
+  opacity: 1;
+  inset: 7px;
+}
+
+.style-collection__leaf.pos--tl { --tile-accent: var(--color-dusty-coral, #D6887C); }
+.style-collection__leaf.pos--tr { --tile-accent: var(--color-aqua, #78AAB1); }
+.style-collection__leaf.pos--bl { --tile-accent: var(--color-blush-pink, #EC9F93); }
+.style-collection__leaf.pos--br { --tile-accent: var(--color-nude-beige, #E3C4BC); }
+
+/* ---- Centre medallion ---- */
 .style-collection__heading {
   display: none;
 }
 
-@media screen and (max-width: 767px) {
-  .kk__wrapper:has(.style-collection) .kk__heading{
-    display: block;
-    margin-bottom: 20px;
-    margin-block-start: 0;
-  }
-  
-  .style-collection{
-    grid-template-columns: 1fr;
-  }
-
-  .style-collection__leaf{ border-radius: 110px; }
-  .style-collection__leaf:has(.badge__tl) { border-bottom-right-radius: 20px; }
-  .style-collection__leaf:has(.badge__tr) { border-bottom-left-radius: 20px; }
-  .style-collection__leaf:has(.badge__bl) { border-top-right-radius: 20px; }
-  .style-collection__leaf:has(.badge__br) { border-top-left-radius: 20px; }
-
-  .badge__tl{ left: -25px; bottom: 0; top: unset; }
-  .badge__tr{ right: -25px; bottom: 0; top: unset; }
-  .badge__bl{ right: -25px; bottom: 0; left: unset; }
-  .badge__br{ left: -25px; bottom: 0; right: unset; }
-}
-
 @media screen and (min-width: 769px) {
-
   .style-collection__heading{
     display: grid;
     place-items: center;
-    
+
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(200px, 180px + 6.25vw, 300px);
+    width: clamp(180px, 150px + 6vw, 260px);
     aspect-ratio: 1;
-    z-index: 20;
-    
+    z-index: 3;
+
     border-radius: 50%;
     background: var(--color-white, #fff);
     box-shadow: var(--shadow-lg, 0 20px 48px -8px rgba(32,27,25,.22));
@@ -147,49 +169,66 @@
     font-family: var(--font-heading-family);
     font-style: italic;
     text-align: center;
+    padding: 18px;
   }
 
   .style-collection__heading h2{
-    font-size: clamp(26px, 23.2px + 0.875vw, 40px);
-    max-width: 14ch;
+    font-size: clamp(22px, 18px + 0.9vw, 32px);
+    max-width: 12ch;
+    margin: 0;
   }
 }
 
+@media screen and (max-width: 768px) {
+  .kk__wrapper:has(.style-collection) .kk__heading{
+    display: block;
+    margin-bottom: 20px;
+    margin-block-start: 0;
+  }
 
+  .style-collection{
+    grid-template-columns: 1fr 1fr;
+    max-width: 100%;
+  }
 
-
-
+  /* Softer, uniform petals once the centre medallion is gone */
+  .style-collection__leaf.pos--tl,
+  .style-collection__leaf.pos--tr,
+  .style-collection__leaf.pos--bl,
+  .style-collection__leaf.pos--br { border-radius: 40% 40% 16px 16px; }
+}
 </style>
 
 <div class="kk__wrapper">
   <h2 class="kk__heading">{{ section.settings.heading_text }}</h2>
-  
+
   <section class="style-collection">
-    
+
     <div class="style-collection__heading">
       <h2>{{ section.settings.heading_text }}</h2>
     </div>
-    
+
     {% for block in section.blocks %}
+      {%- liquid
+        assign pos = block.settings.position | default: 'tl'
+        assign label = block.settings.label | default: 'Shop the edit'
+      -%}
       <a
         href="{{ block.settings.badge_link }}"
-        class="style-collection__leaf"
+        class="style-collection__leaf pos--{{ pos }}"
+        {{ block.shopify_attributes }}
         style="
-          --bg-size: {{ block.settings.bg_size }}%;
-          --focus-x: {{ block.settings.focus_x }}%;
-          --focus-y: {{ block.settings.focus_y }}%;
-          background-image: url({{ block.settings.leaf_shape | img_url: 'master' }});
+          {% if block.settings.leaf_shape != blank %}--leaf-image: url({{ block.settings.leaf_shape | image_url: width: 800 }});{% endif %}
+          --bg-size: {% if block.settings.leaf_shape != blank %}{{ block.settings.bg_size | default: 150 }}%{% else %}cover{% endif %};
+          --focus-x: {{ block.settings.focus_x | default: 50 }}%;
+          --focus-y: {{ block.settings.focus_y | default: 50 }}%;
         "
       >
-        <span
-          class="style-collection__badge badge__{{ block.settings.position }}"
-          style="
-            --badge-icon: url('{{ block.settings.badge_icon | img_url: 'master' }}');
-            --badge-text-image: url('{{ block.settings.badge_text_image | img_url: 'master' }}');
-          "
-        ></span>
+        <span class="style-collection__label">
+          <span class="style-collection__label-title">{{ label }}</span>
+          <span class="style-collection__label-cta">Shop now</span>
+        </span>
       </a>
-
     {% endfor %}
   </section>
 </div>
@@ -209,7 +248,7 @@
   "blocks": [
     {
       "type": "badge",
-      "name": "Leaf Card (4 Total)",
+      "name": "Style Tile (4 Total)",
       "settings": [
         {
           "type": "select",
@@ -220,22 +259,21 @@
             { "value": "tr", "label": "Top Right" },
             { "value": "bl", "label": "Bottom Left" },
             { "value": "br", "label": "Bottom Right" }
-          ]
+          ],
+          "default": "tl"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Shown on the tile, e.g. Daily Wear",
+          "default": "Daily Wear"
         },
         {
           "type": "image_picker",
           "id": "leaf_shape",
-          "label": "Leaf shape"
-        },
-        {
-          "type": "image_picker",
-          "id": "badge_icon",
-          "label": "Static Icon"
-        },
-        {
-          "type": "image_picker",
-          "id": "badge_text_image",
-          "label": "Rotating Text SVG"
+          "label": "Tile photo",
+          "info": "Optional. Falls back to a brand gradient if left empty."
         },
         {
           "type": "url",
@@ -245,7 +283,7 @@
         {
           "type": "range",
           "id": "bg_size",
-          "label": "Background Zoom (%)",
+          "label": "Photo zoom (%)",
           "min": 100,
           "max": 300,
           "step": 10,
@@ -255,7 +293,7 @@
         {
           "type": "range",
           "id": "focus_x",
-          "label": "Image Focus X-axis (%)",
+          "label": "Photo focus X-axis (%)",
           "min": 0,
           "max": 100,
           "step": 5,
@@ -265,7 +303,7 @@
         {
           "type": "range",
           "id": "focus_y",
-          "label": "Image Focus Y-axis (%)",
+          "label": "Photo focus Y-axis (%)",
           "min": 0,
           "max": 100,
           "step": 5,

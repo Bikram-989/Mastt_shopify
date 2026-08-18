@@ -372,12 +372,27 @@ body, p {
    its own soft floating card with a coral accent that appears on the open
    row — distinct from the generic accordion look, no markup changes needed.
    -------------------------------------------------------------------------- */
+/* Two columns on desktop so a long FAQ doesn't push the footer miles down.
+   Rows fill column-wise via CSS columns, which keeps each card intact and
+   lets them re-flow naturally as they open and close. */
 .collapsible-content__wrapper .grid__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  display: block;
+  column-gap: var(--space-4);
 }
+
+@media screen and (min-width: 990px) {
+  .collapsible-content__wrapper .grid__item {
+    column-count: 2;
+  }
+}
+
 .collapsible-content .accordion {
+  /* keep each card whole when the list splits across two columns */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: var(--space-3);
+
   background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -433,6 +448,81 @@ body, p {
 .promotion__badge.exclusive__badge   { background: var(--color-charcoal); color: var(--color-pearl-beige); }
 .promotion__badge.themasttedit__badge{ background: var(--color-blush-pink); color: var(--color-charcoal); }
 .promotion__badge.artisan__badge     { background: var(--color-nude-beige); color: var(--color-charcoal); }
+
+
+/* --------------------------------------------------------------------------
+   8b. TESTIMONIALS  (sections/ss-testimonial-9.liquid)
+   Third-party section whose classes are all suffixed with the section id,
+   hence the attribute selectors. The section's own colour settings are set
+   in the template; this adds the structural personality the settings panel
+   can't express — a serif quote mark, an asymmetric card corner, and a
+   coral ring on the avatar so the reviewer reads as a person, not a chip.
+   -------------------------------------------------------------------------- */
+[class*="testimonials-slide-"] {
+  position: relative;
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-md) 4px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-charcoal-08);
+  overflow: visible;
+  transition: box-shadow var(--duration-med) var(--ease-out),
+              transform var(--duration-med) var(--ease-out);
+}
+
+[class*="testimonials-slide-"]:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Oversized quote mark, tucked behind the text */
+[class*="testimonials-slide-"]::before {
+  content: '\201C';
+  position: absolute;
+  top: -2px;
+  left: 14px;
+  z-index: 0;
+  font-family: var(--font-heading-family);
+  font-size: 64px;
+  line-height: 1;
+  color: var(--color-dusty-coral);
+  opacity: .28;
+  pointer-events: none;
+}
+
+[class*="testimonials-slide-"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Product name → tracked caps, matching the eyebrow voice used elsewhere */
+[class*="testimonials-title-"] {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  font-size: 10.5px !important;
+  font-weight: 700;
+  color: var(--color-aqua-dark) !important;
+}
+
+[class*="testimonials-text-"] {
+  font-family: var(--font-body-family);
+}
+
+[class*="testimonials-author-"] {
+  font-family: var(--font-heading-family);
+  font-style: italic;
+}
+
+[class*="testimonials-avatar-"] {
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-dusty-coral);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Arrows: brand-tinted, circular, consistent with the UGC/review carousels */
+[class*="testimonials-btn-prev-"],
+[class*="testimonials-btn-next-"] {
+  border-radius: var(--radius-full);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
 
 
 /* --------------------------------------------------------------------------
