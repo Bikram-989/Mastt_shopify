@@ -98,7 +98,7 @@
         "collection_card_9tQnGm": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.tag=women",
+            "collection_url": "/collections/all?filter.p.product_type=Earrings",
             "image": "shopify://shop_images/1.png",
             "custom_title": "Earings"
           }
@@ -106,7 +106,7 @@
         "collection_card_khPWpT": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.tag=men",
+            "collection_url": "/collections/all?filter.p.product_type=Sets",
             "image": "shopify://shop_images/5.png",
             "custom_title": "Sets"
           }
@@ -114,7 +114,7 @@
         "collection_card_TUqki9": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all",
+            "collection_url": "/collections/all?filter.p.tag=men",
             "image": "shopify://shop_images/6.png",
             "custom_title": "Men"
           }
