@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "slideshow_FPVJpr": {
@@ -6,7 +15,6 @@
         "slide_qegYQT": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Mastt_Banner_Statement.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -25,7 +33,6 @@
         "slide_hH9zBP": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Mastt_Banner_BoldSoft.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -56,7 +63,7 @@
         "slider_visual": "dots",
         "auto_rotate": true,
         "change_slides_speed": 5,
-        "image_behavior": "none",
+        "image_behavior": "ambient",
         "show_text_below": true,
         "accessibility_info": "Slideshow about our brand"
       }
@@ -68,42 +75,48 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Rings",
+            "image": "shopify://shop_images/3.png",
             "custom_title": "Rings"
-          }
-        },
-        "collection_card_D9yqpL": {
-          "type": "collection_card",
-          "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Bracelets",
-            "custom_title": "Bracelets"
           }
         },
         "collection_card_yrQqym": {
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Necklaces",
+            "image": "shopify://shop_images/4.png",
             "custom_title": "Necklaces"
+          }
+        },
+        "collection_card_D9yqpL": {
+          "type": "collection_card",
+          "settings": {
+            "collection_url": "/collections/all?filter.p.product_type=Bracelets",
+            "image": "shopify://shop_images/2.png",
+            "custom_title": "Bracelets"
           }
         },
         "collection_card_9tQnGm": {
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=women",
-            "custom_title": "For Her"
+            "image": "shopify://shop_images/1.png",
+            "custom_title": "Earings"
           }
         },
         "collection_card_khPWpT": {
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=men",
-            "custom_title": "For Him"
+            "image": "shopify://shop_images/5.png",
+            "custom_title": "Sets"
           }
         },
         "collection_card_TUqki9": {
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all",
-            "custom_title": "Shop All"
+            "image": "shopify://shop_images/6.png",
+            "custom_title": "Men"
           }
         }
       },
@@ -118,335 +131,6 @@
       "name": "Mastt Collection List",
       "settings": {
         "title": "Shop by Category"
-      }
-    },
-    "176542848128554f43": {
-      "type": "apps",
-      "settings": {
-        "include_margins": false
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "disabled": true,
-      "custom_css": [
-        ".card__inner .card__media {border-radius: 200px 200px 20px 20px;}",
-        ".card--media {border-radius: 200px 200px 20px 20px; outline: none;}"
-      ],
-      "settings": {
-        "collection": "trending-products",
-        "products_to_show": 4,
-        "enable_dark_mode": false,
-        "title": "Trending",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": false,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "standard",
-        "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "padding_top": 44,
-        "padding_bottom": 36
-      }
-    },
-    "kekaa_usp_section_9p66aY": {
-      "type": "kekaa__usp__section",
-      "blocks": {
-        "usp_xfCgAb": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/usp-1.svg",
-            "title": "Skin-Friendly",
-            "description": "Hypoallergenic Jewellery crafted for Comfort"
-          }
-        },
-        "usp_me944Q": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/usp-2.svg",
-            "title": "True Craft",
-            "description": "Surgical-grade steel, finished to last"
-          }
-        },
-        "usp_CrnVTD": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/usp-4.svg",
-            "title": "Fade Proof",
-            "description": "Premium Designs crafted to have a lasting shine"
-          }
-        }
-      },
-      "block_order": [
-        "usp_xfCgAb",
-        "usp_me944Q",
-        "usp_CrnVTD"
-      ],
-      "name": "USP Section",
-      "settings": {
-        "heading": "Our Promise"
-      }
-    },
-    "kekaa_style_collection_mgQ4zd": {
-      "type": "kekaa__style__collection",
-      "blocks": {
-        "badge_iADpxz": {
-          "type": "badge",
-          "settings": {
-            "position": "tl",
-            "badge_link": "shopify://collections/daily-wear-jewelry",
-            "bg_size": 200,
-            "focus_x": 65,
-            "focus_y": 65,
-            "label": "Daily Wear"
-          }
-        },
-        "badge_zqgHKp": {
-          "type": "badge",
-          "settings": {
-            "position": "tr",
-            "badge_link": "shopify://collections/summer-wear-jewelry",
-            "bg_size": 180,
-            "focus_x": 40,
-            "focus_y": 95,
-            "label": "Summer Wear"
-          }
-        },
-        "badge_YnUkqR": {
-          "type": "badge",
-          "settings": {
-            "position": "bl",
-            "badge_link": "shopify://collections/party-wear-jewelry",
-            "bg_size": 180,
-            "focus_x": 50,
-            "focus_y": 90,
-            "label": "Party Wear"
-          }
-        },
-        "badge_pr76B8": {
-          "type": "badge",
-          "settings": {
-            "position": "br",
-            "badge_link": "shopify://collections/office-wear-jewelry",
-            "bg_size": 200,
-            "focus_x": 30,
-            "focus_y": 70,
-            "label": "Office Wear"
-          }
-        }
-      },
-      "block_order": [
-        "badge_iADpxz",
-        "badge_zqgHKp",
-        "badge_YnUkqR",
-        "badge_pr76B8"
-      ],
-      "name": "Style Collection",
-      "settings": {
-        "heading_text": "Outfit-Style Collections"
-      },
-      "disabled": true
-    },
-    "178670482636cffafd": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "kekaa_promo_section_D4MDGC": {
-      "type": "kekaa__promo__section",
-      "blocks": {
-        "large_Trttyk": {
-          "type": "large",
-          "settings": {
-            "image": "shopify://shop_images/try.png",
-            "link": "shopify://collections",
-            "badge_text": "New Year Sale",
-            "badge_position": "before",
-            "title": "<p>Buy1 get 1 FREE</p>",
-            "content_placement": "top-left"
-          }
-        },
-        "top_AJrHTn": {
-          "type": "top",
-          "settings": {
-            "image": "shopify://shop_images/Frame_78.png",
-            "link": "",
-            "badge_text": "Stay tuned",
-            "badge_position": "after",
-            "title": "<p>Mastt Pass:<br/>Exclusive Club</p>",
-            "content_placement": "bottom-left"
-          }
-        },
-        "bottom_LYtAC4": {
-          "type": "bottom",
-          "settings": {
-            "image": "shopify://shop_images/Frame_76.png",
-            "link": "",
-            "badge_text": "",
-            "badge_position": "after",
-            "title": "<p>Hidden Discount</p>",
-            "subtext": "Only for First 10 Customers",
-            "coupon": "MakeMeRare",
-            "content_placement": "top-right"
-          }
-        }
-      },
-      "block_order": [
-        "large_Trttyk",
-        "top_AJrHTn",
-        "bottom_LYtAC4"
-      ],
-      "name": "Promo Cards Grid",
-      "settings": {},
-      "disabled": true
-    },
-    "1745938145f3ffcbff": {
-      "type": "apps",
-      "disabled": true,
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "collapsible_content_pDahx6": {
-      "type": "collapsible-content",
-      "blocks": {
-        "collapsible_row_rV7GcY": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Is Mastt jewellery safe for sensitive skin?",
-            "icon": "none",
-            "row_content": "<p>Yes — every piece is built on hypoallergenic, surgical-grade stainless steel, with no lead, nickel, or cadmium. Look good without the itch.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_rFKTLK": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "What is Mastt jewellery made of?",
-            "icon": "none",
-            "row_content": "<p>Surgical-grade stainless steel with a thick, richly bonded gold-tone finish — chosen for how it wears over months, not just how it photographs on day one.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_areCkR": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Will my Mastt pieces tarnish over time?",
-            "icon": "none",
-            "row_content": "<p>Stainless steel doesn't tarnish the way plated brass does. Keep your pieces dry, away from perfume and harsh chemicals, and they'll stay looking as good as day one.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_ek6BJN": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How do I take care of my jewellery?",
-            "icon": "none",
-            "row_content": "<p>Wipe gently with a soft, dry cloth after wearing, store pieces separately so they don't scratch each other, and take them off before swimming, showering, or applying lotion.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_tnMC43": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Do you make jewellery for men and women?",
-            "icon": "none",
-            "row_content": "<p>Both. Our rings, necklaces and bracelets are designed for men and women, all held to the same standard of comfort and craft.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_Dwckk6": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Is it solid gold?",
-            "icon": "none",
-            "row_content": "<p>No, and we won't pretend otherwise. Every piece is stainless steel with a premium gold-tone finish — the look and the longevity, without the fine-jewellery price. Every listing says exactly what you're getting.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_cXPVfi": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Can I wear Mastt jewellery every day?",
-            "icon": "none",
-            "row_content": "<p>That's exactly what it's made for. Durable, skin-safe, and designed to move from your morning coffee to your evening plans without a second thought.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_RLKHHe": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "What makes Mastt different?",
-            "icon": "none",
-            "row_content": "<p>We sit in the gap between 'expensive fine jewellery' and 'cheap imitation' — pieces that feel considered and last, priced so you can actually build a collection. Look good, feel Mastt.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_aUkNVy": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How is my order packaged?",
-            "icon": "none",
-            "row_content": "<p>Every piece arrives in gift-ready packaging with simple care instructions tucked inside — so it's ready to keep or hand straight to someone else.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_684tT4": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Something's wrong with my order — what now?",
-            "icon": "none",
-            "row_content": "<p>Reach out to Mastt Cares at info@mastt.co and we'll sort it quickly. Your satisfaction matters more to us than being right.</p>",
-            "page": ""
-          }
-        }
-      },
-      "block_order": [
-        "collapsible_row_rV7GcY",
-        "collapsible_row_rFKTLK",
-        "collapsible_row_areCkR",
-        "collapsible_row_ek6BJN",
-        "collapsible_row_tnMC43",
-        "collapsible_row_Dwckk6",
-        "collapsible_row_cXPVfi",
-        "collapsible_row_RLKHHe",
-        "collapsible_row_aUkNVy",
-        "collapsible_row_684tT4"
-      ],
-      "custom_css": [],
-      "name": "t:sections.collapsible_content.presets.name",
-      "settings": {
-        "caption": "Support",
-        "heading": "Frequently Asked Questions (FAQ)",
-        "heading_size": "h1",
-        "heading_alignment": "center",
-        "layout": "row",
-        "container_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "open_first_collapsible_row": false,
-        "image_ratio": "adapt",
-        "desktop_layout": "image_second",
-        "padding_top": 36,
-        "padding_bottom": 36
-      },
-      "disabled": true
-    },
-    "175221991594959e7c": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
       }
     },
     "mastt_top_styles": {
@@ -635,6 +319,7 @@
         "r1": {
           "type": "recipient",
           "settings": {
+            "image": "shopify://shop_images/IMG_8144.png",
             "label_light": "Gifts For",
             "label_strong": "Her",
             "link": "/collections/all?filter.p.tag=women"
@@ -656,6 +341,208 @@
       "settings": {
         "heading": "Shop by Recipient",
         "image_ratio": "4 / 3"
+      }
+    },
+    "176542848128554f43": {
+      "type": "apps",
+      "settings": {
+        "include_margins": false
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "disabled": true,
+      "custom_css": [
+        ".card__inner .card__media {border-radius: 200px 200px 20px 20px;}",
+        ".card--media {border-radius: 200px 200px 20px 20px; outline: none;}"
+      ],
+      "settings": {
+        "collection": "trending-products",
+        "products_to_show": 4,
+        "enable_dark_mode": false,
+        "title": "Trending",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    },
+    "kekaa_usp_section_9p66aY": {
+      "type": "kekaa__usp__section",
+      "blocks": {
+        "usp_jEkcnb": {
+          "type": "usp",
+          "settings": {
+            "icon": "shopify://shop_images/IMG_8139.png",
+            "title": "Quality Assured",
+            "description": "Every piece, Checked with care"
+          }
+        },
+        "usp_xfCgAb": {
+          "type": "usp",
+          "settings": {
+            "title": "Skin-Friendly",
+            "description": "Hypoallergenic Jewellery crafted for Comfort"
+          }
+        },
+        "usp_me944Q": {
+          "type": "usp",
+          "settings": {
+            "title": "True Craft",
+            "description": "Surgical-grade steel, finished to last"
+          }
+        },
+        "usp_CrnVTD": {
+          "type": "usp",
+          "settings": {
+            "title": "Fade Proof",
+            "description": "Premium Designs crafted to have a lasting shine"
+          }
+        }
+      },
+      "block_order": [
+        "usp_jEkcnb",
+        "usp_xfCgAb",
+        "usp_me944Q",
+        "usp_CrnVTD"
+      ],
+      "name": "USP Section",
+      "settings": {
+        "heading": "Our Promise"
+      }
+    },
+    "kekaa_style_collection_mgQ4zd": {
+      "type": "kekaa__style__collection",
+      "blocks": {
+        "badge_iADpxz": {
+          "type": "badge",
+          "settings": {
+            "position": "tl",
+            "label": "Daily Wear",
+            "badge_link": "shopify://collections/daily-wear-jewelry",
+            "bg_size": 200,
+            "focus_x": 65,
+            "focus_y": 65
+          }
+        },
+        "badge_zqgHKp": {
+          "type": "badge",
+          "settings": {
+            "position": "tr",
+            "label": "Summer Wear",
+            "badge_link": "shopify://collections/summer-wear-jewelry",
+            "bg_size": 180,
+            "focus_x": 40,
+            "focus_y": 95
+          }
+        },
+        "badge_YnUkqR": {
+          "type": "badge",
+          "settings": {
+            "position": "bl",
+            "label": "Party Wear",
+            "badge_link": "shopify://collections/party-wear-jewelry",
+            "bg_size": 180,
+            "focus_x": 50,
+            "focus_y": 90
+          }
+        },
+        "badge_pr76B8": {
+          "type": "badge",
+          "settings": {
+            "position": "br",
+            "label": "Office Wear",
+            "badge_link": "shopify://collections/office-wear-jewelry",
+            "bg_size": 200,
+            "focus_x": 30,
+            "focus_y": 70
+          }
+        }
+      },
+      "block_order": [
+        "badge_iADpxz",
+        "badge_zqgHKp",
+        "badge_YnUkqR",
+        "badge_pr76B8"
+      ],
+      "disabled": true,
+      "name": "Style Collection",
+      "settings": {
+        "heading_text": "Outfit-Style Collections"
+      }
+    },
+    "178670482636cffafd": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "kekaa_promo_section_D4MDGC": {
+      "type": "kekaa__promo__section",
+      "blocks": {
+        "large_Trttyk": {
+          "type": "large",
+          "settings": {
+            "link": "shopify://collections",
+            "badge_text": "New Year Sale",
+            "badge_position": "before",
+            "title": "<p>Buy1 get 1 FREE</p>",
+            "content_placement": "top-left"
+          }
+        },
+        "top_AJrHTn": {
+          "type": "top",
+          "settings": {
+            "link": "",
+            "badge_text": "Stay tuned",
+            "badge_position": "after",
+            "title": "<p>Mastt Pass:<br/>Exclusive Club</p>",
+            "content_placement": "bottom-left"
+          }
+        },
+        "bottom_LYtAC4": {
+          "type": "bottom",
+          "settings": {
+            "link": "",
+            "badge_text": "",
+            "badge_position": "after",
+            "title": "<p>Hidden Discount</p>",
+            "subtext": "Only for First 10 Customers",
+            "coupon": "MakeMeRare",
+            "content_placement": "top-right"
+          }
+        }
+      },
+      "block_order": [
+        "large_Trttyk",
+        "top_AJrHTn",
+        "bottom_LYtAC4"
+      ],
+      "disabled": true,
+      "name": "Promo Cards Grid",
+      "settings": {}
+    },
+    "1745938145f3ffcbff": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+        "include_margins": true
       }
     },
     "mastt_reviews": {
@@ -733,6 +620,136 @@
       "settings": {
         "heading": "Loved by Mastt Wearers",
         "summary_text": "4.8 average from 250+ happy customers"
+      }
+    },
+    "collapsible_content_pDahx6": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_rV7GcY": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is Mastt jewellery safe for sensitive skin?",
+            "icon": "none",
+            "row_content": "<p>Yes — every piece is built on hypoallergenic, surgical-grade stainless steel, with no lead, nickel, or cadmium. Look good without the itch.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_rFKTLK": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is Mastt jewellery made of?",
+            "icon": "none",
+            "row_content": "<p>Surgical-grade stainless steel with a thick, richly bonded gold-tone finish — chosen for how it wears over months, not just how it photographs on day one.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_areCkR": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Will my Mastt pieces tarnish over time?",
+            "icon": "none",
+            "row_content": "<p>Stainless steel doesn't tarnish the way plated brass does. Keep your pieces dry, away from perfume and harsh chemicals, and they'll stay looking as good as day one.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_ek6BJN": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I take care of my jewellery?",
+            "icon": "none",
+            "row_content": "<p>Wipe gently with a soft, dry cloth after wearing, store pieces separately so they don't scratch each other, and take them off before swimming, showering, or applying lotion.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_tnMC43": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you make jewellery for men and women?",
+            "icon": "none",
+            "row_content": "<p>Both. Our rings, necklaces and bracelets are designed for men and women, all held to the same standard of comfort and craft.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Dwckk6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is it solid gold?",
+            "icon": "none",
+            "row_content": "<p>No, and we won't pretend otherwise. Every piece is stainless steel with a premium gold-tone finish — the look and the longevity, without the fine-jewellery price. Every listing says exactly what you're getting.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_cXPVfi": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I wear Mastt jewellery every day?",
+            "icon": "none",
+            "row_content": "<p>That's exactly what it's made for. Durable, skin-safe, and designed to move from your morning coffee to your evening plans without a second thought.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_RLKHHe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What makes Mastt different?",
+            "icon": "none",
+            "row_content": "<p>We sit in the gap between 'expensive fine jewellery' and 'cheap imitation' — pieces that feel considered and last, priced so you can actually build a collection. Look good, feel Mastt.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_aUkNVy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How is my order packaged?",
+            "icon": "none",
+            "row_content": "<p>Every piece arrives in gift-ready packaging with simple care instructions tucked inside — so it's ready to keep or hand straight to someone else.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_684tT4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Something's wrong with my order — what now?",
+            "icon": "none",
+            "row_content": "<p>Reach out to Mastt Cares at info@mastt.co and we'll sort it quickly. Your satisfaction matters more to us than being right.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_rV7GcY",
+        "collapsible_row_rFKTLK",
+        "collapsible_row_areCkR",
+        "collapsible_row_ek6BJN",
+        "collapsible_row_tnMC43",
+        "collapsible_row_Dwckk6",
+        "collapsible_row_cXPVfi",
+        "collapsible_row_RLKHHe",
+        "collapsible_row_aUkNVy",
+        "collapsible_row_684tT4"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "Support",
+        "heading": "Frequently Asked Questions (FAQ)",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "row",
+        "container_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "175221991594959e7c": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
       }
     }
   },
