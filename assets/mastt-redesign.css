@@ -749,13 +749,15 @@ h1, h2, h3, h4, h5, h6,
   color: var(--color-dusty-coral);
 }
 
-/* SVG logo: the artwork carries generous internal padding, so it needs a
-   larger box than a tightly-cropped raster to read at the same size. */
+/* SVG logo. The source canvas was 2102x1402 with the artwork occupying only
+   839x378 of it — mostly empty margin, which is why it rendered tiny. The
+   viewBox is now cropped to the artwork, so this width is the real mark. */
 .header__heading-logo-wrapper img[src$='.svg'],
 .header__heading-logo[src$='.svg'] {
-  width: clamp(150px, 120px + 6vw, 230px);
+  width: clamp(132px, 104px + 5vw, 178px);
   height: auto;
   max-width: 100%;
+  display: block;
 }
 
 /* Dawn adds .shopify-section-header-sticky once the header detaches */
@@ -807,11 +809,12 @@ h1, h2, h3, h4, h5, h6,
   color: var(--color-charcoal);
 }
 
-/* Dawn underlines the active item with a plain border — swap for the accent */
+/* No persistent marker on the current page — the hover underline already
+   reads clearly, and a static one on HOME looked like a stuck hover state. */
 .header__active-menu-item {
   text-decoration: none;
-  border-bottom: 1.5px solid var(--color-dusty-coral);
-  padding-bottom: 2px;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 /* Dropdown/submenu rows stay sentence-case and quieter than the top row */
@@ -876,11 +879,25 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 1.4rem;
 }
 
-/* Body text sits at pearl, links a touch softer so headings lead */
-.footer .footer-block__details-content,
+/* Link columns sit slightly under the headings */
 .footer .list-menu__item--link,
 .footer .copyright__content {
   color: rgba(var(--color-foreground), 0.82);
+}
+
+/* Brand block (contact / GST / address) in white — it sits on the aqua
+   band and reads as supporting detail against the charcoal heading. */
+.footer .footer-block__brand-info,
+.footer .footer-block__brand-info p,
+.footer .footer-block__brand-info a,
+.footer .footer-block__brand-info strong {
+  color: var(--color-white);
+}
+
+.footer .footer-block__brand-info a:hover {
+  color: var(--color-white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Divider above the bottom bar + copyright/GST on one row */
