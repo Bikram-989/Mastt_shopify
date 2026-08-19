@@ -75,7 +75,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Rings",
-            "image": "shopify://shop_images/3.png",
+            "image": "shopify://shop_images/2_cbbeabea-972a-41c1-b69d-5397105cf92d.png",
             "custom_title": "Rings"
           }
         },
@@ -83,7 +83,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Necklaces",
-            "image": "shopify://shop_images/4.png",
+            "image": "shopify://shop_images/3_15cef7cc-ac3f-45bd-bd21-982f54c33821.png",
             "custom_title": "Necklaces"
           }
         },
@@ -91,31 +91,31 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Bracelets",
-            "image": "shopify://shop_images/2.png",
+            "image": "shopify://shop_images/1_8273c059-8ae4-4e01-bdef-2f399c64139d.png",
             "custom_title": "Bracelets"
           }
         },
         "collection_card_9tQnGm": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Earrings",
-            "image": "shopify://shop_images/1.png",
+            "collection_url": "/collections/all?filter.p.tag=women",
+            "image": "shopify://shop_images/6_9075f5c4-350b-4952-a714-0c2da3ba7d05.png",
             "custom_title": "Earings"
           }
         },
         "collection_card_khPWpT": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Sets",
-            "image": "shopify://shop_images/5.png",
+            "collection_url": "/collections/all?filter.p.tag=men",
+            "image": "shopify://shop_images/4_5d888ff7-43a8-4fdc-826f-cd65d8c67853.png",
             "custom_title": "Sets"
           }
         },
         "collection_card_TUqki9": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.tag=men",
-            "image": "shopify://shop_images/6.png",
+            "collection_url": "/collections/all",
+            "image": "shopify://shop_images/5_2f4a43b5-e6ca-422d-ae93-b916e9bb8c9c.png",
             "custom_title": "Men"
           }
         }
