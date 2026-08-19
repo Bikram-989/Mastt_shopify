@@ -390,7 +390,7 @@
         "usp_jEkcnb": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8140.png",
+            "icon": "shopify://shop_images/IMG_8139_copy.png",
             "title": "Quality Assured",
             "description": "Every piece, Checked with care"
           }
@@ -398,6 +398,7 @@
         "usp_xfCgAb": {
           "type": "usp",
           "settings": {
+            "icon": "shopify://shop_images/IMG_8137copy.png",
             "title": "Skin-Friendly",
             "description": "Hypoallergenic Jewellery crafted for Comfort"
           }
@@ -405,6 +406,7 @@
         "usp_me944Q": {
           "type": "usp",
           "settings": {
+            "icon": "shopify://shop_images/IMG_8140_copy.png",
             "title": "True Craft",
             "description": "Surgical-grade steel, finished to last"
           }
@@ -412,6 +414,7 @@
         "usp_CrnVTD": {
           "type": "usp",
           "settings": {
+            "icon": "shopify://shop_images/IMG_8134_copy.png",
             "title": "Fade Proof",
             "description": "Premium Designs crafted to have a lasting shine"
           }
