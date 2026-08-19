@@ -328,6 +328,7 @@
         "badge_YnUkqR",
         "badge_pr76B8"
       ],
+      "disabled": true,
       "name": "Style Collection",
       "settings": {
         "heading_text": "Outfit-Style Collections"
@@ -381,6 +382,7 @@
         "top_AJrHTn",
         "bottom_LYtAC4"
       ],
+      "disabled": true,
       "name": "Promo Cards Grid",
       "settings": {}
     },
@@ -454,7 +456,7 @@
       ],
       "name": "SS - Testimonial #9",
       "settings": {
-        "heading": "<h2>Over <strong>250+</strong> reviews on <em>Google</em> from our Happy Customers</h2>",
+        "heading": "<h2>Over 350<strong>+</strong> reviews on <em>Google</em> from our Happy Customers</h2>",
         "heading_custom": false,
         "heading_font": "josefin_sans_n4",
         "heading_size": 42,
@@ -478,9 +480,10 @@
         "rating_size_mobile": 16,
         "rating_height": 130,
         "rating_mt": 16,
+        "stars_icon": "shopify://shop_images/31747695_s4k6_pdjv_220810.svg",
         "stars_count": 5,
-        "stars_size": 16,
-        "slider_view": "5",
+        "stars_size": 18,
+        "slider_view": "1",
         "slider_view_mobile": 1.5,
         "slider_gap": 20,
         "slider_gap_mobile": 20,
