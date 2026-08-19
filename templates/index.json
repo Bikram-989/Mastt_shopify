@@ -33,6 +33,7 @@
         "slide_hH9zBP": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/IMG_8169_JPG.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
