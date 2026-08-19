@@ -13,7 +13,6 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "disabled": true,
       "blocks": {
         "announcement_QDBkcG": {
           "type": "announcement",
@@ -34,6 +33,7 @@
         "announcement_QDBkcG",
         "announcement-bar-0"
       ],
+      "disabled": true,
       "custom_css": [],
       "settings": {
         "scroll_enabled": true,
@@ -41,8 +41,8 @@
         "direction": "ltr",
         "speed": 22,
         "separator": "•",
-        "text_color": "#201B19",
-        "bg_color": "#EC9F93"
+        "text_color": "#201b19",
+        "bg_color": "#ec9f93"
       }
     },
     "header": {

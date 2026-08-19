@@ -20,20 +20,20 @@
             "show_social": true
           }
         },
-        "mastt_cares_main": {
-          "type": "mastt_cares",
-          "settings": {
-            "heading": "Mastt Cares",
-            "link_labels": "About Us, Track Order, Terms of Use, Refund Policy, Privacy Policy, Shipping Policy, Warranty Registration",
-            "link_urls": "/pages/about-us, https://mastt.shiprocket.co/tracking, /policies/terms-of-service, /policies/refund-policy, /policies/privacy-policy, /policies/shipping-policy, /pages/warranty-registration"
-          }
-        },
         "mastt_shop": {
           "type": "mastt_cares",
           "settings": {
             "heading": "Shop",
             "link_labels": "All Jewellery, Rings, Necklaces, Bracelets, Men's Jewellery, Women's Jewellery",
             "link_urls": "/collections/all, /collections/all?filter.p.product_type=Rings, /collections/all?filter.p.product_type=Necklaces, /collections/all?filter.p.product_type=Bracelets, /collections/all?filter.p.tag=men, /collections/all?filter.p.tag=women"
+          }
+        },
+        "mastt_cares_main": {
+          "type": "mastt_cares",
+          "settings": {
+            "heading": "Mastt Cares",
+            "link_labels": "About Us, Track Order, Terms of Use, Refund Policy, Privacy Policy, Shipping Policy, Warranty Registration",
+            "link_urls": "/pages/about-us, https://mastt.shiprocket.co/tracking, /policies/terms-of-service, /policies/refund-policy, /policies/privacy-policy, /policies/shipping-policy, /pages/warranty-registration"
           }
         }
       },
