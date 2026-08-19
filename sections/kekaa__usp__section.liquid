@@ -17,7 +17,8 @@ h1, h2, h3, p { margin: 0; }
 
 .usp-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* auto-fit so the strip stays balanced whatever the block count */
+  grid-template-columns: repeat({{ section.blocks.size | at_most: 4 }}, 1fr);
   max-width: 1120px;
   margin: 0 auto;
   position: static;
@@ -35,7 +36,7 @@ h1, h2, h3, p { margin: 0; }
   padding: 4px clamp(14px, 8px + 1.8vw, 32px);
 }
 
-.usp:not(:nth-child(4n+1))::before {
+.usp:not(:first-child)::before {
   content: '';
   position: absolute;
   left: 0;
@@ -107,8 +108,10 @@ h1, h2, h3, p { margin: 0; }
     grid-template-columns: repeat(2, 1fr);
     row-gap: clamp(28px, 20px + 2vw, 40px);
   }
-  .usp:not(:nth-child(4n+1))::before { display: none; }
+  /* two-up: only the right-hand column of each row keeps a divider */
+  .usp::before { display: none; }
   .usp:nth-child(even)::before {
+    display: block;
     content: '';
     position: absolute;
     left: 0;

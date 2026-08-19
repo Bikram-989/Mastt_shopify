@@ -1,0 +1,277 @@
+{%- comment -%}
+  Static testimonials — a 3 x 2 grid of reviews held in section blocks, so it
+  needs no reviews app and no product data. Each card carries a star row, the
+  quote, the reviewer and what they bought.
+{%- endcomment -%}
+
+<style>
+  #Reviews-{{ section.id }} {
+    padding-block: calc(var(--spacer) / 2);
+  }
+
+  #Reviews-{{ section.id }} .mrv__summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: clamp(24px, 16px + 1.6vw, 40px);
+    font-family: var(--font-body-family);
+    font-size: 1.4rem;
+    color: var(--color-charcoal-70, #6B5F5B);
+    flex-wrap: wrap;
+  }
+
+  #Reviews-{{ section.id }} .mrv__summary strong {
+    color: var(--color-charcoal, #201B19);
+  }
+
+  #Reviews-{{ section.id }} .mrv__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 9px + 1.2vw, 26px);
+  }
+
+  #Reviews-{{ section.id }} .mrv__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--color-white, #fff);
+    border: 1px solid var(--color-charcoal-08, rgba(32,27,25,.08));
+    /* same petal signature as the product cards */
+    border-radius: var(--radius-md, 16px) clamp(24px, 18px + 1.4vw, 40px)
+                   var(--radius-md, 16px) var(--radius-md, 16px);
+    padding: clamp(20px, 15px + 1vw, 30px);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(32,27,25,.1));
+    transition: transform 340ms cubic-bezier(.16,1,.3,1),
+                box-shadow 340ms cubic-bezier(.16,1,.3,1);
+  }
+
+  #Reviews-{{ section.id }} .mrv__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md, 0 8px 24px -4px rgba(32,27,25,.16));
+  }
+
+  #Reviews-{{ section.id }} .mrv__stars {
+    display: flex;
+    gap: 3px;
+    color: var(--color-dusty-coral, #D6887C);
+  }
+
+  #Reviews-{{ section.id }} .mrv__stars svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  #Reviews-{{ section.id }} .mrv__quote {
+    font-size: 1.45rem;
+    line-height: 1.62;
+    color: var(--color-charcoal, #201B19);
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  #Reviews-{{ section.id }} .mrv__foot {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-charcoal-08, rgba(32,27,25,.08));
+  }
+
+  #Reviews-{{ section.id }} .mrv__avatar {
+    display: grid;
+    place-items: center;
+    width: 3.8rem;
+    height: 3.8rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--avatar-tint, var(--color-nude-beige, #E3C4BC));
+    color: var(--color-charcoal, #201B19);
+    font-family: var(--font-heading-family);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  #Reviews-{{ section.id }} .mrv__card:nth-child(6n+1) { --avatar-tint: color-mix(in srgb, var(--color-dusty-coral, #D6887C) 45%, white); }
+  #Reviews-{{ section.id }} .mrv__card:nth-child(6n+2) { --avatar-tint: color-mix(in srgb, var(--color-aqua, #78AAB1) 45%, white); }
+  #Reviews-{{ section.id }} .mrv__card:nth-child(6n+3) { --avatar-tint: color-mix(in srgb, var(--color-blush-pink, #EC9F93) 50%, white); }
+  #Reviews-{{ section.id }} .mrv__card:nth-child(6n+4) { --avatar-tint: color-mix(in srgb, var(--color-aqua, #78AAB1) 32%, white); }
+  #Reviews-{{ section.id }} .mrv__card:nth-child(6n+5) { --avatar-tint: color-mix(in srgb, var(--color-nude-beige, #E3C4BC) 80%, white); }
+  #Reviews-{{ section.id }} .mrv__card:nth-child(6n+6) { --avatar-tint: color-mix(in srgb, var(--color-dusty-coral, #D6887C) 30%, white); }
+
+  #Reviews-{{ section.id }} .mrv__who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  #Reviews-{{ section.id }} .mrv__name {
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--color-charcoal, #201B19);
+  }
+
+  #Reviews-{{ section.id }} .mrv__meta {
+    font-size: 1.15rem;
+    color: var(--color-charcoal-70, #6B5F5B);
+  }
+
+  #Reviews-{{ section.id }} .mrv__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-aqua-dark, #5A8087);
+  }
+
+  #Reviews-{{ section.id }} .mrv__verified svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    #Reviews-{{ section.id }} .mrv__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 599px) {
+    #Reviews-{{ section.id }} .mrv__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div id="Reviews-{{ section.id }}" class="mastt-reviews kk__wrapper page-width">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="kk__heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  {%- if section.settings.summary_text != blank -%}
+    <p class="mrv__summary">
+      <span class="mrv__stars" aria-hidden="true">
+        {%- for i in (1..5) -%}
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.6 7.7l5.8-.8L10 1.6z"/></svg>
+        {%- endfor -%}
+      </span>
+      <span>{{ section.settings.summary_text }}</span>
+    </p>
+  {%- endif -%}
+
+  <div class="mrv__grid">
+    {%- for block in section.blocks -%}
+      {%- assign stars = block.settings.stars | default: 5 -%}
+      <figure class="mrv__card" {{ block.shopify_attributes }}>
+        <div class="mrv__stars" role="img" aria-label="{{ stars }} out of 5 stars">
+          {%- for i in (1..5) -%}
+            {%- if i <= stars -%}
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.6 7.7l5.8-.8L10 1.6z"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.6 7.7l5.8-.8L10 1.6z"/></svg>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <blockquote class="mrv__quote">{{ block.settings.quote }}</blockquote>
+
+        <figcaption class="mrv__foot">
+          <span class="mrv__avatar" aria-hidden="true">
+            {{ block.settings.author | strip | slice: 0 | upcase }}
+          </span>
+          <span class="mrv__who">
+            <span class="mrv__name">{{ block.settings.author | escape }}</span>
+            <span class="mrv__meta">{{ block.settings.product | escape }}</span>
+            {%- if block.settings.verified -%}
+              <span class="mrv__verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Verified buyer
+              </span>
+            {%- endif -%}
+          </span>
+        </figcaption>
+      </figure>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Mastt Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by Mastt Wearers"
+    },
+    {
+      "type": "text",
+      "id": "summary_text",
+      "label": "Summary line",
+      "default": "4.8 average from 250+ happy customers"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Stars",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review",
+          "default": "Genuinely surprised by the quality for the price."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Name",
+          "default": "Ananya S."
+        },
+        {
+          "type": "text",
+          "id": "product",
+          "label": "Product / location",
+          "default": "Bengaluru"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show \"Verified buyer\"",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Mastt Reviews",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
+      ]
+    }
+  ]
+}
+{% endschema %}

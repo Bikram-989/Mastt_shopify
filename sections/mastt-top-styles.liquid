@@ -1,0 +1,354 @@
+{%- comment -%}
+  Mastt Top Styles — tabbed product rail.
+
+  Each block is a tab. A tab points at a collection and, optionally, narrows it
+  by product type and/or tag so a single "all products" collection can feed
+  every tab without the merchant creating a collection per category.
+
+  All tabs render server-side and are toggled with a tiny bit of JS, so the
+  products are in the HTML for crawlers and the tab switch costs no request.
+{%- endcomment -%}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+<style>
+  #TopStyles-{{ section.id }} {
+    padding-block: calc(var(--spacer) / 2);
+  }
+
+  #TopStyles-{{ section.id }} .mts__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(8px, 5px + 0.6vw, 14px);
+    margin-bottom: clamp(24px, 16px + 1.6vw, 40px);
+    padding: 0;
+    list-style: none;
+  }
+
+  #TopStyles-{{ section.id }} .mts__tab {
+    appearance: none;
+    cursor: pointer;
+    border: 1px solid var(--color-charcoal-15, rgba(32,27,25,.15));
+    background: transparent;
+    color: var(--color-charcoal, #201B19);
+    border-radius: var(--radius-full, 999px);
+    padding: 0.9rem 2rem;
+    font-family: var(--font-body-family);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide, .08em);
+    transition: background-color 180ms cubic-bezier(.16,1,.3,1),
+                color 180ms cubic-bezier(.16,1,.3,1),
+                border-color 180ms cubic-bezier(.16,1,.3,1);
+  }
+
+  #TopStyles-{{ section.id }} .mts__tab:hover {
+    border-color: var(--color-dusty-coral, #D6887C);
+  }
+
+  #TopStyles-{{ section.id }} .mts__tab[aria-selected='true'] {
+    background: var(--color-charcoal, #201B19);
+    border-color: var(--color-charcoal, #201B19);
+    color: var(--color-pearl-beige, #F5E7DF);
+  }
+
+  #TopStyles-{{ section.id }} .mts__panel[hidden] { display: none; }
+
+  #TopStyles-{{ section.id }} .mts__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
+    gap: clamp(14px, 9px + 1.2vw, 28px);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #TopStyles-{{ section.id }} .mts__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: clamp(28px, 20px + 2vw, 56px) 16px;
+    border: 1px dashed var(--color-charcoal-15, rgba(32,27,25,.15));
+    border-radius: var(--radius-md, 16px);
+    color: var(--color-charcoal-70, #6B5F5B);
+    font-size: 1.4rem;
+  }
+
+  #TopStyles-{{ section.id }} .mts__viewall {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(24px, 16px + 1.6vw, 40px);
+  }
+
+  @media screen and (max-width: 989px) {
+    #TopStyles-{{ section.id }} .mts__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    #TopStyles-{{ section.id }} .mts__tab {
+      padding: 0.7rem 1.4rem;
+      font-size: 1.1rem;
+    }
+  }
+</style>
+
+<div id="TopStyles-{{ section.id }}" class="mastt-top-styles kk__wrapper page-width">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="kk__heading">{{ section.settings.heading | escape }}</h2>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="mts__tabs" role="tablist" aria-label="{{ section.settings.heading | default: 'Product categories' | escape }}">
+      {%- for block in section.blocks -%}
+        <button
+          type="button"
+          class="mts__tab"
+          role="tab"
+          id="MtsTab-{{ section.id }}-{{ forloop.index0 }}"
+          aria-controls="MtsPanel-{{ section.id }}-{{ forloop.index0 }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.label | escape }}
+        </button>
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign source = block.settings.collection
+        comment
+          Falls back to the whole catalogue so a tab still fills before the
+          merchant picks a collection (and because the "all" handle does not
+          always resolve to a real collection object).
+        endcomment
+        if source == blank or source.products_count == 0
+          assign source = collections.all
+        endif
+        assign want_type = block.settings.product_type | strip | downcase
+        assign want_tag = block.settings.tag | strip | downcase
+        assign limit = section.settings.products_to_show
+        assign shown = 0
+
+        assign view_all = block.settings.view_all_url
+        if view_all == blank
+          assign view_all = source.url
+        endif
+      -%}
+
+      <div
+        class="mts__panel"
+        id="MtsPanel-{{ section.id }}-{{ forloop.index0 }}"
+        role="tabpanel"
+        aria-labelledby="MtsTab-{{ section.id }}-{{ forloop.index0 }}"
+        {% unless forloop.first %}hidden{% endunless %}
+      >
+        <ul class="mts__grid">
+          {%- for product in source.products -%}
+            {%- liquid
+              assign ok = true
+              if want_type != blank
+                assign ptype = product.type | downcase
+                unless ptype == want_type
+                  assign ok = false
+                endunless
+              endif
+              if want_tag != blank
+                assign has_tag = false
+                for t in product.tags
+                  assign t_down = t | downcase
+                  if t_down == want_tag
+                    assign has_tag = true
+                  endif
+                endfor
+                unless has_tag
+                  assign ok = false
+                endunless
+              endif
+            -%}
+            {%- if ok and shown < limit -%}
+              {%- assign shown = shown | plus: 1 -%}
+              <li>
+                {%- render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: 'square',
+                  show_secondary_image: section.settings.show_secondary_image,
+                  quick_add: section.settings.quick_add,
+                  section_id: section.id
+                -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if shown == 0 -%}
+            <li class="mts__empty">Nothing here yet — new pieces landing soon.</li>
+          {%- endif -%}
+        </ul>
+
+        {%- if section.settings.show_view_all and view_all != blank -%}
+          <div class="mts__viewall">
+            <a href="{{ view_all }}" class="button button--secondary">
+              {{ section.settings.view_all_label | default: 'View all' | escape }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('TopStyles-{{ section.id }}');
+    if (!root) return;
+
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('.mts__tab'));
+
+    function select(index) {
+      tabs.forEach(function (tab, i) {
+        var on = i === index;
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        tab.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(tab.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !on;
+      });
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(i); });
+      tab.addEventListener('keydown', function (e) {
+        var next = null;
+        if (e.key === 'ArrowRight') next = (i + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = tabs.length - 1;
+        if (next === null) return;
+        e.preventDefault();
+        select(next);
+        tabs[next].focus();
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mastt Top Styles",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Mastt Top Styles"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products per tab",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "label": "Quick add",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "\"View all\" label",
+      "default": "View all"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "default": "All"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Source collection",
+          "info": "Usually your full catalogue — narrow it with the filters below."
+        },
+        {
+          "type": "text",
+          "id": "product_type",
+          "label": "Only show this product type",
+          "info": "Optional. Must match the product's Type exactly, e.g. Rings."
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Only show products with this tag",
+          "info": "Optional, e.g. men or women."
+        },
+        {
+          "type": "url",
+          "id": "view_all_url",
+          "label": "\"View all\" link",
+          "info": "Defaults to the source collection if left empty."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Mastt Top Styles",
+      "blocks": [
+        { "type": "tab" },
+        { "type": "tab" },
+        { "type": "tab" },
+        { "type": "tab" }
+      ]
+    }
+  ]
+}
+{% endschema %}
