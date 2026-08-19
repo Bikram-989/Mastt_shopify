@@ -203,7 +203,19 @@
             }}
           </div>
         {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
+          {%- comment -%}
+            No logo uploaded to the Files library yet, so fall back to the
+            SVG shipped with the theme rather than plain shop-name text.
+            Uploading a logo in Theme Editor still takes precedence.
+          {%- endcomment -%}
+          <div class="header__heading-logo-wrapper">
+            <img
+              src="{{ 'mastt-logo.svg' | asset_url }}"
+              alt="{{ shop.name | escape }}"
+              class="header__heading-logo motion-reduce"
+              width="{{ settings.logo_width | default: 140 }}"
+            >
+          </div>
         {%- endif -%}
       </a>
       {%- if request.page_type == 'index' -%}
@@ -350,7 +362,19 @@
             }}
           </div>
         {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
+          {%- comment -%}
+            No logo uploaded to the Files library yet, so fall back to the
+            SVG shipped with the theme rather than plain shop-name text.
+            Uploading a logo in Theme Editor still takes precedence.
+          {%- endcomment -%}
+          <div class="header__heading-logo-wrapper">
+            <img
+              src="{{ 'mastt-logo.svg' | asset_url }}"
+              alt="{{ shop.name | escape }}"
+              class="header__heading-logo motion-reduce"
+              width="{{ settings.logo_width | default: 140 }}"
+            >
+          </div>
         {%- endif -%}
       </a>
       {%- if request.page_type == 'index' -%}

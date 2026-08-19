@@ -54,7 +54,8 @@ h1, h2, h3, p { margin: 0; }
   width: clamp(58px, 48px + 2.6vw, 76px);
   aspect-ratio: 1;
   transform: none;
-  padding: clamp(14px, 11px + 0.8vw, 18px);
+  padding: clamp(10px, 8px + 0.5vw, 14px);
+  overflow: hidden;
   margin-bottom: clamp(14px, 10px + 1vw, 20px);
   background: var(--color-white, #fff);
   border-radius: 50%;
@@ -72,9 +73,15 @@ h1, h2, h3, p { margin: 0; }
 .usp:nth-child(4n+4) .usp-icon { --usp-ring: var(--color-nude-beige, #E3C4BC); }
 
 .usp-icon img {
+  /* fill the padded circle without cropping, whatever the source aspect */
+  display: block;
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: auto;
   object-fit: contain;
+  object-position: center;
 }
 
 .usp-content {

@@ -100,6 +100,13 @@
   #Reviews-{{ section.id }} .mrv__card:nth-child(6n+5) { --avatar-tint: color-mix(in srgb, var(--color-nude-beige, #E3C4BC) 80%, white); }
   #Reviews-{{ section.id }} .mrv__card:nth-child(6n+6) { --avatar-tint: color-mix(in srgb, var(--color-dusty-coral, #D6887C) 30%, white); }
 
+  #Reviews-{{ section.id }} .mrv__avatar--photo {
+    object-fit: cover;
+    background: var(--color-pearl-beige, #F5E7DF);
+    box-shadow: 0 0 0 2px var(--color-white, #fff),
+                0 0 0 4px var(--avatar-tint, var(--color-nude-beige, #E3C4BC));
+  }
+
   #Reviews-{{ section.id }} .mrv__who {
     display: flex;
     flex-direction: column;
@@ -178,9 +185,21 @@
         <blockquote class="mrv__quote">{{ block.settings.quote }}</blockquote>
 
         <figcaption class="mrv__foot">
-          <span class="mrv__avatar" aria-hidden="true">
-            {{ block.settings.author | strip | slice: 0 | upcase }}
-          </span>
+          {%- if block.settings.photo != blank -%}
+            <img
+              class="mrv__avatar mrv__avatar--photo"
+              src="{{ block.settings.photo | image_url: width: 160 }}"
+              alt="{{ block.settings.author | escape }}"
+              loading="lazy"
+              width="160"
+              height="160"
+            >
+          {%- else -%}
+            {%- comment -%} Initial stands in until a photo is uploaded {%- endcomment -%}
+            <span class="mrv__avatar" aria-hidden="true">
+              {{ block.settings.author | strip | slice: 0 | upcase }}
+            </span>
+          {%- endif -%}
           <span class="mrv__who">
             <span class="mrv__name">{{ block.settings.author | escape }}</span>
             <span class="mrv__meta">{{ block.settings.product | escape }}</span>
@@ -237,6 +256,12 @@
           "id": "quote",
           "label": "Review",
           "default": "Genuinely surprised by the quality for the price."
+        },
+        {
+          "type": "image_picker",
+          "id": "photo",
+          "label": "Reviewer photo",
+          "info": "Optional — falls back to the reviewer's initial."
         },
         {
           "type": "text",

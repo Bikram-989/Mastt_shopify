@@ -106,6 +106,75 @@
 
 
 /* --------------------------------------------------------------------------
+   2b. COLOUR SCHEMES — enforced from code
+   Dawn builds .color-scheme-N from config/settings_data.json, which the
+   Shopify Theme Editor rewrites every time it saves. That kept reverting the
+   palette to the old store's tan/gold (scheme-1 back to #f5efe6 / #c8a46b),
+   which is why the header and other sections stopped matching the brand.
+   Declaring the schemes here makes the palette code-owned and stable.
+
+   Consequence to know: the Colors panel in Theme Editor no longer changes
+   the site. Ask for a colour change here instead.
+   -------------------------------------------------------------------------- */
+.color-scheme-1 {
+  --color-background: 245, 231, 223;      /* Warm Pearl Beige */
+  --color-foreground: 32, 27, 25;         /* Charcoal */
+  --color-button: 214, 136, 124;          /* Dusty Coral */
+  --color-button-text: 32, 27, 25;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 214, 136, 124;
+  --gradient-background: #F5E7DF;
+}
+
+/* Footer / aqua band */
+.color-scheme-2 {
+  --color-background: 120, 170, 177;      /* Soft Aqua */
+  --color-foreground: 32, 27, 25;         /* charcoal, not white: 6.8:1 vs 2.6:1 */
+  --color-button: 32, 27, 25;
+  --color-button-text: 245, 231, 223;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 0, 0, 0;
+  --gradient-background: #78AAB1;
+}
+
+.color-scheme-3 {
+  --color-background: 227, 196, 188;      /* Soft Nude Beige */
+  --color-foreground: 32, 27, 25;
+  --color-button: 214, 136, 124;
+  --color-button-text: 32, 27, 25;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 214, 136, 124;
+  --gradient-background: #E3C4BC;
+}
+
+.color-scheme-4 {
+  --color-background: 236, 159, 147;      /* Signature Blush Pink */
+  --color-foreground: 32, 27, 25;
+  --color-button: 32, 27, 25;
+  --color-button-text: 245, 231, 223;
+  --color-secondary-button-text: 32, 27, 25;
+  --color-link: 32, 27, 25;
+  --color-shadow: 32, 27, 25;
+  --gradient-background: #EC9F93;
+}
+
+.color-scheme-5,
+.color-scheme-6 {
+  --color-background: 32, 27, 25;         /* Charcoal */
+  --color-foreground: 245, 231, 223;
+  --color-button: 214, 136, 124;
+  --color-button-text: 32, 27, 25;
+  --color-secondary-button-text: 245, 231, 223;
+  --color-link: 245, 231, 223;
+  --color-shadow: 0, 0, 0;
+  --gradient-background: #201B19;
+}
+
+
+/* --------------------------------------------------------------------------
    3. TYPOGRAPHY
    -------------------------------------------------------------------------- */
 :root:not(.system-body-font) {
@@ -404,18 +473,14 @@ h1, h2, h3, h4, h5, h6,
    block via `bottom: 100%`, which lands it over the bottom of the image
    whatever the aspect ratio — and, unlike anchoring to .card-wrapper, it
    can never cover the product title. */
-/* Positioned unconditionally — no :has() dependency, and harmless on cards
-   that have no quick-add. The image stays clickable because the media's own
-   title-link overlay lives inside .card__inner (which is .ratio, already
-   position:relative), so it is unaffected by this. */
-.card-wrapper .card__content {
-  position: relative;
-}
-
+/* The quick-add markup now sits inside .card__inner (the media box), so it
+   anchors to the image itself. Earlier passes anchored it to .card__content
+   and it covered the product title. .card__inner already carries Dawn's
+   .ratio class (position: relative), so it is the containing block. */
 @media (min-width: 750px) {
-  .card-wrapper .quick-add {
+  .card-wrapper .card__inner > .quick-add {
     position: absolute;
-    bottom: calc(100% + var(--space-3));
+    bottom: var(--space-3);
     left: var(--space-3);
     right: var(--space-3);
     z-index: 4;
@@ -423,28 +488,29 @@ h1, h2, h3, h4, h5, h6,
     opacity: 0;
     transform: translateY(8px);
     /* opacity:0 alone still swallows clicks — without this the invisible
-       button sits over the image and blocks the link through to the
-       product page. */
+       button covers the image and blocks the link to the product page. */
     pointer-events: none;
     transition: opacity var(--duration-med) var(--ease-out),
                 transform var(--duration-med) var(--ease-out);
   }
 
-  .card-wrapper:hover .quick-add,
-  .card-wrapper:focus-within .quick-add {
+  .card-wrapper:hover .card__inner > .quick-add,
+  .card-wrapper:focus-within .card__inner > .quick-add {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
   }
 }
 
-/* Touch: no hover to rely on, so keep it in flow and always reachable */
+/* Touch: no hover, so pin it to the bottom of the image and keep it visible */
 @media (max-width: 749px) {
-  .card-wrapper .quick-add {
-    position: static;
-    margin-top: var(--space-3);
-    opacity: 1;
-    transform: none;
+  .card-wrapper .card__inner > .quick-add {
+    position: absolute;
+    bottom: var(--space-2);
+    left: var(--space-2);
+    right: var(--space-2);
+    z-index: 4;
+    margin: 0;
   }
 }
 
@@ -667,9 +733,7 @@ h1, h2, h3, h4, h5, h6,
   border-bottom: 1px solid var(--color-charcoal-08);
 }
 
-/* ---- Wordmark ----
-   Shown as text until the logo image is uploaded. Takes the blush pink of
-   the script in the logo lockup so the text stand-in still reads as Mastt. */
+/* ---- Wordmark ---- */
 .header__heading-link .h2,
 .header__heading .h2,
 .header__heading-link {
@@ -683,6 +747,15 @@ h1, h2, h3, h4, h5, h6,
 .header__heading-link:hover .h2,
 .header__heading-link:hover {
   color: var(--color-dusty-coral);
+}
+
+/* SVG logo: the artwork carries generous internal padding, so it needs a
+   larger box than a tightly-cropped raster to read at the same size. */
+.header__heading-logo-wrapper img[src$='.svg'],
+.header__heading-logo[src$='.svg'] {
+  width: clamp(150px, 120px + 6vw, 230px);
+  height: auto;
+  max-width: 100%;
 }
 
 /* Dawn adds .shopify-section-header-sticky once the header detaches */
@@ -787,16 +860,18 @@ h1, h2, h3, h4, h5, h6,
    they invert correctly — what needs help is the type treatment and the
    link affordances, which were tuned for a light ground.
    -------------------------------------------------------------------------- */
-/* Column headings in coral — the one warm accent against the charcoal,
-   and the cue that ties the footer back to the rest of the palette. */
-.footer .footer-block__heading {
+/* Column headings: charcoal and bold. The footer runs on the aqua scheme,
+   where coral headings sat at only ~1.9:1 against the background — charcoal
+   on aqua is 6.8:1 and reads as deliberate rather than washed out. */
+.footer .footer-block__heading,
+.footer .footer-block__heading * {
   font-family: var(--font-heading-family);
-  font-size: 1.8rem;
-  font-weight: 500;
-  font-style: italic;
+  font-size: 1.9rem;
+  font-weight: 700;
+  font-style: normal;
   letter-spacing: 0;
   text-transform: none;
-  color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
   opacity: 1;
   margin-bottom: 1.4rem;
 }
