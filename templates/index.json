@@ -575,6 +575,7 @@
           "settings": {
             "stars": 4,
             "quote": "Delivery took a day longer than promised but the packaging made up for it. The ring is exactly the shade shown in the photos, which honestly never happens.",
+            "photo": "shopify://shop_images/IMG_8159.png",
             "author": "Priya Deshmukh",
             "product": "Pune",
             "verified": true
@@ -585,6 +586,7 @@
           "settings": {
             "stars": 5,
             "quote": "My skin reacts to almost every metal, so I was sceptical. Three weeks in with the pendant and not a single itch. That alone is worth it.",
+            "photo": "shopify://shop_images/IMG_8158.png",
             "author": "Sneha Iyer",
             "product": "Kochi",
             "verified": true
