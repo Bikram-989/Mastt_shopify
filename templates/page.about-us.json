@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "content": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_main": {
+          "type": "heading",
+          "settings": {
+            "heading": "About Us",
+            "heading_size": "h1"
+          }
+        },
+        "text_main": {
+          "type": "text",
+          "settings": {
+            "text": "<p>At Mastt, jewellery is more than an accessory - it's a way to express your personality, elevate your everyday style, and feel confident in your own skin.</p><p>Designed for both men and women, Mastt brings together a curated collection of trendy, contemporary and versatile jewellery made for modern lifestyles. From subtle everyday essentials to bold statement pieces, our designs are created to complement different personalities, outfits, moods and occasions.</p><p>We believe great jewellery should feel effortless - easy to wear, easy to style, and expressive enough to make every look feel like your own. Whether you prefer minimal elegance, layered looks, or jewellery that makes a statement, Mastt has something for every style.</p><p>Inspired by modern trends and timeless aesthetics, Mastt is made for those who love experimenting with their look while staying true to themselves.</p><p>Because when you look good, you should feel good too.</p><p><strong>Look Good. Feel Mastt.</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_main",
+        "text_main"
+      ],
+      "name": "Content",
+      "settings": {
+        "desktop_content_position": "left",
+        "content_alignment": "left",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "main",
+    "content"
+  ]
+}

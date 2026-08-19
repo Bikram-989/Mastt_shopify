@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "content": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_main": {
+          "type": "heading",
+          "settings": {
+            "heading": "Refund policy",
+            "heading_size": "h1"
+          }
+        },
+        "text_main": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We have a 7-day return policy, which means you have 7 days after receiving your item to request a return.</p><p>To be eligible for a return, your item must be in the same condition that you received it, unworn or unused, with tags, and in its original packaging. You'll also need the receipt or proof of purchase with product unboxing video.</p><p>To start a return, you can contact us at info@mastt.co.</p><p>If your return is accepted, we'll send you a return shipping label, as well as instructions on how and where to send your package. Items sent back to us without first requesting a return will not be accepted.</p><p>You can always contact us for any return question at info@mastt.co.</p><p><strong>Exchanges</strong></p><p>The fastest way to ensure you get what you want is to return the item you have, and once the return is accepted, make a separate purchase for the new item.</p><p><strong>Refunds</strong></p><p>We will notify you once we've received and inspected your return, and let you know if the refund was approved or not. If approved, you'll be automatically credited on your original payment method within 10 business days, or as our store credit as decided by the Mastt team. Please remember it can take some time for your bank or credit card company to process and post the refund too.</p><p>If more than 15 business days have passed since we've approved your return, please contact us at info@mastt.co.</p><p><strong>Note:</strong> All returns and exchanges are subject to company approval and are dealt with on a case-by-case basis, and only for genuine situations. Return and refund does not apply to items that are on 'Sale', and Mastt reserves the right to reject any request at any time.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_main",
+        "text_main"
+      ],
+      "name": "Content",
+      "settings": {
+        "desktop_content_position": "left",
+        "content_alignment": "left",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "main",
+    "content"
+  ]
+}

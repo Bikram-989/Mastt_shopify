@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "content": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_main": {
+          "type": "heading",
+          "settings": {
+            "heading": "Shipping policy",
+            "heading_size": "h1"
+          }
+        },
+        "text_main": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>Orders processed and shipped same day for orders placed Monday–Saturday before 4 PM.</li><li>Estimated delivery time: delivered within 3–5 working days.</li><li>Tracking confirmation provided within 12 working hours.</li><li>Free delivery on all orders.</li><li>Contact us at info@mastt.co if there are any tracking issues.</li></ul>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_main",
+        "text_main"
+      ],
+      "name": "Content",
+      "settings": {
+        "desktop_content_position": "left",
+        "content_alignment": "left",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "main",
+    "content"
+  ]
+}
