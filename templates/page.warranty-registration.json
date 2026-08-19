@@ -1,1 +1,92 @@
-{"sections":{"main":{"type":"main-page","disabled":true,"settings":{"padding_top":28,"padding_bottom":28}},"rich_text_MDLLwF":{"type":"rich-text","blocks":{"heading_caXMMA":{"type":"heading","settings":{"heading":"Warranty Registration","heading_size":"h1"}},"text_qtaHJL":{"type":"text","disabled":true,"settings":{"text":"<p>Click <a href=\"https:\/\/forms.gle\/C5VJL58Thc5yA2xA9\" target=\"_blank\" title=\"https:\/\/forms.gle\/C5VJL58Thc5yA2xA9\"><strong>here<\/strong><\/a> to register your product<\/p>"}},"button_fPXjgw":{"type":"button","settings":{"button_label":"Register here","button_link":"https:\/\/forms.gle\/C5VJL58Thc5yA2xA9","button_style_secondary":false,"button_label_2":"","button_link_2":"","button_style_secondary_2":false}}},"block_order":["heading_caXMMA","text_qtaHJL","button_fPXjgw"],"name":"t:sections.rich-text.presets.name","settings":{"desktop_content_position":"center","content_alignment":"center","color_scheme":"","full_width":true,"padding_top":40,"padding_bottom":52}},"rich_text_Tihc36":{"type":"rich-text","blocks":{"heading_8Rw7VT":{"type":"heading","settings":{"heading":"Mastt – Warranty Registration Policy","heading_size":"h2"}},"text_fBUF3g":{"type":"text","settings":{"text":"<p><br\/><strong>1. Warranty Registration<\/strong><\/p><ul><li>Customers must fill out the Warranty Registration Form within 7 days of receiving their product to activate the warranty.<\/li><li>The warranty will only be considered valid upon successful registration within this time frame.<\/li><li>The form can be accessed via the QR code or link provided with your purchase.<br\/><\/li><\/ul><p><strong>2. Warranty Coverage<\/strong><\/p><ul><li>Manufacturing defects in material or workmanship.<\/li><li>Stone setting issues caused during the manufacturing process.<\/li><li>Clasp or fastening malfunctions not caused by mishandling.<\/li><\/ul><p><strong>Note<\/strong>: Warranty does not cover:<\/p><ul><li>General wear and tear.<\/li><li>Damage due to accidents, misuse, exposure to chemicals, perfumes, or water.<\/li><li>Loss of gemstones due to improper handling.<\/li><li>Unauthorized repairs or alterations.<br\/><\/li><\/ul><p><strong>3. Warranty Claim Process<\/strong><\/p><ul><li>Fill in the above registration following through the instructions. Please do not forget to attach clear photos or videos showing the issue in the approprite section of the page<\/li><li>Once approved, products will be repaired or replaced as per the brand’s discretion.<\/li><li>Handling charges will be Rs. 250\/- for any polishing and repair on eligible products<br\/><\/li><\/ul><p><strong>4. Additional Terms<\/strong><\/p><ul><li>Warranty is non-transferable and valid only for the original purchaser.<\/li><li>Warranty claims are processed within 7–14 working days after inspection.<\/li><li>Shipping charges for sending the product to our service center are borne by the customer; return shipping is covered by us.<br\/><br\/>💎<strong> The Mastt Promise</strong>: Every piece is checked by hand before it leaves us. Register yours today and wear it with complete peace of mind—that's what it means to feel Mastt.<\/li><\/ul>"}}},"block_order":["heading_8Rw7VT","text_fBUF3g"],"name":"t:sections.rich-text.presets.name","settings":{"desktop_content_position":"center","content_alignment":"left","color_scheme":"scheme-1","full_width":true,"padding_top":20,"padding_bottom":20}}},"order":["main","rich_text_MDLLwF","rich_text_Tihc36"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "rich_text_MDLLwF": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_caXMMA": {
+          "type": "heading",
+          "settings": {
+            "heading": "Warranty Registration",
+            "heading_size": "h1"
+          }
+        },
+        "text_qtaHJL": {
+          "type": "text",
+          "disabled": false,
+          "settings": {
+            "text": "<p>Register your piece within 7 days of delivery to activate its warranty.</p>"
+          }
+        },
+        "button_fPXjgw": {
+          "type": "button",
+          "settings": {
+            "button_label": "Register here",
+            "button_link": "https://forms.gle/C5VJL58Thc5yA2xA9",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_caXMMA",
+        "text_qtaHJL",
+        "button_fPXjgw"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_Tihc36": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_8Rw7VT": {
+          "type": "heading",
+          "settings": {
+            "heading": "Mastt — Warranty Registration Policy",
+            "heading_size": "h2"
+          }
+        },
+        "text_fBUF3g": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>1. Warranty Registration</strong></p><ul><li>Customers must fill out the Warranty Registration Form within 7 days of receiving their product to activate the warranty.</li><li>The warranty will only be considered valid upon successful registration within this time frame.</li><li>The form can be accessed via the QR code or link provided with your purchase.</li></ul><p><strong>2. Warranty Coverage</strong></p><ul><li>Manufacturing defects in material or workmanship.</li><li>Defects in the finish or plating arising during manufacture.</li><li>Clasp or fastening malfunctions not caused by mishandling.</li></ul><p><strong>Note</strong>: Warranty does not cover:</p><ul><li>General wear and tear.</li><li>Damage due to accidents, misuse, exposure to chemicals, perfumes, or water.</li><li>Damage to the finish caused by improper handling or storage.</li><li>Unauthorized repairs or alterations.</li></ul><p><strong>3. Warranty Claim Process</strong></p><ul><li>Fill in the registration form above, following the instructions. Please remember to attach clear photos or videos showing the issue in the appropriate section of the form.</li><li>Once approved, products will be repaired or replaced at Mastt’s discretion.</li><li>Handling charges of Rs. 250/- apply for any polishing or repair on eligible products.</li></ul><p><strong>4. Additional Terms</strong></p><ul><li>Warranty is non-transferable and valid only for the original purchaser.</li><li>Warranty claims are processed within 7–14 working days after inspection.</li><li>Shipping charges for sending the product to our service centre are borne by the customer; return shipping is covered by us.</li></ul><p>💎 <strong>The Mastt Promise</strong>: Every piece is checked by hand before it leaves us. Register yours today and wear it with complete peace of mind — that’s what it means to feel Mastt.</p><p>Questions? Email us at <strong>info@mastt.co</strong>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_8Rw7VT",
+        "text_fBUF3g"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "left",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_MDLLwF",
+    "rich_text_Tihc36"
+  ]
+}

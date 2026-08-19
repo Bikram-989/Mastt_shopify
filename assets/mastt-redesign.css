@@ -733,6 +733,15 @@ h1, h2, h3, h4, h5, h6,
   border-bottom: 1px solid var(--color-charcoal-08);
 }
 
+/* Narrower header than the 1400px page width — pulls the logo and nav in
+   from the edges so the bar reads as a contained element rather than a
+   full-bleed strip. Page content keeps the wider measure. */
+@media screen and (min-width: 990px) {
+  .header-wrapper .header.page-width {
+    max-width: 118rem;
+  }
+}
+
 /* ---- Wordmark ---- */
 .header__heading-link .h2,
 .header__heading .h2,

@@ -33,7 +33,7 @@
           "settings": {
             "heading": "Mastt Cares",
             "link_labels": "About Us, Track Order, Terms of Use, Refund Policy, Privacy Policy, Shipping Policy, Warranty Registration",
-            "link_urls": "/pages/about-us, https://mastt.shiprocket.co/tracking, /policies/terms-of-service, /policies/refund-policy, /policies/privacy-policy, /policies/shipping-policy, /pages/warranty-registration"
+            "link_urls": "/pages/about-us, https://mastt.co/pages/track-order, /policies/terms-of-service, /policies/refund-policy, /policies/privacy-policy, /policies/shipping-policy, /pages/warranty-registration"
           }
         }
       },
