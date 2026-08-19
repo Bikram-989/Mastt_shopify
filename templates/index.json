@@ -319,6 +319,7 @@
         "r1": {
           "type": "recipient",
           "settings": {
+            "image": "shopify://shop_images/IMG_8144.png",
             "label_light": "Gifts For",
             "label_strong": "Her",
             "link": "/collections/all?filter.p.tag=women"
@@ -388,6 +389,7 @@
         "usp_jEkcnb": {
           "type": "usp",
           "settings": {
+            "icon": "shopify://shop_images/IMG_8139.png",
             "title": "Quality Assured",
             "description": "Every piece, Checked with care"
           }
