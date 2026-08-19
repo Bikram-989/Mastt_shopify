@@ -1,1 +1,91 @@
-{"name":"t:sections.header.name","type":"header","sections":{"announcement-bar":{"type":"announcement-bar","disabled":true,"blocks":{"announcement_QDBkcG":{"type":"announcement","settings":{"text":"⭐ Pick Any 2, Pay for 1- Yes, Buy1 Get1 FREE!! ➕ Extra 10% OFF on Prepaid Orders","link":"https:\/\/www.mastt.co\/collections\/all?sort_by=best-selling&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&filter.v.price.gte=&filter.v.price.lte="}},"announcement-bar-0":{"type":"announcement","settings":{"text":"🚚 Shipping - FREE!","link":""}}},"block_order":["announcement_QDBkcG","announcement-bar-0"],"custom_css":[],"settings":{"scroll_enabled":true,"pause_on_hover":true,"direction":"ltr","speed":22,"separator":"•","text_color":"#201B19","bg_color":"#EC9F93"}},"header":{"type":"header","blocks":{"mega_menu_Fq3T3y":{"type":"mega_menu","settings":{"menu_item":"category"}}},"block_order":["mega_menu_Fq3T3y"],"custom_css":[],"settings":{"logo_position":"middle-left","mobile_logo_position":"left","menu":"main-menu","menu_type_desktop":"dropdown","sticky_header_type":"always","show_line_separator":true,"color_scheme":"scheme-1","menu_color_scheme":"scheme-1","enable_country_selector":true,"enable_language_selector":true,"enable_customer_avatar":true,"margin_bottom":0,"padding_top":16,"padding_bottom":16}},"17461191138c4e716a":{"type":"apps","settings":{"include_margins":true}}},"order":["announcement-bar","header","17461191138c4e716a"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "disabled": true,
+      "blocks": {
+        "announcement_QDBkcG": {
+          "type": "announcement",
+          "settings": {
+            "text": "⭐ Pick Any 2, Pay for 1- Yes, Buy1 Get1 FREE!! ➕ Extra 10% OFF on Prepaid Orders",
+            "link": "https://www.mastt.co/collections/all?sort_by=best-selling&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "🚚 Shipping - FREE!",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_QDBkcG",
+        "announcement-bar-0"
+      ],
+      "custom_css": [],
+      "settings": {
+        "scroll_enabled": true,
+        "pause_on_hover": true,
+        "direction": "ltr",
+        "speed": 22,
+        "separator": "•",
+        "text_color": "#201B19",
+        "bg_color": "#EC9F93"
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega_menu_Fq3T3y": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item": "category"
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_Fq3T3y"
+      ],
+      "custom_css": [],
+      "settings": {
+        "logo_position": "middle-left",
+        "mobile_logo_position": "left",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "always",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "margin_bottom": 0,
+        "padding_top": 16,
+        "padding_bottom": 16
+      }
+    },
+    "17461191138c4e716a": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "17461191138c4e716a"
+  ]
+}
