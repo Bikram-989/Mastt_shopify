@@ -319,7 +319,7 @@
         "r1": {
           "type": "recipient",
           "settings": {
-            "image": "shopify://shop_images/IMG_8147.png",
+            "image": "shopify://shop_images/IMG_8154.png",
             "label_light": "Gifts For",
             "label_strong": "Her",
             "link": "/collections/all?filter.p.tag=women"
@@ -328,7 +328,7 @@
         "r2": {
           "type": "recipient",
           "settings": {
-            "image": "shopify://shop_images/IMG_8151.png",
+            "image": "shopify://shop_images/IMG_8155.png",
             "label_light": "Gifts For",
             "label_strong": "Him",
             "link": "/collections/all?filter.p.tag=men"
@@ -390,7 +390,7 @@
         "usp_jEkcnb": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8139.png",
+            "icon": "shopify://shop_images/IMG_8140.png",
             "title": "Quality Assured",
             "description": "Every piece, Checked with care"
           }
