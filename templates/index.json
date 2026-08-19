@@ -30,10 +30,65 @@
             "color_scheme": "scheme-2"
           }
         },
-        "slide_hH9zBP": {
+        "slide_7Bkp4z": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/IMG_8169_JPG.jpg",
+            "image_overlay_opacity": 10,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "Shop the collection",
+            "link": "/collections/all",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "bottom-left",
+            "text_alignment": "left",
+            "text_alignment_mobile": "center",
+            "mobile_image_only": false,
+            "color_scheme": "scheme-2"
+          }
+        },
+        "slide_B8W9Vz": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "Shop the collection",
+            "link": "/collections/all",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "bottom-left",
+            "text_alignment": "left",
+            "text_alignment_mobile": "center",
+            "mobile_image_only": false,
+            "color_scheme": "scheme-2"
+          }
+        },
+        "slide_LbjdL3": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "Shop the collection",
+            "link": "/collections/all",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "bottom-left",
+            "text_alignment": "left",
+            "text_alignment_mobile": "center",
+            "mobile_image_only": false,
+            "color_scheme": "scheme-2"
+          }
+        },
+        "slide_hH9zBP": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IMG_8170_JPG.jpg",
             "image_overlay_opacity": 0,
             "heading": "",
             "heading_size": "h1",
@@ -52,6 +107,9 @@
       },
       "block_order": [
         "slide_qegYQT",
+        "slide_7Bkp4z",
+        "slide_B8W9Vz",
+        "slide_LbjdL3",
         "slide_hH9zBP"
       ],
       "custom_css": [
