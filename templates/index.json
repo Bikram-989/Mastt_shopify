@@ -75,7 +75,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Rings",
-            "image": "shopify://shop_images/IMG_8127.png",
+            "image": "shopify://shop_images/3.png",
             "custom_title": "Rings"
           }
         },
@@ -83,7 +83,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Necklaces",
-            "image": "shopify://shop_images/IMG_8119.png",
+            "image": "shopify://shop_images/4.png",
             "custom_title": "Necklaces"
           }
         },
@@ -91,7 +91,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Bracelets",
-            "image": "shopify://shop_images/IMG_8124.png",
+            "image": "shopify://shop_images/2.png",
             "custom_title": "Bracelets"
           }
         },
@@ -99,7 +99,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=women",
-            "image": "shopify://shop_images/IMG_8123.png",
+            "image": "shopify://shop_images/1.png",
             "custom_title": "Earings"
           }
         },
@@ -107,6 +107,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=men",
+            "image": "shopify://shop_images/5.png",
             "custom_title": "Sets"
           }
         },
@@ -114,6 +115,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all",
+            "image": "shopify://shop_images/6.png",
             "custom_title": "Men"
           }
         }
@@ -386,7 +388,6 @@
         "usp_jEkcnb": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8139.png",
             "title": "Quality Assured",
             "description": "Every piece, Checked with care"
           }
@@ -394,7 +395,6 @@
         "usp_xfCgAb": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8137.png",
             "title": "Skin-Friendly",
             "description": "Hypoallergenic Jewellery crafted for Comfort"
           }
@@ -402,7 +402,6 @@
         "usp_me944Q": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8140.png",
             "title": "True Craft",
             "description": "Surgical-grade steel, finished to last"
           }
@@ -410,7 +409,6 @@
         "usp_CrnVTD": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8134.png",
             "title": "Fade Proof",
             "description": "Premium Designs crafted to have a lasting shine"
           }
