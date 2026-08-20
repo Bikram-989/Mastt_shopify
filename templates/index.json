@@ -161,7 +161,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=women",
-            "image": "shopify://shop_images/jewelry_design.svg",
+            "image": "shopify://shop_images/jewelry_design_white_bg.svg",
             "custom_title": "Earings"
           }
         },
