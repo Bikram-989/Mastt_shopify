@@ -137,7 +137,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Rings",
-            "image": "shopify://shop_images/2_cbbeabea-972a-41c1-b69d-5397105cf92d.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-18_at_4.47.53_PM_fe8f34a9-914e-4c1f-9ca9-b8bc1f2b05a5.jpg",
             "custom_title": "Rings"
           }
         },
@@ -145,7 +145,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Necklaces",
-            "image": "shopify://shop_images/3_15cef7cc-ac3f-45bd-bd21-982f54c33821.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-18_at_4.48.34_PM.jpg",
             "custom_title": "Necklaces"
           }
         },
@@ -153,7 +153,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.product_type=Bracelets",
-            "image": "shopify://shop_images/1_8273c059-8ae4-4e01-bdef-2f399c64139d.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_12.53.22_PM.jpg",
             "custom_title": "Bracelets"
           }
         },
@@ -161,7 +161,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=women",
-            "image": "shopify://shop_images/jewelry_design_white_bg.svg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_12.56.38_PM.jpg",
             "custom_title": "Earings"
           }
         },
@@ -169,7 +169,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all?filter.p.tag=men",
-            "image": "shopify://shop_images/w4.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.12.04_PM.jpg",
             "custom_title": "Sets"
           }
         },
@@ -177,7 +177,7 @@
           "type": "collection_card",
           "settings": {
             "collection_url": "/collections/all",
-            "image": "shopify://shop_images/5_2f4a43b5-e6ca-422d-ae93-b916e9bb8c9c.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.42.23_PM.jpg",
             "custom_title": "Men"
           }
         }
