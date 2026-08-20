@@ -21,7 +21,9 @@
         },
         "badges_share_tTj9H9": {
           "type": "badges_share",
+          "disabled": true,
           "settings": {
+            "sale_icon": "shopify://shop_images/OTH_R_F_0200.jpg",
             "sale_text": "Pick Any 2, Pay for 1",
             "variant_text": "Amethyst",
             "share_label": ""
@@ -89,7 +91,6 @@
           "type": "bank_offer",
           "disabled": true,
           "settings": {
-            "icon": "shopify://shop_images/bank-hdfc.svg",
             "title": "HDFC Cards- ₹500 Instant OFF",
             "description": "<p>Minimum order value <strong>₹3499</strong>.</p>"
           }
@@ -98,13 +99,13 @@
           "type": "bank_offer",
           "disabled": true,
           "settings": {
-            "icon": "shopify://shop_images/bank-sbi.svg",
             "title": "Extra 12% Instant OFF on SBI Rupay Card",
             "description": "<p>Minimum order value <strong>₹2499.</strong></p>"
           }
         },
         "coupon_offer_fLgiaq": {
           "type": "coupon_offer",
+          "disabled": true,
           "settings": {
             "headline": "Buy 1 Get 1 Free",
             "code": "BOGO",
@@ -134,13 +135,9 @@
           "type": "features",
           "settings": {
             "feature_1_text": "Skin Safe",
-            "feature_1_image": "shopify://shop_images/skin-safe.png",
             "feature_2_text": "Anti-Tarnish",
-            "feature_2_image": "shopify://shop_images/anti-tarnish.png",
             "feature_3_text": "Thick Plating",
-            "feature_3_image": "shopify://shop_images/thick-plating.png",
-            "feature_4_text": "Easy Exchange",
-            "feature_4_image": "shopify://shop_images/easy-return.png"
+            "feature_4_text": "Easy Exchange"
           }
         },
         "collapsible_tab_QJfrPU": {
@@ -336,7 +333,6 @@
           "settings": {
             "title": "Rose quartz bracelet",
             "text": "Bought the rose quartz bracelet as a self-love gift and honestly, I haven’t taken it off since.",
-            "avatar": "shopify://shop_images/5_45a8feb7-beae-411f-8dda-aef6b29597cc.jpg",
             "hide_avatar": false,
             "author": "Lara S.",
             "stars_count": 5
@@ -455,27 +451,27 @@
         "progress_height_mobile": 6,
         "progress_show_desktop": true,
         "progress_show_mobile": true,
-        "card_bg_color": "#FFFFFF",
-        "card_border_color": "#201B19",
-        "card_shadow_color": "#201B19",
-        "title_color": "#201B19",
-        "text_color": "#201B19",
-        "author_color": "#6B5F5B",
-        "arrow_color": "#201B19",
-        "arrow_hover_color": "#D6887C",
+        "card_bg_color": "#ffffff",
+        "card_border_color": "#201b19",
+        "card_shadow_color": "#201b19",
+        "title_color": "#201b19",
+        "text_color": "#201b19",
+        "author_color": "#6b5f5b",
+        "arrow_color": "#201b19",
+        "arrow_hover_color": "#d6887c",
         "arrow_bg_color": "#ffffff",
-        "arrow_bg_hover_color": "#F5E7DF",
-        "arrow_border_color": "#E5DED8",
-        "arrow_border_hover_color": "#D6887C",
-        "progress_bg_color": "#E3C4BC",
-        "progress_color": "#D6887C",
-        "heading_color": "#201B19",
-        "bottom_color": "#201B19",
-        "rating_text_color": "#201B19",
+        "arrow_bg_hover_color": "#f5e7df",
+        "arrow_border_color": "#e5ded8",
+        "arrow_border_hover_color": "#d6887c",
+        "progress_bg_color": "#e3c4bc",
+        "progress_color": "#d6887c",
+        "heading_color": "#201b19",
+        "bottom_color": "#201b19",
+        "rating_text_color": "#201b19",
         "stars_color": "#f4ac03",
-        "background_color": "#F5E7DF",
+        "background_color": "#f5e7df",
         "background_gradient": "",
-        "border_color": "#201B19",
+        "border_color": "#201b19",
         "margin_top": 0,
         "margin_bottom": 0,
         "padding_top": 36,
