@@ -1,0 +1,29 @@
+{%- comment -%}
+  Renders a single product card, on its own, for the Recently Viewed rail.
+
+  Fetched client-side through the Section Rendering API:
+    /products/{handle}?section_id=mastt-rv-card
+
+  This mirrors how Dawn renders cart-icon-bubble and quick-add — a section
+  file that lives outside any JSON template and exists only to be fetched.
+  Do not add it to a template.
+
+  Styles are skipped because mastt-recently-viewed.liquid already loads
+  component-card.css and component-price.css once for the whole rail.
+{%- endcomment -%}
+{%- if product != blank -%}
+  {%- render 'card-product',
+    card_product: product,
+    media_aspect_ratio: 'square',
+    show_secondary_image: true,
+    show_vendor: false,
+    show_rating: false,
+    skip_styles: true
+  -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Recently viewed card"
+}
+{% endschema %}

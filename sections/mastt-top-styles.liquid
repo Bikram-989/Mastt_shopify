@@ -135,8 +135,13 @@
         if source == blank or source.products_count == 0
           assign source = collections.all
         endif
-        assign want_type = block.settings.product_type | strip | downcase
-        assign want_tag = block.settings.tag | strip | downcase
+        comment
+          Both accept a comma-separated list, so one tab can straddle a
+          taxonomy migration (e.g. "women, her") without the rail going empty
+          the moment the data changes underneath it.
+        endcomment
+        assign want_types = block.settings.product_type | downcase | split: ','
+        assign want_tags = block.settings.tag | downcase | split: ','
         assign limit = section.settings.products_to_show
         assign shown = 0
 
@@ -157,19 +162,31 @@
           {%- for product in source.products -%}
             {%- liquid
               assign ok = true
-              if want_type != blank
-                assign ptype = product.type | downcase
-                unless ptype == want_type
+
+              if want_types.size > 0
+                assign ptype = product.type | downcase | strip
+                assign type_ok = false
+                for wanted in want_types
+                  assign wanted_clean = wanted | strip
+                  if wanted_clean != blank and ptype == wanted_clean
+                    assign type_ok = true
+                  endif
+                endfor
+                unless type_ok
                   assign ok = false
                 endunless
               endif
-              if want_tag != blank
+
+              if want_tags.size > 0
                 assign has_tag = false
                 for t in product.tags
-                  assign t_down = t | downcase
-                  if t_down == want_tag
-                    assign has_tag = true
-                  endif
+                  assign t_down = t | downcase | strip
+                  for wanted in want_tags
+                    assign wanted_clean = wanted | strip
+                    if wanted_clean != blank and t_down == wanted_clean
+                      assign has_tag = true
+                    endif
+                  endfor
                 endfor
                 unless has_tag
                   assign ok = false
@@ -321,13 +338,13 @@
           "type": "text",
           "id": "product_type",
           "label": "Only show this product type",
-          "info": "Optional. Must match the product's Type exactly, e.g. Rings."
+          "info": "Optional. Comma-separate to accept several, e.g. Ring, Rings."
         },
         {
           "type": "text",
           "id": "tag",
           "label": "Only show products with this tag",
-          "info": "Optional, e.g. men or women."
+          "info": "Optional. Comma-separate to accept several, e.g. women, her."
         },
         {
           "type": "url",

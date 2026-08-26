@@ -381,6 +381,33 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    {%- comment -%}
+      Recently Viewed recorder. Writes the current product's handle to the
+      front of a short list in the visitor's own browser. Read back by
+      sections/mastt-recently-viewed.liquid. Nothing is sent to the server.
+    {%- endcomment -%}
+    {%- if template.name == 'product' and product != blank -%}
+      <script>
+        (function () {
+          try {
+            var KEY = 'mastt:recently-viewed';
+            var MAX = 12;
+            var handle = {{ product.handle | json }};
+            if (!handle) return;
+            var raw = window.localStorage.getItem(KEY);
+            var list = raw ? JSON.parse(raw) : [];
+            if (!Array.isArray(list)) list = [];
+            list = list.filter(function (h) { return h !== handle; });
+            list.unshift(handle);
+            window.localStorage.setItem(KEY, JSON.stringify(list.slice(0, MAX)));
+          } catch (e) {
+            // Private browsing or storage disabled — history is a nicety,
+            // never let it break the product page.
+          }
+        })();
+      </script>
+    {%- endif -%}
     
   
 	</body>
