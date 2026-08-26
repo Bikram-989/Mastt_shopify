@@ -8,7 +8,6 @@
 {%- assign offers_count    = bank_offers.size | plus: coupon_offers.size -%}
 {%- assign offers_rendered = false -%}
 
-{{ 'kk-offers.css' | asset_url | stylesheet_tag }}
 
 <product-info
   id="MainProduct-{{ section.id }}"
@@ -577,7 +576,6 @@
 
 {%- when 'size_chart' -%}
   {%- if product.metafields.custom.size_chart != blank -%}
-    {{ 'kk-size-chart.css' | asset_url | stylesheet_tag }}
     <modal-dialog id="SizeChartModal" class="kk-sizechart-modal" {{ block.shopify_attributes }}>
       <div role="dialog" aria-label="{{ block.settings.trigger_label | default: 'Size Guide' | escape }}" aria-modal="true" class="kk-sizechart-modal__content" tabindex="-1">
         <button id="ModalClose-SizeChart" type="button" class="kk-sizechart-modal__close" aria-label="{{ 'accessibility.close' | t }}">
@@ -868,8 +866,6 @@
     </script>
   </div>
 </product-info>
-{% render 'rebuy-add' %}
-{% render 'rebuy-templates' %}
 {% schema %}
 {
   "name": "t:sections.main-product.name",
@@ -899,7 +895,7 @@
           "type": "checkbox",
           "id": "auto_apply",
           "label": "Auto-apply at checkout (native Shopify checkout only)",
-          "info": "Leave OFF for GoKwik — shows a Copy button. Turn ON only if you're on Shopify's native checkout or GoKwik exposes a prefill hook.",
+          "info": "Turn ON to auto-apply the code at checkout. Leave OFF to show a Copy button instead.",
           "default": false
         }
       ]

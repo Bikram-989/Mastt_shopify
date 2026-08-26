@@ -129,16 +129,6 @@
     "show_cart_note": false,
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
-    "mid": "1hc3x66ima5m1xuv",
-    "envType": "production",
-    "fbpixel": "",
-    "goEnable": false,
-    "priClr": "#00324c",
-    "goBuynowEnable": false,
-    "btnBClr": "#00324c",
-    "sub-titile": "10% off on prepaid orders",
-    "enableIntlFlow": false,
-    "enableBannertext": true,
     "sections": {
       "main-password-header": {
         "type": "main-password-header",

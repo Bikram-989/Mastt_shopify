@@ -2,12 +2,6 @@
 <html class="js" lang="{{ request.locale.iso_code }}">
   <head>
 
-    <!-- Gokwik theme code start -->
-    <link rel="dns-prefetch" href="https://pdp.gokwik.co/">
-    <link rel="dns-prefetch" href="https://api.gokwik.co">
-    {% render 'gokwik' %}
-    <!-- Gokwik theme code End -->
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -311,25 +305,6 @@
       }
     </script>
   
-	{%- comment -%}
-	1Checkout (Shiprocket/Fastrr) disabled for now — using Shopify's native
-	checkout while Mastt's own provider accounts get set up. Delete this
-	comment wrapper (and the matching JS block near the closing </body>) to
-	re-enable once that's ready.
-
-	<!-- --------------- BEGIN 1CHECKOUT CSS --------------- -->
-	<!-- DNS Prefetch -->
-	<meta http-equiv='x-dns-prefetch-control' content='on'><link rel='dns-prefetch' href='//pay.1checkout.ai'>
-	<link rel='dns-prefetch' href='//api.1checkout.ai'>
-	<link rel='dns-prefetch' href='//cdn.1checkout.ai'>
-	<!-- Preconnect -->
-	<link rel='preconnect' href='https://pay.1checkout.ai' crossorigin>
-	<link rel='preconnect' href='https://api.1checkout.ai' crossorigin>
-	<link rel='preconnect' href='https://cdn.1checkout.ai' crossorigin>
-	{{ '1checkout.css' | asset_url | stylesheet_tag }}
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0, maximum-scale=1.0'>
-	<!-- --------------- END 1CHECKOUT CSS --------------- -->
-	{%- endcomment -%}
 	</head>
 
   <body class="{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -408,13 +383,6 @@
     {%- endif -%}
     
   
-	{%- comment -%}
-	<!-- --------------- BEGIN 1CHECKOUT JS --------------- -->
-	{% include '1checkout-modal' %}
-	{{ '1checkout.js' | asset_url | script_tag }}
-	<!-- --------------- END 1CHECKOUT JS --------------- -->
-	{%- endcomment -%}
-{% comment %} <script type="module" src="https://pdp.gokwik.co/jify/build/sdk.js"></script> {% endcomment %}
 	</body>
 
 <style>
