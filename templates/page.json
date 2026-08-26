@@ -1,1 +1,14 @@
-{"sections":{"main":{"type":"main-page","disabled":true,"settings":{"padding_top":28,"padding_bottom":28}},"kk_bundle_deals_NyH63d":{"type":"kk-bundle-deals","blocks":{"step_GkAPMC":{"type":"step","settings":{"title":"Step 1","note":"Pick any 2 Rings","step_collection":"all","required_count":2,"max_per_item":1}}},"block_order":["step_GkAPMC"],"name":"Deals Drawer","settings":{"deal_message":"Add items to unlock!","auto_advance":false,"enable_qty_selector":true,"show_step_counters":true,"enable_fly_anim":true,"accent_color":"#11314a","show_secondary_image":false,"show_top_pills":true,"show_bottom_pills":false,"show_app_rating":false,"columns_mobile":"2","columns_desktop":4}}},"order":["main","kk_bundle_deals_NyH63d"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

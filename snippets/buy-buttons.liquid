@@ -94,19 +94,6 @@
             {%- render 'loading-spinner' -%}
           </button>
           {%- if show_dynamic_checkout -%}
-            {%- unless product.selected_or_first_available_variant.available -%}
-              <style>
-                .sr-headless-checkout{
-                 opacity:0.5;
-                 cursor: not-allowed;
-                 pointer-events: none;
-                }
-              </style>
-            {%- endunless -%}
-            <input type="hidden" value="true" id="fastrrCollectionPage">
-            <input type="hidden" value="{{ product.url }}" name="productUrl">
-            <div class="shiprocket-headless" data-type="product"></div>
-
             {{ form | payment_button }}
           {%- endif -%}
         </div>
