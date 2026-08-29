@@ -494,13 +494,7 @@ Custom Card Render Logic
 
 
 
-  {%- comment -%} 3) Gender pill {% endcomment -%}
-  {%- for gender in gender_list -%}
-    {%- if attr1 contains gender -%}
-      <span class="pill pill-gender">{{ gender }}</span>
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
+
 </div>
 
 <div class="price-with-rating">
@@ -523,41 +517,24 @@ Custom Card Render Logic
   >
     {{ design_name | escape }}
   </a>
+  {%- comment -%}
+    Proxy for Dawn's quick-add. Clicking it clicks the real submit button,
+    which keeps the variant modal, the product form and the bulk path exactly
+    as Dawn built them — no markup surgery, nothing to keep in sync.
+  {%- endcomment -%}
+  {%- if quick_add != 'none' and card_product.available -%}
+    <button
+      type="button"
+      class="mcard__add"
+      data-mastt-add="quick-add-{{ section_id }}{{ card_product.id }}-submit"
+      aria-label="{{ 'Add ' | append: design_name | escape }}"
+      title="Add to cart"
+    >+</button>
+  {%- endif -%}
 </h3>
 
-{%- render 'mastt-card-rating', card_product: card_product -%}
 
 
-{%- comment -%} Material pills below title {%- endcomment -%}
-{%- if attr1 != '' -%}
-  {%- comment -%} Normalize both en-dash or hyphen separators {% endcomment -%}
-  {%- assign normalized = attr1 
-       | replace: ' – ', '|' 
-       | replace: ' - ', '|' -%}
-  {%- assign mat_parts  = normalized | split: '|' -%}
-  {%- assign materials  = mat_parts[0]        | strip         -%}
-  {%- assign list       = materials          | split: '&'     -%}
-
-  <div class="product__card-pills pills-bottom">
-    {%- for m in list -%}
-      {%- assign mat = m | strip -%}
-      {%- if forloop.first and mat contains '925' -%}
-        <span class="pill pill--metallic">925 SILVER</span>
-      {%- else -%}
-        <span class="pill">{{ mat | upcase }}</span>
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-{%- elsif card_product.type != blank -%}
-  {%- comment -%}
-    Material pills come from a "Title | Material" naming convention. Products
-    that don't use it fall back to the product type so the card still gets its
-    eyebrow line instead of collapsing.
-  {%- endcomment -%}
-  <div class="product__card-pills pills-bottom">
-    <span class="pill">{{ card_product.type | upcase }}</span>
-  </div>
-{%- endif -%}
 
           <div class="card-information">
             {%- if show_vendor -%}
