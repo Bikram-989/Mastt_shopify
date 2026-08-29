@@ -35,9 +35,9 @@
   assign money_price_min = price_min | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
   assign money_price_max = price_max | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
   if settings.currency_code_enabled
-    assign money_price = price | money_with_currency
-    assign money_price_min = price_min | money_with_currency
-    assign money_price_max = price_max | money_with_currency
+    assign money_price = price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
+    assign money_price_min = price_min | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
+    assign money_price_max = price_max | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
   endif
 
   if target == product and product.price_varies
@@ -79,7 +79,7 @@
                   {% if settings.currency_code_enabled %}
                     {{ compare_at_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
                   {% else %}
-                    {{ compare_at_price | money }}
+                    {{ compare_at_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
                   {% endif %}
                 </s>
               </span>
@@ -118,11 +118,11 @@
           <span class="mrp-wrap">
           {%- if template.name == 'product'-%}
           {%- endif -%}
-            <s class="price-item price-item--regular"><span>MRP</span>
+            <s class="price-item price-item--regular">
               {% if settings.currency_code_enabled %}
                 {{ compare_at_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
               {% else %}
-                {{ compare_at_price | money }}
+                {{ compare_at_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
               {% endif %}
             </s>
           </span>
@@ -155,7 +155,7 @@
     {%- endif -%}
     {%- if show_badges and compare_at_price > price and template.name == 'product' -%}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }} discount">
-        Save {{ discount_amount | money_with_currency }} <!-- ({{ discount_percent }}%) -->
+        Save {{ discount_amount | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} <!-- ({{ discount_percent }}%) -->
       </span>
     
       <span class="badge price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">

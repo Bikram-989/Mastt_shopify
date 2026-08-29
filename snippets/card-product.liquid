@@ -499,9 +499,23 @@ Custom Card Render Logic
 
 <div class="price-with-rating">
   {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+
+  {%- comment -%}
+    Proxy for Dawn's quick-add: clicking it clicks the real submit button, so
+    the variant modal, the product form and the bulk path stay exactly as Dawn
+    built them. Sits on the price row so the title keeps the full card width.
+  {%- endcomment -%}
+  {%- if quick_add != 'none' and card_product.available -%}
+    <button
+      type="button"
+      class="mcard__add"
+      data-mastt-add="quick-add-{{ section_id }}{{ card_product.id }}-submit"
+      aria-label="{{ 'Add ' | append: design_name | escape }}"
+      title="Add to cart"
+    >+</button>
+  {%- endif -%}
 </div>
 
-{%- render 'mastt-card-bundle', card_product: card_product -%}
   
 <h3
   class="card__heading"
@@ -517,20 +531,6 @@ Custom Card Render Logic
   >
     {{ design_name | escape }}
   </a>
-  {%- comment -%}
-    Proxy for Dawn's quick-add. Clicking it clicks the real submit button,
-    which keeps the variant modal, the product form and the bulk path exactly
-    as Dawn built them — no markup surgery, nothing to keep in sync.
-  {%- endcomment -%}
-  {%- if quick_add != 'none' and card_product.available -%}
-    <button
-      type="button"
-      class="mcard__add"
-      data-mastt-add="quick-add-{{ section_id }}{{ card_product.id }}-submit"
-      aria-label="{{ 'Add ' | append: design_name | escape }}"
-      title="Add to cart"
-    >+</button>
-  {%- endif -%}
 </h3>
 
 
@@ -641,7 +641,7 @@ Custom Card Render Logic
                         <li>
                           <span>{{ card_product.selected_or_first_available_variant.quantity_rule.min }}+</span>
                           {%- assign price = card_product.selected_or_first_available_variant.price
-                            | money_with_currency
+                            | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
                           -%}
                           <span>{{ 'sections.quick_order_list.each' | t: money: price }}</span>
                         </li>
@@ -651,7 +651,7 @@ Custom Card Render Logic
                               {{- price_break.minimum_quantity -}}
                               <span aria-hidden="true">+</span></span
                             >
-                            {%- assign price = price_break.price | money_with_currency -%}
+                            {%- assign price = price_break.price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' -%}
                             <span> {{ 'sections.quick_order_list.each' | t: money: price }}</span>
                           </li>
                         {%- endfor -%}

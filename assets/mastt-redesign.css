@@ -1534,18 +1534,18 @@ body.template-index {
    CARD — title row, price, rating
    -------------------------------------------------------------------------- */
 
-/* Title and + share a row; the + never wraps away from the name. */
-.card-wrapper .card__heading {
+/* Price row: figures left, + pinned right. */
+.card-wrapper .price-with-rating {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  margin: 2px 0 0;
+  margin-bottom: 2px;
 }
 
-.card-wrapper .card__heading .full-unstyled-link {
-  flex: 1 1 auto;
-  min-width: 0;
-}
+.card-wrapper .price-with-rating .price { flex: 1 1 auto; min-width: 0; }
+
+.card-wrapper .card__heading { margin: 0; }
 
 .mcard__add {
   flex: 0 0 auto;
@@ -1583,7 +1583,6 @@ body.template-index {
 }
 
 /* Price above the title, one line, sale price leading. */
-.card-wrapper .price-with-rating { margin-bottom: 2px; }
 
 .card-wrapper .price {
   display: flex;
@@ -1650,4 +1649,97 @@ body.template-index {
   width: 70% !important;
   height: 70% !important;
   object-fit: contain !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   CARD FRAME — clip the photo to the card's corners
+   Dawn rounds .card and .card__inner but leaves the <img> square, so at the
+   top corners the photo sits proud of the frame it is supposed to be inside.
+   Clipping at every level costs nothing and fixes it whatever the radius
+   setting is.
+   -------------------------------------------------------------------------- */
+.card-wrapper .card,
+.card-wrapper .card__inner,
+.card-wrapper .card__media,
+.card-wrapper .card__media > .media {
+  overflow: hidden;
+}
+
+.card-wrapper .card__inner,
+.card-wrapper .card__media,
+.card-wrapper .card__media > .media {
+  border-radius: inherit;
+}
+
+.card-wrapper .card__media img,
+.card-wrapper .card__media > .media img {
+  border-radius: inherit;
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT PAGE — Add to cart and Buy it now, side by side
+   Dawn stacks them full width, which puts the primary action a scroll away
+   from the price on a phone. Sharing one row keeps both on the first screen.
+   -------------------------------------------------------------------------- */
+.product-form__buttons {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.product-form__buttons > *,
+.product-form__buttons .product-form__submit,
+.product-form__buttons .shopify-payment-button {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-top: 0;
+}
+
+.product-form__buttons .shopify-payment-button__button {
+  width: 100%;
+  min-height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.product-form__buttons .product-form__submit { margin-bottom: 0; }
+
+/* Below 380px the two labels cannot both fit; stacking beats truncating. */
+@media screen and (max-width: 379px) {
+  .product-form__buttons { flex-wrap: wrap; }
+  .product-form__buttons > * { flex: 1 1 100%; }
+}
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT PAGE — accordions open with a plus, not a chevron
+   Scoped to .product__accordion so the carets in navigation, facets and the
+   cart drawer are left alone.
+   -------------------------------------------------------------------------- */
+.product__accordion summary { position: relative; }
+
+.product__accordion summary .icon-caret,
+.product__accordion summary > svg {
+  opacity: 0;          /* keep the box so the row keeps its spacing */
+  pointer-events: none;
+}
+
+.product__accordion summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-body-family);
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--color-charcoal);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.product__accordion details[open] > summary::after {
+  content: '−';
 }
