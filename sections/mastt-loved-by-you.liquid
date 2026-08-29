@@ -1,0 +1,328 @@
+{%- comment -%}
+  Mastt — Loved by You Guys.
+
+  A bestseller rail. Point it at a collection whose sort order is set to
+  "Best selling" in the Shopify admin and it ranks itself from real order
+  data. Until there are enough orders for that ranking to mean anything,
+  point it at a hand-picked collection instead — the section behaves the same
+  either way, so nothing needs rebuilding once sales come in.
+
+  Shares the mobile rail treatment with Mastt Top Styles so the homepage reads
+  as one system rather than a stack of differently-behaving carousels.
+{%- endcomment -%}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- liquid
+  assign source = section.settings.collection
+  if source == blank or source.products_count == 0
+    assign source = collections.all
+  endif
+  assign limit = section.settings.products_to_show
+-%}
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #Loved-{{ section.id }} .mlv__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4, 1.6rem);
+    margin-bottom: 18px;
+  }
+
+  #Loved-{{ section.id }} .mlv__titles { display: grid; gap: var(--space-1, 0.4rem); }
+
+  #Loved-{{ section.id }} .mlv__heading {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: var(--text-lg, 2.8rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  #Loved-{{ section.id }} .mlv__viewall-link {
+    font-family: var(--font-body-family);
+    font-size: var(--text-xs, 1.3rem);
+    letter-spacing: var(--tracking-wide, 0.08em);
+    text-transform: uppercase;
+    color: var(--color-charcoal-70, #6B5F5B);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-charcoal-15, rgba(32, 27, 25, 0.15));
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+
+  @media (hover: hover) {
+    #Loved-{{ section.id }} .mlv__viewall-link:hover {
+      color: var(--color-charcoal, #201B19);
+      border-color: currentColor;
+    }
+  }
+
+  /* Horizontal rail on mobile, matching Mastt Top Styles. */
+  #Loved-{{ section.id }} .mlv__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0 1.5rem 4px;
+    margin: 0 -1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  #Loved-{{ section.id }} .mlv__grid::-webkit-scrollbar { display: none; }
+
+  #Loved-{{ section.id }} .mlv__item {
+    position: relative;
+    flex: 0 0 clamp(150px, 43vw, 210px);
+    scroll-snap-align: start;
+  }
+
+  /* Rank ribbon. Only the top few carry it — a badge on every card is
+     wallpaper, not a signal. */
+  #Loved-{{ section.id }} .mlv__badge {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    z-index: 2;
+    padding: 3px 10px 3px 8px;
+    background: var(--color-charcoal, #201B19);
+    color: var(--color-pearl-beige, #F5E7DF);
+    font-family: var(--font-body-family);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide, 0.08em);
+    text-transform: uppercase;
+    border-radius: 0 var(--radius-xs, 6px) var(--radius-xs, 6px) 0;
+    pointer-events: none;
+  }
+
+  @media screen and (min-width: 990px) {
+    #Loved-{{ section.id }} .mlv__head { margin-bottom: clamp(20px, 14px + 1.2vw, 32px); }
+
+    #Loved-{{ section.id }} .mlv__grid {
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
+      gap: clamp(14px, 9px + 1.2vw, 28px);
+      overflow-x: visible;
+      margin: 0;
+      padding: 0;
+    }
+
+    #Loved-{{ section.id }} .mlv__item { flex: initial; }
+  }
+
+  #Loved-{{ section.id }} .mlv__empty {
+    flex: 1 0 100%;
+    text-align: center;
+    padding: clamp(28px, 20px + 2vw, 56px) 16px;
+    border: 1px dashed var(--color-charcoal-15, rgba(32, 27, 25, 0.15));
+    border-radius: var(--radius-md, 16px);
+    color: var(--color-charcoal-70, #6B5F5B);
+    font-size: 1.4rem;
+  }
+</style>
+
+<div id="Loved-{{ section.id }}" class="mastt-loved page-width section-{{ section.id }}-padding">
+  <div class="mlv__head">
+    <div class="mlv__titles">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="mastt-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="mlv__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all -%}
+      <a href="{{ source.url | default: '/collections/all' }}" class="mlv__viewall-link">
+        {{ section.settings.view_all_label | default: 'See all' | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+
+  <ul class="mlv__grid" role="list">
+    {%- liquid
+      assign shown = 0
+      assign skip_card_styles = false
+    -%}
+    {%- for product in source.products limit: limit -%}
+      {%- assign shown = shown | plus: 1 -%}
+      <li class="mlv__item">
+        {%- if forloop.index <= section.settings.badge_count and section.settings.badge_label != blank -%}
+          <span class="mlv__badge">{{ section.settings.badge_label | escape }}</span>
+        {%- endif -%}
+        {%- render 'card-product',
+          card_product: product,
+          media_aspect_ratio: 'square',
+          show_secondary_image: section.settings.show_secondary_image,
+          show_vendor: false,
+          show_rating: false,
+          quick_add: section.settings.quick_add,
+          section_id: section.id,
+          skip_styles: skip_card_styles
+        -%}
+      </li>
+      {%- assign skip_card_styles = true -%}
+    {%- endfor -%}
+
+    {%- if shown == 0 -%}
+      <li class="mlv__empty">Bestsellers land here as soon as orders start coming in.</li>
+    {%- endif -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Loved by You Guys",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Set the chosen collection's sort order to \"Best selling\" in the admin and this rail ranks itself from real orders. Before there are enough orders for that to be meaningful, point it at a hand-picked collection instead."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Most loved this month"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by You Guys"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Leave empty to use the whole catalogue."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "label": "Quick add",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "header",
+      "content": "Ribbon"
+    },
+    {
+      "type": "text",
+      "id": "badge_label",
+      "label": "Ribbon text",
+      "default": "Bestseller",
+      "info": "Leave empty to hide the ribbon."
+    },
+    {
+      "type": "range",
+      "id": "badge_count",
+      "label": "Ribbon on first N products",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "default": 3,
+      "info": "A badge on every card stops meaning anything. Three or fewer keeps it a signal."
+    },
+    {
+      "type": "header",
+      "content": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"See all\" link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "\"See all\" label",
+      "default": "See all"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loved by You Guys"
+    }
+  ]
+}
+{% endschema %}

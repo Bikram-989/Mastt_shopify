@@ -1,0 +1,336 @@
+{%- comment -%}
+  Mastt — Recently Viewed.
+
+  Reads product handles from localStorage (written by the recorder in
+  layout/theme.liquid on every product page) and fetches each card through
+  the Section Rendering API, so the markup stays identical to every other
+  product card on the site.
+
+  Nothing is stored server-side and nothing leaves the visitor's browser.
+  The section removes itself when there is no history, so a first-time
+  visitor never sees an empty shelf.
+
+  Safe to place on the homepage and the product page. On a product page the
+  product being viewed is excluded from its own rail.
+{%- endcomment -%}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols = section.settings.columns_desktop
+  assign cols_mobile = section.settings.columns_mobile
+-%}
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #MasttRV-{{ section.id }}[hidden] { display: none; }
+
+  #MasttRV-{{ section.id }} .mrv__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4, 1.6rem);
+    margin-bottom: clamp(20px, 14px + 1.2vw, 36px);
+  }
+
+  #MasttRV-{{ section.id }} .mrv__titles { display: grid; gap: var(--space-1, 0.4rem); }
+
+  #MasttRV-{{ section.id }} .mrv__heading {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: var(--text-lg, 2.8rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  #MasttRV-{{ section.id }} .mrv__clear {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0.4rem 0;
+    cursor: pointer;
+    font-family: var(--font-body-family);
+    font-size: var(--text-xs, 1.3rem);
+    letter-spacing: var(--tracking-wide, 0.08em);
+    text-transform: uppercase;
+    color: var(--color-charcoal-70, #6B5F5B);
+    border-bottom: 1px solid var(--color-charcoal-15, rgba(32, 27, 25, 0.15));
+    transition: color var(--duration-fast, 180ms) var(--ease-out, ease),
+                border-color var(--duration-fast, 180ms) var(--ease-out, ease);
+    white-space: nowrap;
+  }
+
+  #MasttRV-{{ section.id }} .mrv__clear:hover {
+    color: var(--color-charcoal, #201B19);
+    border-color: currentColor;
+  }
+
+  #MasttRV-{{ section.id }} .mrv__grid {
+    display: grid;
+    grid-template-columns: repeat({{ cols }}, minmax(0, 1fr));
+    gap: clamp(14px, 9px + 1.2vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Placeholder tiles hold the row's height while cards are fetched, so the
+     page below does not jump when they land. */
+  #MasttRV-{{ section.id }} .mrv__ph {
+    aspect-ratio: 1;
+    border-radius: var(--radius-md, 16px);
+    background: var(--color-charcoal-08, rgba(32, 27, 25, 0.06));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #MasttRV-{{ section.id }} .mrv__ph {
+      animation: mrv-pulse 1.4s var(--ease-out, ease-in-out) infinite alternate;
+    }
+    @keyframes mrv-pulse { from { opacity: 0.55; } to { opacity: 1; } }
+  }
+
+  @media screen and (max-width: 989px) {
+    #MasttRV-{{ section.id }} .mrv__grid {
+      grid-template-columns: repeat({{ cols_mobile }}, minmax(0, 1fr));
+    }
+  }
+
+  {%- if section.settings.scroll_on_mobile -%}
+    @media screen and (max-width: 749px) {
+      #MasttRV-{{ section.id }} .mrv__grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        margin-inline: -1.5rem;
+        padding-inline: 1.5rem;
+      }
+      #MasttRV-{{ section.id }} .mrv__grid::-webkit-scrollbar { display: none; }
+      #MasttRV-{{ section.id }} .mrv__grid > * {
+        flex: 0 0 clamp(150px, 42vw, 220px);
+        scroll-snap-align: start;
+      }
+    }
+  {%- endif -%}
+</style>
+
+<div
+  id="MasttRV-{{ section.id }}"
+  class="mastt-recently-viewed page-width section-{{ section.id }}-padding"
+  data-limit="{{ section.settings.products_to_show }}"
+  {% if template.name == 'product' %}data-exclude="{{ product.handle }}"{% endif %}
+  hidden
+>
+  <div class="mrv__head">
+    <div class="mrv__titles">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="mastt-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="mrv__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_clear -%}
+      <button type="button" class="mrv__clear" data-mrv-clear>
+        {{ section.settings.clear_label | default: 'Clear' | escape }}
+      </button>
+    {%- endif -%}
+  </div>
+
+  <ul class="mrv__grid" role="list" data-mrv-grid></ul>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('MasttRV-{{ section.id }}');
+    if (!root) return;
+
+    var KEY = 'mastt:recently-viewed';
+    var grid = root.querySelector('[data-mrv-grid]');
+    var limit = parseInt(root.dataset.limit, 10) || 4;
+    var exclude = root.dataset.exclude || null;
+
+    function read() {
+      try {
+        var raw = window.localStorage.getItem(KEY);
+        var list = raw ? JSON.parse(raw) : [];
+        return Array.isArray(list) ? list : [];
+      } catch (e) {
+        // Private mode, blocked storage, or corrupt JSON — behave like a
+        // first-time visitor rather than throwing.
+        return [];
+      }
+    }
+
+    var handles = read()
+      .filter(function (h) { return typeof h === 'string' && h && h !== exclude; })
+      .slice(0, limit);
+
+    if (!handles.length) return;
+
+    // Reserve the row height before anything is fetched.
+    handles.forEach(function () {
+      var li = document.createElement('li');
+      li.className = 'mrv__ph';
+      grid.appendChild(li);
+    });
+    root.hidden = false;
+
+    var parser = new DOMParser();
+
+    Promise.all(
+      handles.map(function (handle) {
+        return fetch('/products/' + encodeURIComponent(handle) + '?section_id=mastt-rv-card')
+          .then(function (r) { return r.ok ? r.text() : null; })
+          .then(function (html) {
+            if (!html) return null;
+            var doc = parser.parseFromString(html, 'text/html');
+            // Shopify wraps the response in #shopify-section-*; take the card itself.
+            return doc.querySelector('.card-wrapper') || doc.querySelector('.card');
+          })
+          .catch(function () { return null; });
+      })
+    ).then(function (cards) {
+      grid.innerHTML = '';
+      var placed = 0;
+
+      cards.forEach(function (card) {
+        // A null card means the product was deleted, unpublished, or renamed
+        // since it was viewed. Skip it rather than rendering a broken tile.
+        if (!card) return;
+        var li = document.createElement('li');
+        li.appendChild(card);
+        grid.appendChild(li);
+        placed++;
+      });
+
+      if (!placed) root.hidden = true;
+    });
+
+    var clear = root.querySelector('[data-mrv-clear]');
+    if (clear) {
+      clear.addEventListener('click', function () {
+        try { window.localStorage.removeItem(KEY); } catch (e) {}
+        root.hidden = true;
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows each visitor the products they looked at most recently. History is kept in their own browser only — nothing is stored on the store. The section hides itself for first-time visitors."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Pick up where you left off"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently viewed"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_on_mobile",
+      "label": "Swipe horizontally on mobile",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_clear",
+      "label": "Show \"Clear\" button",
+      "default": true,
+      "info": "Lets a visitor wipe their own viewing history."
+    },
+    {
+      "type": "text",
+      "id": "clear_label",
+      "label": "\"Clear\" label",
+      "default": "Clear"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently viewed"
+    }
+  ]
+}
+{% endschema %}

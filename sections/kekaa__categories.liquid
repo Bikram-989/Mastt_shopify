@@ -1,44 +1,40 @@
 <style>
-/* Editorial photo tiles — full-bleed image, gradient scrim, caption overlaid at
-   the bottom. Same grid/breakpoints and same block.settings.custom_title text,
-   only the card's visual treatment changed (was: circular medallion + separate
-   outlined pill label below). */
+/* Category tiles — square photo with a soft corner radius, caption beneath.
+   Mobile leads: three across with a tight gutter so the row reads as one
+   band of choices rather than two big cards you have to scroll past. */
 
 .section-{{ section.id }} .collection-list__grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: clamp(14px, 9px + 1.2vw, 28px);
-
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   margin: 0 auto;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (min-width: 750px) {
   .section-{{ section.id }} .collection-list__grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: clamp(14px, 9px + 1.2vw, 24px);
     max-width: clamp(600px, 411.1111px + 27.7778vw, 800px);
   }
 }
 
-@media screen and (max-width: 679px) {
+@media screen and (min-width: 1401px) {
   .section-{{ section.id }} .collection-list__grid {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: clamp(300px, 211.1111px + 27.7778vw, 400px);
+    grid-template-columns: repeat(6, 1fr);
+    max-width: none;
   }
 }
 
-/* Circular category medallions: the photo fills a perfect circle, the label
-   sits beneath it. A soft ring picks up the brand accents on hover. */
 .collection-list__card {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 7px + 0.6vw, 16px);
+  gap: 8px;
   overflow: visible;
   border-radius: 0;
   background: none;
   box-shadow: none;
-
   text-decoration: none;
   color: inherit;
 }
@@ -50,7 +46,7 @@
   aspect-ratio: 1;
   height: auto;
   margin-bottom: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-md, 16px);
   overflow: hidden;
   background: var(--color-pearl-beige, #F5E7DF);
   box-shadow: var(--shadow-sm, 0 1px 2px rgba(32, 27, 25, .1)),
@@ -59,11 +55,24 @@
               box-shadow 420ms cubic-bezier(.16, 1, .3, 1);
 }
 
-.collection-list__card:hover .collection-list__image {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md, 0 8px 24px -4px rgba(32, 27, 25, .16)),
-              0 0 0 2px var(--tile-ring, var(--color-dusty-coral, #D6887C));
+@media screen and (min-width: 750px) {
+  .collection-list__image { border-radius: var(--radius-lg, 24px); }
+  .collection-list__card { gap: clamp(10px, 7px + 0.6vw, 16px); }
 }
+
+/* Hover lift is a pointer affordance — skip it on touch, where it only ever
+   fires as a sticky state after a tap. */
+@media (hover: hover) {
+  .collection-list__card:hover .collection-list__image {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md, 0 8px 24px -4px rgba(32, 27, 25, .16)),
+                0 0 0 2px var(--tile-ring, var(--color-dusty-coral, #D6887C));
+  }
+  .collection-list__card:hover .collection-list__image img { transform: scale(1.07); }
+  .collection-list__card:hover .collection-list__label { color: var(--color-coral-dark, #B96C60); }
+}
+
+.collection-list__card:active .collection-list__image { transform: scale(0.97); }
 
 /* Ring colour cycles through the secondary palette, matching the USP badges */
 .collection-list__card:nth-child(4n+1) { --tile-ring: var(--color-dusty-coral, #D6887C); }
@@ -79,10 +88,6 @@
   height: 100%;
   object-fit: cover;
   transition: transform 600ms cubic-bezier(.16, 1, .3, 1);
-}
-
-.collection-list__card:hover .collection-list__image img {
-  transform: scale(1.07);
 }
 
 .collection-list__placeholder {
@@ -112,17 +117,14 @@
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0.01em;
-  font-size: clamp(13px, 11px + 0.5vw, 16px);
+  font-size: 12px;
+  line-height: 1.3;
   color: var(--color-charcoal, #201B19);
   transition: color 220ms ease;
 }
 
-.collection-list__card:hover .collection-list__label {
-  color: var(--color-coral-dark, #B96C60);
-}
-
-@media screen and (max-width: 679px) {
-  .collection-list__label { font-size: 13px; }
+@media screen and (min-width: 750px) {
+  .collection-list__label { font-size: clamp(13px, 11px + 0.5vw, 16px); }
 }
 </style>
 
