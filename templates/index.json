@@ -21,7 +21,7 @@
             "heading_size": "h1",
             "subheading": "",
             "button_label": "Shop the collection",
-            "link": "/collections/all",
+            "link": "shopify://collections",
             "button_style_secondary": false,
             "show_text_box": false,
             "box_align": "bottom-left",
