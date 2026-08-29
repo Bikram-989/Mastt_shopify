@@ -1,0 +1,61 @@
+{%- comment -%}
+  Mastt card overlay — everything that sits on top of the product image.
+
+  Accepts:
+  - card_product: {Object} the product
+
+  Three independent pieces, each rendering nothing when its data is absent,
+  so a product with no metafields looks exactly like it does today:
+
+    ribbon   <- custom.card_badge          (text, e.g. Bestseller)
+    wishlist <- localStorage               (no data needed)
+    rating   <- custom.rating + custom.rating_count
+
+  Reviews are seeded in Phase 3; until then only the heart shows.
+{%- endcomment -%}
+
+{%- liquid
+  assign badge = card_product.metafields.custom.card_badge.value
+  assign rating = card_product.metafields.custom.rating.value
+  assign rating_count = card_product.metafields.custom.rating_count.value
+-%}
+
+<div class="mcard__overlay">
+  {%- if badge != blank -%}
+    <span class="mcard__ribbon">{{ badge | escape }}</span>
+  {%- endif -%}
+
+  <button
+    type="button"
+    class="mcard__wish"
+    data-mastt-wish
+    data-handle="{{ card_product.handle }}"
+    aria-pressed="false"
+    aria-label="{{ 'Save ' | append: card_product.title | escape }}"
+    title="Save for later"
+  >
+    <svg class="mcard__wish-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        d="M12 20.7 4.3 13a4.8 4.8 0 0 1 0-6.8 4.8 4.8 0 0 1 6.8 0l.9.9.9-.9a4.8 4.8 0 0 1 6.8 0 4.8 4.8 0 0 1 0 6.8Z"
+        fill="none" stroke="currentColor" stroke-width="1.7"
+        stroke-linecap="round" stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+
+  {%- if rating != blank and rating.rating != blank -%}
+    <span
+      class="mcard__rating"
+      role="img"
+      aria-label="Rated {{ rating.rating }} out of {{ rating.scale_max }}{% if rating_count %} from {{ rating_count }} reviews{% endif %}"
+    >
+      <span aria-hidden="true">{{ rating.rating }}</span>
+      <svg class="mcard__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="m12 2.6 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9Z" fill="currentColor"/>
+      </svg>
+      {%- if rating_count != blank and rating_count > 0 -%}
+        <span class="mcard__rating-count" aria-hidden="true">|{{ rating_count }}</span>
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</div>

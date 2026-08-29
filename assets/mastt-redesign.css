@@ -1283,3 +1283,141 @@ body.template-index {
   border-radius: var(--radius-xs, 6px);
   background: color-mix(in srgb, var(--color-white) 72%, transparent);
 }
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT CARD — Mastt overlay
+   Ribbon, wishlist heart and rating pill sit on the image; the bundle line
+   sits under the price. Each piece renders only when its data exists, so a
+   product with no metafields is unchanged.
+   -------------------------------------------------------------------------- */
+.mcard__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;   /* the card link stays tappable underneath */
+}
+
+.mcard__overlay > * { pointer-events: auto; }
+
+/* Ribbon, top-left, notched into the image edge. */
+.mcard__ribbon {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  padding: 3px 10px 3px 8px;
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+/* Wishlist, top-right. */
+.mcard__wish {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color-white) 88%, transparent);
+  color: var(--color-charcoal);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  transition: color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.mcard__wish-icon { width: 18px; height: 18px; display: block; }
+
+.mcard__wish.is-saved {
+  color: var(--color-dusty-coral);
+  background: var(--color-white);
+}
+
+.mcard__wish.is-saved .mcard__wish-icon path {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.mcard__wish:focus-visible {
+  outline: 2px solid var(--color-charcoal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mcard__wish.is-popping { animation: mcard-pop 340ms var(--ease-out); }
+  @keyframes mcard-pop {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.28); }
+    100% { transform: scale(1); }
+  }
+}
+
+/* Rating, bottom-right, clear of the quick-add button on the left. */
+.mcard__rating {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-white) 92%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mcard__star {
+  width: 11px;
+  height: 11px;
+  color: #F4AC03;   /* the one colour outside the palette: a gold star reads
+                       as a rating everywhere, a coral one reads as decoration */
+}
+
+.mcard__rating-count { color: var(--color-charcoal-45); font-weight: 500; }
+
+/* Bundle line, under the price. */
+.mcard__bundle {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0 0;
+  font-family: var(--font-body-family);
+  font-size: clamp(12px, 11px + 0.3vw, 14px);
+  line-height: 1.3;
+}
+
+.mcard__bundle-head {
+  font-weight: 700;
+  color: var(--color-aqua-dark);
+}
+
+.mcard__bundle-more { color: var(--color-charcoal-45); font-weight: 500; }
+
+.mcard__bundle-code {
+  padding: 1px 6px;
+  border: 1px dashed var(--color-charcoal-15);
+  border-radius: var(--radius-xs);
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-charcoal-70);
+}

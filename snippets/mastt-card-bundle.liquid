@@ -1,0 +1,36 @@
+{%- comment -%}
+  Mastt bundle line — "Buy 4 At Rs2999 + 2 more".
+
+  Accepts:
+  - card_product: {Object} the product
+  - show_code: {Boolean} also render the discount code (product page only)
+
+  Reads the Bundle Campaign metaobject referenced by
+  custom.bundle_campaign. One campaign covers as many products as you link
+  it to, so ending an offer is a single edit rather than a bulk job.
+
+  Renders nothing when there is no campaign, or when the campaign's Active
+  box is unchecked — which is how you pull an offer from the whole catalogue
+  at once without unlinking anything.
+{%- endcomment -%}
+
+{%- liquid
+  assign campaign = card_product.metafields.custom.bundle_campaign.value
+  assign headline = campaign.headline.value
+  assign is_active = campaign.active.value
+  assign extra = campaign.tiers.value.size | default: 0
+-%}
+
+{%- if campaign != blank and headline != blank and is_active -%}
+  <p class="mcard__bundle">
+    <span class="mcard__bundle-head">{{ headline | escape }}</span>
+    {%- if extra > 0 -%}
+      <span class="mcard__bundle-more">
+        + {{ extra }} more
+      </span>
+    {%- endif -%}
+    {%- if show_code and campaign.code.value != blank -%}
+      <span class="mcard__bundle-code">{{ campaign.code.value | escape }}</span>
+    {%- endif -%}
+  </p>
+{%- endif -%}

@@ -138,6 +138,15 @@ Custom Card Render Logic
 {% render 'product-badges', product: card_product, context: 'card' %}
 
         {%- endif -%}
+
+        {%- comment -%}
+          Mastt overlay — ribbon, wishlist heart and rating pill. Placed after
+          the media if/else so it renders for products with and without a
+          photo, and inside .card__inner so it sits on the image rather than
+          the text block.
+        {%- endcomment -%}
+        {%- render 'mastt-card-overlay', card_product: card_product -%}
+
         <div class="card__content">
           <div class="card__information">  
             <h3
@@ -503,6 +512,8 @@ Custom Card Render Logic
   </div> 
   <!-- End of Judge.me code -->
 </div>
+
+{%- render 'mastt-card-bundle', card_product: card_product -%}
   
 <h3
   class="card__heading"
