@@ -1718,3 +1718,62 @@ body.template-index {
 .product__accordion details[open] > summary::after {
   content: '−';
 }
+
+
+/* --------------------------------------------------------------------------
+   PRODUCT PAGE — share and save over the gallery
+   -------------------------------------------------------------------------- */
+.product__media-wrapper { position: relative; }
+
+.mpa {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.mpa__btn {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color-white) 90%, transparent);
+  color: var(--color-charcoal);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+  transition: color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.mpa__icon { width: 19px; height: 19px; display: block; }
+
+.mpa__btn.is-saved { color: var(--color-dusty-coral); background: var(--color-white); }
+.mpa__btn.is-saved .mcard__wish-icon path { fill: currentColor; stroke: currentColor; }
+
+.mpa__btn:focus-visible { outline: 2px solid var(--color-charcoal); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mpa__btn.is-popping { animation: mcard-pop 340ms var(--ease-out); }
+}
+
+.mpa__toast {
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+
+.mpa__toast[hidden] { display: none; }

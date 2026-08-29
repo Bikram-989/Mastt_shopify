@@ -1,0 +1,51 @@
+{%- comment -%}
+  Share and save, floating over the product gallery.
+
+  Share uses the Web Share API where the browser has it — on a phone that
+  opens the native sheet, which is the only share flow people actually
+  complete. Everything else falls back to copying the link, with a confirmation
+  so the click is not silent.
+
+  The heart reuses the same [data-mastt-wish] contract as the product cards,
+  so mastt-wishlist.js drives it with no extra code and hearting here shows up
+  on every card for the same product.
+{%- endcomment -%}
+
+<div class="mpa">
+  <button
+    type="button"
+    class="mpa__btn"
+    data-mastt-wish
+    data-handle="{{ product.handle }}"
+    aria-pressed="false"
+    aria-label="Save {{ product.title | escape }}"
+    title="Save for later"
+  >
+    <svg viewBox="0 0 24 24" class="mpa__icon mcard__wish-icon" aria-hidden="true" focusable="false">
+      <path
+        d="M12 20.7 4.3 13a4.8 4.8 0 0 1 0-6.8 4.8 4.8 0 0 1 6.8 0l.9.9.9-.9a4.8 4.8 0 0 1 6.8 0 4.8 4.8 0 0 1 0 6.8Z"
+        fill="none" stroke="currentColor" stroke-width="1.7"
+        stroke-linecap="round" stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    class="mpa__btn"
+    data-mastt-share
+    data-title="{{ product.title | escape }}"
+    data-url="{{ shop.url }}{{ product.url }}"
+    aria-label="Share {{ product.title | escape }}"
+    title="Share"
+  >
+    <svg viewBox="0 0 24 24" class="mpa__icon" aria-hidden="true" focusable="false">
+      <circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <path d="M8.6 10.6 15.4 6.4M8.6 13.4l6.8 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <span class="mpa__toast" data-mastt-share-toast hidden role="status">Link copied</span>
+</div>
