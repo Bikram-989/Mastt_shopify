@@ -83,6 +83,7 @@
         "custom_liquid_BnnLW4": {
           "type": "custom_liquid",
           "name": "[Offers]",
+          "disabled": true,
           "settings": {
             "custom_liquid": "OFFERS"
           }
@@ -133,8 +134,10 @@
         },
         "features_yaiGKM": {
           "type": "features",
+          "name": "MASTT-Features",
           "settings": {
             "feature_1_text": "Skin Safe",
+            "feature_1_image": "shopify://shop_images/OTH_R_F_0200.jpg",
             "feature_2_text": "Anti-Tarnish",
             "feature_3_text": "Thick Plating",
             "feature_4_text": "Easy Exchange"
@@ -231,33 +234,43 @@
         "padding_bottom": 0
       }
     },
-    "1765432784f68427fe": {
-      "type": "apps",
+    "mastt_loved_by_you_C8XzTn": {
+      "type": "mastt-loved-by-you",
+      "name": "Loved by You Guys",
       "settings": {
-        "include_margins": true
+        "eyebrow": "Most loved this month",
+        "heading": "Loved by You Guys",
+        "collection": "",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_secondary_image": true,
+        "quick_add": "standard",
+        "badge_label": "Bestseller",
+        "badge_count": 3,
+        "show_view_all": true,
+        "view_all_label": "See all",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
-    "176543348451589833": {
-      "type": "apps",
+    "mastt_recently_viewed_EgNBMR": {
+      "type": "mastt-recently-viewed",
+      "name": "Recently viewed",
       "settings": {
-        "include_margins": true
-      }
-    },
-    "174594043442de62c9": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "1765432523dfe615b7": {
-      "type": "apps",
-      "settings": {
-        "include_margins": false
+        "eyebrow": "Pick up where you left off",
+        "heading": "Recently viewed",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "columns_mobile": "2",
+        "scroll_on_mobile": true,
+        "show_clear": true,
+        "clear_label": "Clear",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "related-products": {
       "type": "related-products",
-      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
@@ -304,36 +317,13 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "175622883674c57dbf": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "1769228079dba78ad6": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "17721909190e3a3760": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
     }
   },
   "order": [
     "main",
-    "1765432784f68427fe",
-    "176543348451589833",
-    "174594043442de62c9",
-    "1765432523dfe615b7",
+    "mastt_loved_by_you_C8XzTn",
+    "mastt_recently_viewed_EgNBMR",
     "related-products",
-    "featured_collection_8haAj6",
-    "175622883674c57dbf",
-    "1769228079dba78ad6",
-    "17721909190e3a3760"
+    "featured_collection_8haAj6"
   ]
 }

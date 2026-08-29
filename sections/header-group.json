@@ -33,7 +33,6 @@
         "announcement_QDBkcG",
         "announcement-bar-0"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
         "scroll_enabled": true,
@@ -61,7 +60,7 @@
       "custom_css": [],
       "settings": {
         "logo_position": "middle-left",
-        "mobile_logo_position": "left",
+        "mobile_logo_position": "center",
         "menu": "main-menu",
         "menu_type_desktop": "dropdown",
         "sticky_header_type": "always",
@@ -78,6 +77,7 @@
     },
     "17461191138c4e716a": {
       "type": "apps",
+      "disabled": true,
       "settings": {
         "include_margins": true
       }

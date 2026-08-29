@@ -9,8 +9,7 @@
  */
 {
   "current": {
-    "logo": "",
-    "logo_width": 132,
+    "logo_width": 120,
     "favicon": "shopify://shop_images/Mastt_Favicon.png",
     "type_header_font": "bitter_n5",
     "heading_scale": 100,
@@ -20,7 +19,7 @@
     "spacing_sections": 40,
     "spacing_grid_horizontal": 12,
     "spacing_grid_vertical": 16,
-    "animations_reveal_on_scroll": false,
+    "animations_reveal_on_scroll": true,
     "animations_hover_elements": "none",
     "buttons_border_thickness": 0,
     "buttons_border_opacity": 100,
@@ -103,7 +102,7 @@
     "drawer_shadow_horizontal_offset": 0,
     "drawer_shadow_vertical_offset": 4,
     "drawer_shadow_blur": 5,
-    "badge_position": "bottom right",
+    "badge_position": "bottom left",
     "badge_corner_radius": 20,
     "sale_badge_color_scheme": "scheme-4",
     "sold_out_badge_color_scheme": "scheme-3",
@@ -127,7 +126,7 @@
     "cart_type": "drawer",
     "show_vendor": false,
     "show_cart_note": false,
-    "cart_drawer_collection": "",
+    "cart_drawer_collection": "rings",
     "cart_color_scheme": "scheme-1",
     "sections": {
       "main-password-header": {
@@ -158,7 +157,7 @@
       },
       "scheme-2": {
         "settings": {
-          "background": "#78AAB1",
+          "background": "#78aab1",
           "background_gradient": "",
           "text": "#ffffff",
           "button": "#684830",

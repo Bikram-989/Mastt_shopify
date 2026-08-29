@@ -120,8 +120,8 @@
       ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
-        "layout": "grid",
-        "slide_height": "adapt_image",
+        "layout": "full_bleed",
+        "slide_height": "large",
         "slider_visual": "dots",
         "auto_rotate": true,
         "change_slides_speed": 5,
@@ -160,7 +160,7 @@
         "collection_card_9tQnGm": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Earrings",
+            "collection_url": "/collections/all?filter.p.product_type=Earring",
             "image": "shopify://shop_images/OTH_E_F_0069.jpg",
             "custom_title": "Earrings"
           }
@@ -208,14 +208,14 @@
             "view_all_url": "/collections/all"
           }
         },
-        "t2": {
+        "t4": {
           "type": "tab",
           "settings": {
-            "label": "Necklaces",
+            "label": "Rings",
             "collection": "all",
-            "product_type": "Necklace",
+            "product_type": "Ring",
             "tag": "",
-            "view_all_url": "/collections/all?filter.p.product_type=Necklace"
+            "view_all_url": "shopify://collections/rings"
           }
         },
         "t3": {
@@ -225,25 +225,58 @@
             "collection": "all",
             "product_type": "Bracelet",
             "tag": "",
-            "view_all_url": "/collections/all?filter.p.product_type=Bracelet"
+            "view_all_url": "shopify://collections/bracelets"
           }
         },
-        "t4": {
+        "tab_yNnfzG": {
           "type": "tab",
           "settings": {
-            "label": "Rings",
-            "collection": "all",
-            "product_type": "Ring",
+            "label": "Anklets",
+            "collection": "anklets",
+            "product_type": "Anklets",
             "tag": "",
-            "view_all_url": "/collections/all?filter.p.product_type=Ring"
+            "view_all_url": "shopify://collections/anklets"
+          }
+        },
+        "t2": {
+          "type": "tab",
+          "settings": {
+            "label": "Necklaces",
+            "collection": "all",
+            "product_type": "Necklace",
+            "tag": "",
+            "view_all_url": "shopify://collections/necklaces"
+          }
+        },
+        "tab_hektUM": {
+          "type": "tab",
+          "settings": {
+            "label": "Earrings",
+            "collection": "earrings",
+            "product_type": "Earrings",
+            "tag": "",
+            "view_all_url": "shopify://collections/earrings"
+          }
+        },
+        "tab_QpFiz7": {
+          "type": "tab",
+          "settings": {
+            "label": "Sets",
+            "collection": "sets",
+            "product_type": "Sets",
+            "tag": "",
+            "view_all_url": "shopify://collections/sets"
           }
         }
       },
       "block_order": [
         "t1",
-        "t2",
+        "t4",
         "t3",
-        "t4"
+        "tab_yNnfzG",
+        "t2",
+        "tab_hektUM",
+        "tab_QpFiz7"
       ],
       "settings": {
         "heading": "Mastt Top Styles",
@@ -253,6 +286,24 @@
         "quick_add": "standard",
         "show_view_all": true,
         "view_all_label": "View all"
+      }
+    },
+    "mastt_loved_by_you": {
+      "type": "mastt-loved-by-you",
+      "settings": {
+        "eyebrow": "Most loved this month",
+        "heading": "Loved by You Guys",
+        "collection": "",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_secondary_image": true,
+        "quick_add": "standard",
+        "badge_label": "Bestseller",
+        "badge_count": 3,
+        "show_view_all": true,
+        "view_all_label": "See all",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "mastt_top_styles_women": {
@@ -268,14 +319,14 @@
             "view_all_url": "/collections/all?filter.p.tag=women"
           }
         },
-        "w2": {
+        "w4": {
           "type": "tab",
           "settings": {
-            "label": "Necklaces",
+            "label": "Rings",
             "collection": "all",
-            "product_type": "Necklace",
+            "product_type": "Ring",
             "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Necklace"
+            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Ring"
           }
         },
         "w3": {
@@ -288,12 +339,42 @@
             "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Bracelet"
           }
         },
-        "w4": {
+        "w2": {
           "type": "tab",
           "settings": {
-            "label": "Rings",
+            "label": "Necklaces",
             "collection": "all",
-            "product_type": "Ring",
+            "product_type": "Necklace",
+            "tag": "women, her",
+            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Necklace"
+          }
+        },
+        "tab_AikhCU": {
+          "type": "tab",
+          "settings": {
+            "label": "Earrings",
+            "collection": "all",
+            "product_type": "Earrings",
+            "tag": "women, her",
+            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Earrings"
+          }
+        },
+        "tab_KNtpqN": {
+          "type": "tab",
+          "settings": {
+            "label": "Anklets",
+            "collection": "all",
+            "product_type": "Anklets",
+            "tag": "women, her",
+            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Ring"
+          }
+        },
+        "tab_qBK7hT": {
+          "type": "tab",
+          "settings": {
+            "label": "Sets",
+            "collection": "all",
+            "product_type": "Sets",
             "tag": "women, her",
             "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Ring"
           }
@@ -301,10 +382,14 @@
       },
       "block_order": [
         "w1",
-        "w2",
+        "w4",
         "w3",
-        "w4"
+        "w2",
+        "tab_AikhCU",
+        "tab_KNtpqN",
+        "tab_qBK7hT"
       ],
+      "name": "For HER",
       "settings": {
         "heading": "For Her",
         "products_to_show": 8,
@@ -328,14 +413,14 @@
             "view_all_url": "/collections/all?filter.p.tag=men"
           }
         },
-        "m2": {
+        "m4": {
           "type": "tab",
           "settings": {
-            "label": "Necklaces",
+            "label": "Rings",
             "collection": "all",
-            "product_type": "Necklace",
+            "product_type": "Ring",
             "tag": "men, him",
-            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Necklace"
+            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Ring"
           }
         },
         "m3": {
@@ -348,23 +433,24 @@
             "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Bracelet"
           }
         },
-        "m4": {
+        "m2": {
           "type": "tab",
           "settings": {
-            "label": "Rings",
+            "label": "Necklaces",
             "collection": "all",
-            "product_type": "Ring",
+            "product_type": "Necklace",
             "tag": "men, him",
-            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Ring"
+            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Necklace"
           }
         }
       },
       "block_order": [
         "m1",
-        "m2",
+        "m4",
         "m3",
-        "m4"
+        "m2"
       ],
+      "name": "For HIM",
       "settings": {
         "heading": "For Him",
         "products_to_show": 8,
@@ -406,43 +492,18 @@
         "image_ratio": "4 / 3"
       }
     },
-    "176542848128554f43": {
-      "type": "apps",
+    "mastt_recently_viewed": {
+      "type": "mastt-recently-viewed",
       "settings": {
-        "include_margins": false
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "disabled": true,
-      "custom_css": [
-        ".card__inner .card__media {border-radius: 200px 200px 20px 20px;}",
-        ".card--media {border-radius: 200px 200px 20px 20px; outline: none;}"
-      ],
-      "settings": {
-        "collection": "trending-products",
-        "products_to_show": 4,
-        "enable_dark_mode": false,
-        "title": "Trending",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": false,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "standard",
+        "eyebrow": "Pick up where you left off",
+        "heading": "Recently viewed",
+        "products_to_show": 5,
+        "columns_desktop": 5,
         "columns_mobile": "2",
-        "swipe_on_mobile": true,
-        "padding_top": 44,
+        "scroll_on_mobile": true,
+        "show_clear": true,
+        "clear_label": "Clear",
+        "padding_top": 36,
         "padding_bottom": 36
       }
     },
@@ -452,7 +513,7 @@
         "usp_jEkcnb": {
           "type": "usp",
           "settings": {
-            "icon": "shopify://shop_images/IMG_8139_copy.png",
+            "icon": "shopify://shop_images/WhatsApp_Image_2026-08-20_at_12.11.42_PM_1.png",
             "title": "Quality Assured",
             "description": "Every piece, Checked with care"
           }
@@ -488,127 +549,9 @@
         "usp_me944Q",
         "usp_CrnVTD"
       ],
-      "name": "USP Section",
+      "name": "Our Promise",
       "settings": {
         "heading": "Our Promise"
-      }
-    },
-    "kekaa_style_collection_mgQ4zd": {
-      "type": "kekaa__style__collection",
-      "blocks": {
-        "badge_iADpxz": {
-          "type": "badge",
-          "settings": {
-            "position": "tl",
-            "label": "Daily Wear",
-            "badge_link": "shopify://collections/daily-wear-jewelry",
-            "bg_size": 200,
-            "focus_x": 65,
-            "focus_y": 65
-          }
-        },
-        "badge_zqgHKp": {
-          "type": "badge",
-          "settings": {
-            "position": "tr",
-            "label": "Summer Wear",
-            "badge_link": "shopify://collections/summer-wear-jewelry",
-            "bg_size": 180,
-            "focus_x": 40,
-            "focus_y": 95
-          }
-        },
-        "badge_YnUkqR": {
-          "type": "badge",
-          "settings": {
-            "position": "bl",
-            "label": "Party Wear",
-            "badge_link": "shopify://collections/party-wear-jewelry",
-            "bg_size": 180,
-            "focus_x": 50,
-            "focus_y": 90
-          }
-        },
-        "badge_pr76B8": {
-          "type": "badge",
-          "settings": {
-            "position": "br",
-            "label": "Office Wear",
-            "badge_link": "shopify://collections/office-wear-jewelry",
-            "bg_size": 200,
-            "focus_x": 30,
-            "focus_y": 70
-          }
-        }
-      },
-      "block_order": [
-        "badge_iADpxz",
-        "badge_zqgHKp",
-        "badge_YnUkqR",
-        "badge_pr76B8"
-      ],
-      "disabled": true,
-      "name": "Style Collection",
-      "settings": {
-        "heading_text": "Outfit-Style Collections"
-      }
-    },
-    "178670482636cffafd": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "kekaa_promo_section_D4MDGC": {
-      "type": "kekaa__promo__section",
-      "blocks": {
-        "large_Trttyk": {
-          "type": "large",
-          "settings": {
-            "link": "shopify://collections",
-            "badge_text": "New Year Sale",
-            "badge_position": "before",
-            "title": "<p>Buy1 get 1 FREE</p>",
-            "content_placement": "top-left"
-          }
-        },
-        "top_AJrHTn": {
-          "type": "top",
-          "settings": {
-            "link": "",
-            "badge_text": "Stay tuned",
-            "badge_position": "after",
-            "title": "<p>Mastt Pass:<br/>Exclusive Club</p>",
-            "content_placement": "bottom-left"
-          }
-        },
-        "bottom_LYtAC4": {
-          "type": "bottom",
-          "settings": {
-            "link": "",
-            "badge_text": "",
-            "badge_position": "after",
-            "title": "<p>Hidden Discount</p>",
-            "subtext": "Only for First 10 Customers",
-            "coupon": "MakeMeRare",
-            "content_placement": "top-right"
-          }
-        }
-      },
-      "block_order": [
-        "large_Trttyk",
-        "top_AJrHTn",
-        "bottom_LYtAC4"
-      ],
-      "disabled": true,
-      "name": "Promo Cards Grid",
-      "settings": {}
-    },
-    "1745938145f3ffcbff": {
-      "type": "apps",
-      "disabled": true,
-      "settings": {
-        "include_margins": true
       }
     },
     "mastt_reviews": {
@@ -800,7 +743,6 @@
         "collapsible_row_aUkNVy",
         "collapsible_row_684tT4"
       ],
-      "disabled": true,
       "custom_css": [],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
@@ -818,43 +760,157 @@
         "padding_bottom": 36
       }
     },
-    "175221991594959e7c": {
+    "featured_collection": {
+      "type": "featured-collection",
+      "disabled": true,
+      "custom_css": [
+        ".card__inner .card__media {border-radius: 200px 200px 20px 20px;}",
+        ".card--media {border-radius: 200px 200px 20px 20px; outline: none;}"
+      ],
+      "settings": {
+        "collection": "trending-products",
+        "products_to_show": 4,
+        "enable_dark_mode": false,
+        "title": "Trending",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    },
+    "kekaa_style_collection_mgQ4zd": {
+      "type": "kekaa__style__collection",
+      "blocks": {
+        "badge_iADpxz": {
+          "type": "badge",
+          "settings": {
+            "position": "tl",
+            "label": "Daily Wear",
+            "badge_link": "shopify://collections/daily-wear-jewelry",
+            "bg_size": 200,
+            "focus_x": 65,
+            "focus_y": 65
+          }
+        },
+        "badge_zqgHKp": {
+          "type": "badge",
+          "settings": {
+            "position": "tr",
+            "label": "Summer Wear",
+            "badge_link": "shopify://collections/summer-wear-jewelry",
+            "bg_size": 180,
+            "focus_x": 40,
+            "focus_y": 95
+          }
+        },
+        "badge_YnUkqR": {
+          "type": "badge",
+          "settings": {
+            "position": "bl",
+            "label": "Party Wear",
+            "badge_link": "shopify://collections/party-wear-jewelry",
+            "bg_size": 180,
+            "focus_x": 50,
+            "focus_y": 90
+          }
+        },
+        "badge_pr76B8": {
+          "type": "badge",
+          "settings": {
+            "position": "br",
+            "label": "Office Wear",
+            "badge_link": "shopify://collections/office-wear-jewelry",
+            "bg_size": 200,
+            "focus_x": 30,
+            "focus_y": 70
+          }
+        }
+      },
+      "block_order": [
+        "badge_iADpxz",
+        "badge_zqgHKp",
+        "badge_YnUkqR",
+        "badge_pr76B8"
+      ],
+      "disabled": true,
+      "name": "Style Collection",
+      "settings": {
+        "heading_text": "Outfit-Style Collections"
+      }
+    },
+    "kekaa_promo_section_D4MDGC": {
+      "type": "kekaa__promo__section",
+      "blocks": {
+        "large_Trttyk": {
+          "type": "large",
+          "settings": {
+            "link": "shopify://collections",
+            "badge_text": "New Year Sale",
+            "badge_position": "before",
+            "title": "<p>Buy1 get 1 FREE</p>",
+            "content_placement": "top-left"
+          }
+        },
+        "top_AJrHTn": {
+          "type": "top",
+          "settings": {
+            "link": "",
+            "badge_text": "Stay tuned",
+            "badge_position": "after",
+            "title": "<p>Mastt Pass:<br/>Exclusive Club</p>",
+            "content_placement": "bottom-left"
+          }
+        },
+        "bottom_LYtAC4": {
+          "type": "bottom",
+          "settings": {
+            "link": "",
+            "badge_text": "",
+            "badge_position": "after",
+            "title": "<p>Hidden Discount</p>",
+            "subtext": "Only for First 10 Customers",
+            "coupon": "MakeMeRare",
+            "content_placement": "top-right"
+          }
+        }
+      },
+      "block_order": [
+        "large_Trttyk",
+        "top_AJrHTn",
+        "bottom_LYtAC4"
+      ],
+      "disabled": true,
+      "name": "Promo Cards Grid",
+      "settings": {}
+    },
+    "1745938145f3ffcbff": {
       "type": "apps",
+      "disabled": true,
       "settings": {
         "include_margins": true
       }
     },
-    "mastt_recently_viewed": {
-      "type": "mastt-recently-viewed",
+    "175221991594959e7c": {
+      "type": "apps",
+      "disabled": true,
       "settings": {
-        "eyebrow": "Pick up where you left off",
-        "heading": "Recently viewed",
-        "products_to_show": 5,
-        "columns_desktop": 5,
-        "columns_mobile": "2",
-        "scroll_on_mobile": true,
-        "show_clear": true,
-        "clear_label": "Clear",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "mastt_loved_by_you": {
-      "type": "mastt-loved-by-you",
-      "settings": {
-        "eyebrow": "Most loved this month",
-        "heading": "Loved by You Guys",
-        "collection": "",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "show_secondary_image": true,
-        "quick_add": "standard",
-        "badge_label": "Bestseller",
-        "badge_count": 3,
-        "show_view_all": true,
-        "view_all_label": "See all",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "include_margins": true
       }
     }
   },
@@ -862,20 +918,18 @@
     "slideshow_FPVJpr",
     "kekaa_categories_wpDbbw",
     "mastt_top_styles",
+    "mastt_loved_by_you",
     "mastt_top_styles_women",
     "mastt_top_styles_men",
     "mastt_recipient",
     "mastt_recently_viewed",
-    "mastt_loved_by_you",
-    "176542848128554f43",
-    "featured_collection",
     "kekaa_usp_section_9p66aY",
-    "kekaa_style_collection_mgQ4zd",
-    "178670482636cffafd",
-    "kekaa_promo_section_D4MDGC",
-    "1745938145f3ffcbff",
     "mastt_reviews",
     "collapsible_content_pDahx6",
+    "featured_collection",
+    "kekaa_style_collection_mgQ4zd",
+    "kekaa_promo_section_D4MDGC",
+    "1745938145f3ffcbff",
     "175221991594959e7c"
   ]
 }
