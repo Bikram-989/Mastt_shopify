@@ -1112,85 +1112,128 @@ input:focus-visible {
 
 
 /* --------------------------------------------------------------------------
-   MOBILE HERO — full screen
-   The homepage slideshow fills the viewport below the header on phones, so
-   the first screen is one uninterrupted image instead of a cropped banner
-   with a strip of empty page under it. Uses svh/dvh so the mobile browser's
-   collapsing address bar does not leave a gap or cause a jump mid-scroll.
+   MOBILE HEADER — logo first, menu beside it, actions right
+   Dawn's .header--mobile-left only left-aligns the logo inside its grid
+   column, so it never reaches the edge. Keep the grid (an earlier flex
+   rewrite collapsed the logo, because base.css sizes the image through
+   .header__heading-logo-wrapper img and an auto width left it nothing to
+   resolve against) and just redefine the columns.
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .header--mobile-left {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: none;
+    column-gap: 2px;
+    align-items: center;
+    padding-inline: 1.4rem;
+  }
+
+  .header--mobile-left .header__heading,
+  .header--mobile-left .header__heading-link {
+    text-align: left;
+    justify-self: start;
+    margin: 0;
+    padding-inline: 0;
+  }
+
+  /* Cap the height only. Width is owned by base.css so the logo keeps a
+     resolvable box. */
+  .header--mobile-left .header__heading-logo-wrapper img {
+    max-height: 32px;
+    width: auto;
+    max-width: 132px;
+    object-fit: contain;
+  }
+
+  .header--mobile-left .header__icons {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+  }
+
+  .header--mobile-left .header__icon,
+  .header--mobile-left .header__icon--menu,
+  .header--mobile-left .header__icon--cart {
+    width: 4.2rem;
+    height: 4.2rem;
+    margin: 0;
+  }
+
+  .header--mobile-left .header__icon svg { width: 2rem; height: 2rem; }
+}
+
+
+/* --------------------------------------------------------------------------
+   MOBILE HERO
+   Caption and CTA sit below the image (banner--mobile-bottom), so the image
+   gets a fixed portrait ratio rather than a viewport height — that is what
+   keeps the button on the first screen instead of pushing it under the fold.
+   Target ratio is 4:5; see the slide's mobile image setting.
    -------------------------------------------------------------------------- */
 @media screen and (max-width: 749px) {
-  .slideshow.banner {
-    min-height: calc(100vh - var(--header-height, 60px));
-    min-height: calc(100svh - var(--header-height, 60px));
+  .slideshow.banner .slideshow__media {
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+    height: auto;
   }
 
-  .slideshow.banner .slideshow__slide,
-  .slideshow.banner .banner__media {
-    min-height: inherit;
-  }
-
-  .slideshow.banner .banner__media img,
-  .slideshow.banner .banner__media svg {
+  .slideshow.banner .slideshow__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  /* With the text overlaid rather than stacked below, the CTA needs a legible
-     ground of its own — the brand photography is light and a plain label
-     disappears into it. */
-  .slideshow.banner .banner__content {
-    align-items: flex-end;
-    padding-bottom: clamp(28px, 6vh, 64px);
+  .slideshow.banner .banner__content { padding: 0; }
+
+  .slideshow.banner .banner__box {
+    padding: 16px 1.5rem 4px;
+    text-align: center;
   }
 
-  .slideshow.banner .banner__buttons .button {
-    box-shadow: var(--shadow-md);
+  .slideshow.banner .banner__buttons {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
   }
+
+  .slideshow.banner .banner__buttons .button { width: 100%; }
 }
 
 
 /* --------------------------------------------------------------------------
-   MOBILE HEADER — logo flush left
-   Dawn's .header--mobile-left only left-aligns the logo *inside* its grid
-   column; the menu toggle still occupies column one, so the logo never
-   reaches the screen edge. Switching to flex on mobile lets the logo lead and
-   pushes the controls to the right, which is the arrangement people expect on
-   a phone: brand on the left, actions under the right thumb.
+   PAGE GROUND
+   A single soft wash behind the homepage instead of flat beige. Fixed so it
+   does not travel with the scroll, and pinned to the top third, which is
+   where the arch of the hero sits.
    -------------------------------------------------------------------------- */
-@media screen and (max-width: 989px) {
-  .header--mobile-left {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    grid-template-columns: none;
-    grid-template-areas: none;
-  }
+.template-index body,
+body.template-index {
+  background-color: var(--color-pearl-beige);
+}
 
-  .header--mobile-left .header__heading,
-  .header--mobile-left .header__heading-link {
-    order: 1;
-    margin: 0 auto 0 0;   /* the auto right margin does the pushing */
-    text-align: left;
-    justify-self: start;
-    padding-inline: 0;
-  }
+.template-index main {
+  position: relative;
+  isolation: isolate;
+}
 
-  .header--mobile-left .header__heading-logo-wrapper { width: auto; }
+.template-index main::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 50% 0%,
+      color-mix(in srgb, var(--color-blush-pink) 22%, transparent) 0%,
+      transparent 62%),
+    radial-gradient(90% 50% at 85% 18%,
+      color-mix(in srgb, var(--color-aqua) 14%, transparent) 0%,
+      transparent 58%),
+    var(--color-pearl-beige);
+}
 
-  .header--mobile-left .header__heading-logo {
-    max-height: 34px;
-    width: auto;
-  }
-
-  .header--mobile-left .header__icons { order: 2; padding-right: 0; }
-
-  /* Menu toggle last, so it sits at the right edge next to the cart. */
-  .header--mobile-left header-drawer { order: 3; }
-
-  .header--mobile-left .header__icon,
-  .header--mobile-left .header__icon--menu {
-    width: 4rem;
-    height: 4rem;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .template-index main::before { position: absolute; }
 }

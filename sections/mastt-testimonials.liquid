@@ -145,10 +145,52 @@
     }
   }
 
-  @media screen and (max-width: 599px) {
-    #Reviews-{{ section.id }} .mrv__grid {
-      grid-template-columns: 1fr;
+  /* Mobile: six stacked cards was most of a screen's scroll for a section
+     nobody reads top to bottom. One snapping rail keeps every word — nothing
+     is truncated — while costing a single card's height. */
+  @media screen and (max-width: 749px) {
+    #Reviews-{{ section.id }} .mrv__summary {
+      gap: 0.6rem;
+      margin-bottom: 14px;
+      font-size: 1.3rem;
+      padding: 8px 14px;
+      background: var(--color-white, #fff);
+      border: 1px solid var(--color-charcoal-08, rgba(32,27,25,.08));
+      border-radius: var(--radius-full, 999px);
+      width: fit-content;
+      margin-inline: auto;
+      box-shadow: var(--shadow-sm);
     }
+
+    #Reviews-{{ section.id }} .mrv__grid {
+      display: flex;
+      grid-template-columns: none;
+      flex-wrap: nowrap;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
+      margin-inline: -1.5rem;
+      padding: 2px 1.5rem 4px;
+    }
+
+    #Reviews-{{ section.id }} .mrv__grid::-webkit-scrollbar { display: none; }
+
+    #Reviews-{{ section.id }} .mrv__card {
+      flex: 0 0 82vw;
+      max-width: 330px;
+      scroll-snap-align: center;
+      padding: 16px;
+      gap: 0.8rem;
+      border-radius: var(--radius-md, 16px);
+    }
+
+    #Reviews-{{ section.id }} .mrv__stars svg { width: 1.3rem; height: 1.3rem; }
+    #Reviews-{{ section.id }} .mrv__quote { font-size: 1.35rem; line-height: 1.55; }
+    #Reviews-{{ section.id }} .mrv__foot { padding-top: 0.8rem; }
+    #Reviews-{{ section.id }} .mrv__avatar { width: 3.2rem; height: 3.2rem; font-size: 1.3rem; }
   }
 </style>
 
