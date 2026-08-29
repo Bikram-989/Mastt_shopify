@@ -410,6 +410,29 @@
 
       {% render 'header-search', input_id: 'Search-In-Modal' %}
 
+      {%- comment -%}
+        Wishlist. The count is written by mastt-wishlist.js from localStorage,
+        so it must start empty — rendering a number server-side would show
+        every visitor the same one.
+      {%- endcomment -%}
+      <a
+        href="{{ routes.root_url }}pages/wishlist"
+        class="header__icon header__icon--wishlist link focus-inset"
+        data-mastt-wish-link
+      >
+        <span class="svg-wrapper">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path
+              d="M12 20.7 4.3 13a4.8 4.8 0 0 1 0-6.8 4.8 4.8 0 0 1 6.8 0l.9.9.9-.9a4.8 4.8 0 0 1 6.8 0 4.8 4.8 0 0 1 0 6.8Z"
+              fill="none" stroke="currentColor" stroke-width="1.7"
+              stroke-linecap="round" stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span class="mastt-wish-count" data-mastt-wish-count hidden>0</span>
+        <span class="visually-hidden">Wishlist</span>
+      </a>
+
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"

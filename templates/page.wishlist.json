@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "mastt-wishlist-page",
+      "settings": { "heading": "Saved" }
+    }
+  },
+  "order": ["main"]
+}

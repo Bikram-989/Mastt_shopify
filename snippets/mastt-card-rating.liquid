@@ -1,0 +1,32 @@
+{%- comment -%}
+  Rating row for the product card, rendered under the title rather than on
+  the image — a number sitting on photography is decoration, next to the
+  name it is information.
+
+  Accepts:
+  - card_product: {Object} the product
+
+  Reads custom.rating (Shopify's native rating type) and custom.rating_count.
+  Renders nothing until a product has been rated.
+{%- endcomment -%}
+
+{%- liquid
+  assign rating = card_product.metafields.custom.rating.value
+  assign rating_count = card_product.metafields.custom.rating_count.value
+-%}
+
+{%- if rating != blank and rating.rating != blank -%}
+  <span
+    class="mcard__rating"
+    role="img"
+    aria-label="Rated {{ rating.rating }} out of {{ rating.scale_max }}{% if rating_count %} from {{ rating_count }} reviews{% endif %}"
+  >
+    <svg class="mcard__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="m12 2.6 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9Z" fill="currentColor"/>
+    </svg>
+    <span aria-hidden="true">{{ rating.rating }}</span>
+    {%- if rating_count != blank and rating_count > 0 -%}
+      <span class="mcard__rating-count" aria-hidden="true">({{ rating_count }})</span>
+    {%- endif -%}
+  </span>
+{%- endif -%}

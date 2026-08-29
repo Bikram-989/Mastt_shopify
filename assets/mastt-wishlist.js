@@ -53,7 +53,18 @@
     broadcast(list.length);
   }
 
+  /* Header badge. Rendered empty by Liquid on purpose — a server-rendered
+     number would be the same for every visitor, and Shopify caches pages. */
+  function paintCount(count) {
+    var badges = document.querySelectorAll('[data-mastt-wish-count]');
+    for (var i = 0; i < badges.length; i++) {
+      badges[i].textContent = count > 99 ? '99+' : String(count);
+      badges[i].hidden = count === 0;
+    }
+  }
+
   function broadcast(count) {
+    paintCount(count);
     document.dispatchEvent(
       new CustomEvent('mastt:wishlist:change', { detail: { count: count } })
     );

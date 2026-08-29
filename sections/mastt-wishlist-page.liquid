@@ -1,0 +1,131 @@
+{%- comment -%}
+  Wishlist page. Same mechanism as Recently Viewed: handles come from
+  localStorage, cards are fetched through the Section Rendering API so the
+  markup matches every other product card on the site.
+
+  Saving is per-browser today. See docs for what an account-backed wishlist
+  actually requires — it is not a theme-level change.
+{%- endcomment -%}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+<style>
+  #Wish-{{ section.id }} { padding-block: clamp(24px, 18px + 2vw, 56px); }
+
+  #Wish-{{ section.id }} .mwp__head { margin-bottom: clamp(16px, 12px + 1vw, 28px); }
+
+  #Wish-{{ section.id }} .mwp__heading {
+    font-family: var(--font-heading-family);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  #Wish-{{ section.id }} .mwp__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 8px + 1vw, 24px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    #Wish-{{ section.id }} .mwp__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  #Wish-{{ section.id }} .mwp__empty {
+    text-align: center;
+    padding: clamp(36px, 26px + 3vw, 72px) 20px;
+    border: 1px dashed var(--color-charcoal-15);
+    border-radius: var(--radius-md);
+    color: var(--color-charcoal-70);
+  }
+
+  #Wish-{{ section.id }} .mwp__empty a { color: var(--color-charcoal); }
+</style>
+
+<div id="Wish-{{ section.id }}" class="page-width">
+  <div class="mwp__head">
+    <h1 class="mwp__heading">{{ section.settings.heading | default: 'Saved' | escape }}</h1>
+  </div>
+
+  <ul class="mwp__grid" role="list" data-mwp-grid hidden></ul>
+
+  <div class="mwp__empty" data-mwp-empty>
+    Nothing saved yet. Tap the heart on any piece to keep it here.
+    <br><br>
+    <a href="{{ routes.all_products_collection_url }}">Browse everything</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('Wish-{{ section.id }}');
+    if (!root) return;
+
+    var grid = root.querySelector('[data-mwp-grid]');
+    var empty = root.querySelector('[data-mwp-empty]');
+
+    function read() {
+      try {
+        var raw = window.localStorage.getItem('mastt:wishlist');
+        var list = raw ? JSON.parse(raw) : [];
+        return Array.isArray(list) ? list : [];
+      } catch (e) { return []; }
+    }
+
+    function render() {
+      var handles = read().filter(function (h) { return typeof h === 'string' && h; });
+
+      if (!handles.length) {
+        grid.hidden = true;
+        grid.innerHTML = '';
+        empty.hidden = false;
+        return;
+      }
+
+      empty.hidden = true;
+      grid.hidden = false;
+
+      var parser = new DOMParser();
+      Promise.all(handles.map(function (handle) {
+        return fetch('/products/' + encodeURIComponent(handle) + '?section_id=mastt-rv-card')
+          .then(function (r) { return r.ok ? r.text() : null; })
+          .then(function (html) {
+            if (!html) return null;
+            var doc = parser.parseFromString(html, 'text/html');
+            return doc.querySelector('.card-wrapper') || doc.querySelector('.card');
+          })
+          .catch(function () { return null; });
+      })).then(function (cards) {
+        grid.innerHTML = '';
+        var placed = 0;
+        cards.forEach(function (card) {
+          if (!card) return;      // product deleted or unpublished since saving
+          var li = document.createElement('li');
+          li.appendChild(card);
+          grid.appendChild(li);
+          placed++;
+        });
+        if (!placed) { grid.hidden = true; empty.hidden = false; }
+      });
+    }
+
+    render();
+    /* Un-hearting a card on this page should remove it from this page. */
+    document.addEventListener('mastt:wishlist:change', render);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Wishlist",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Saved" }
+  ]
+}
+{% endschema %}

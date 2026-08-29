@@ -1363,21 +1363,14 @@ body.template-index {
   }
 }
 
-/* Rating, bottom-right, clear of the quick-add button on the left. */
+/* Rating sits under the title, in the content flow. */
 .mcard__rating {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--color-white) 92%, transparent);
-  backdrop-filter: blur(6px);
-  box-shadow: var(--shadow-sm);
+  margin-top: 2px;
   font-family: var(--font-body-family);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--color-charcoal);
   font-variant-numeric: tabular-nums;
@@ -1421,3 +1414,114 @@ body.template-index {
   letter-spacing: 0.04em;
   color: var(--color-charcoal-70);
 }
+
+
+/* --------------------------------------------------------------------------
+   QUICK ADD — a plus, level with the title
+   Dawn's quick-add carries two markup variants and two modals, so it is
+   restyled rather than rebuilt: the label text is hidden and a + drawn in
+   its place. The accessible name survives untouched, which a bare icon
+   button would have lost.
+   -------------------------------------------------------------------------- */
+.card .card__inner { overflow: visible; }
+
+.card .quick-add {
+  position: absolute;
+  right: 6px;
+  bottom: -18px;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+}
+
+.card .quick-add .quick-add__submit,
+.card .quick-add .quick-add__submit.button--full-width {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0;              /* hides the label; ::before draws the glyph */
+  color: transparent;
+  background: var(--color-white);
+  border: 1px solid var(--color-charcoal-15);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.card .quick-add .quick-add__submit::before {
+  content: '+';
+  font-family: var(--font-body-family);
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--color-charcoal);
+}
+
+@media (hover: hover) {
+  .card .quick-add .quick-add__submit:hover {
+    background: var(--color-charcoal);
+    border-color: var(--color-charcoal);
+  }
+  .card .quick-add .quick-add__submit:hover::before { color: var(--color-pearl-beige); }
+}
+
+.card .quick-add .quick-add__submit:focus-visible {
+  outline: 2px solid var(--color-charcoal);
+  outline-offset: 2px;
+}
+
+/* Hidden on phones: the tap target competes with the card link, and a
+   variant picker in a modal is a poor mobile flow. Tapping through to the
+   product page is the better path. */
+@media screen and (max-width: 749px) {
+  .card .quick-add { display: none; }
+}
+
+
+/* --------------------------------------------------------------------------
+   OUR PROMISE — diamond frame matched to the card frame
+   The well now carries the same radius scale and hairline as the card behind
+   it, so the two read as one component rather than a badge dropped onto a
+   panel.
+   -------------------------------------------------------------------------- */
+.usp-icon {
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-charcoal) 7%, transparent),
+              var(--shadow-sm) !important;
+  background: color-mix(in srgb, var(--color-white) 62%, transparent) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   HEADER — wishlist icon and count
+   -------------------------------------------------------------------------- */
+.header__icon--wishlist { position: relative; }
+
+.mastt-wish-count {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-dusty-coral);
+  color: var(--color-charcoal);
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.mastt-wish-count[hidden] { display: none; }

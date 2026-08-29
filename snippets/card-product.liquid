@@ -505,12 +505,6 @@ Custom Card Render Logic
 
 <div class="price-with-rating">
   {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
-
-  <!-- Start of Judge.me code --> 
-  <div class='jdgm-widget jdgm-preview-badge' data-id='{{ card_product.id }}' style='{{ jm_style }}'> 
-    {{ card_product.metafields.judgeme.badge }} 
-  </div> 
-  <!-- End of Judge.me code -->
 </div>
 
 {%- render 'mastt-card-bundle', card_product: card_product -%}
@@ -530,6 +524,8 @@ Custom Card Render Logic
     {{ design_name | escape }}
   </a>
 </h3>
+
+{%- render 'mastt-card-rating', card_product: card_product -%}
 
 
 {%- comment -%} Material pills below title {%- endcomment -%}
