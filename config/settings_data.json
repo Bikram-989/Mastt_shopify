@@ -9,8 +9,8 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Mastt_Logo.png",
-    "logo_width": 120,
+    "logo": "",
+    "logo_width": 132,
     "favicon": "shopify://shop_images/Mastt_Favicon.png",
     "type_header_font": "bitter_n5",
     "heading_scale": 100,

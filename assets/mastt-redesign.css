@@ -1153,6 +1153,13 @@ input:focus-visible {
     padding: 0;
   }
 
+  /* Dawn tags the account icon `small-hide` whenever a menu is set, on the
+     assumption that account links live in the drawer. We want it on the bar
+     next to search and cart, so opt back in. */
+  .header--mobile-left .header__icon--account.small-hide {
+    display: flex !important;
+  }
+
   .header--mobile-left .header__icon,
   .header--mobile-left .header__icon--menu,
   .header--mobile-left .header__icon--cart {
@@ -1236,4 +1243,43 @@ body.template-index {
 
 @media (prefers-reduced-motion: reduce) {
   .template-index main::before { position: absolute; }
+}
+
+
+/* --------------------------------------------------------------------------
+   SHOP BY CATEGORY — grounded panel
+   The tiles floated on the page ground with their captions loose underneath.
+   A single soft panel behind the whole section gathers image and label into
+   one object, and a faint gradient keeps it from reading as a hard box.
+   -------------------------------------------------------------------------- */
+.kk-collection-list {
+  position: relative;
+  isolation: isolate;
+}
+
+.kk-collection-list::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -6px -1.1rem 8px;
+  border-radius: var(--radius-lg, 24px);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-white) 82%, transparent) 0%,
+      color-mix(in srgb, var(--color-nude-beige) 26%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+}
+
+@media screen and (min-width: 750px) {
+  .kk-collection-list::before {
+    inset: -12px -24px 16px;
+  }
+}
+
+/* Each caption gets its own quiet chip so it reads as part of the tile
+   rather than text stranded on the panel. */
+.kk-collection-list .collection-list__label {
+  padding: 4px 8px;
+  border-radius: var(--radius-xs, 6px);
+  background: color-mix(in srgb, var(--color-white) 72%, transparent);
 }
