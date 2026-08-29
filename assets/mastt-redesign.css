@@ -306,19 +306,16 @@ h1, h2, h3, h4, h5, h6,
 /* --------------------------------------------------------------------------
    6. PRODUCT CARD  (snippets/card-product.liquid, assets/component-card.css)
    -------------------------------------------------------------------------- */
-/* ---- The petal corner ----
-   One oversized top-left corner, echoing the petal tiles in the Outfit-Style
-   section and the round of the logo's script M. It's the card's signature —
-   the thing that makes a Mastt grid recognisable at a glance — so the media
-   well and the hover frame all inherit the same shape. */
+/* ---- Card corners ----
+   This was a "petal": one oversized top-right radius, intended as the grid's
+   signature. Dropped in favour of four equal corners — with the ribbon, the
+   heart and the rating pill now on the card, an asymmetric frame read as a
+   rendering fault rather than a flourish. */
 .card-wrapper.product-card-wrapper .card {
-  --card-petal: clamp(28px, 20px + 2vw, 48px);
+  --card-petal: var(--radius-md);
 
   position: relative;
-  /* Petal sits top-RIGHT: the promo flap badge occupies the top-left and
-     deliberately overhangs the edge, so the curve stays clear of it. No
-     overflow:hidden here for the same reason — it would clip that flap. */
-  border-radius: var(--radius-md) var(--card-petal) var(--radius-md) var(--radius-md);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   background: var(--color-white);
   transition: box-shadow var(--duration-med) var(--ease-out),
@@ -332,7 +329,7 @@ h1, h2, h3, h4, h5, h6,
 
 .card .card__inner .card__media,
 .card__media--placeholder {
-  border-radius: var(--radius-md) var(--card-petal, var(--radius-md)) 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
   overflow: hidden;
   background-color: var(--color-pearl-beige); /* image-loading placeholder tone */
 }
@@ -1488,18 +1485,7 @@ body.template-index {
 }
 
 
-/* --------------------------------------------------------------------------
-   OUR PROMISE — diamond frame matched to the card frame
-   The well now carries the same radius scale and hairline as the card behind
-   it, so the two read as one component rather than a badge dropped onto a
-   panel.
-   -------------------------------------------------------------------------- */
-.usp-icon {
-  border-radius: var(--radius-md) !important;
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-charcoal) 7%, transparent),
-              var(--shadow-sm) !important;
-  background: color-mix(in srgb, var(--color-white) 62%, transparent) !important;
-}
+
 
 
 /* --------------------------------------------------------------------------
@@ -1639,17 +1625,7 @@ body.template-index {
 }
 
 
-/* --------------------------------------------------------------------------
-   OUR PROMISE — whole artwork inside the diamond
-   A diamond is a square turned 45 degrees, so a covering image loses its four
-   corners. Fitting the artwork inside the diamond's inscribed square — 70% of
-   the frame, which is 1/root-2 — shows all of it and crops nothing.
-   -------------------------------------------------------------------------- */
-.usp-icon img {
-  width: 70% !important;
-  height: 70% !important;
-  object-fit: contain !important;
-}
+
 
 
 /* --------------------------------------------------------------------------
@@ -1659,7 +1635,6 @@ body.template-index {
    Clipping at every level costs nothing and fixes it whatever the radius
    setting is.
    -------------------------------------------------------------------------- */
-.card-wrapper .card,
 .card-wrapper .card__inner,
 .card-wrapper .card__media,
 .card-wrapper .card__media > .media {
