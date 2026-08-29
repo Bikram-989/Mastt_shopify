@@ -102,9 +102,36 @@
     height: 1.3rem;
   }
 
+  /* Two across on mobile: "Gifts For Her" and "Gifts For Him" are a pair of
+     choices, and stacking them buried the second one below the fold. */
   @media screen and (max-width: 749px) {
     #Recipient-{{ section.id }} .msr__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #Recipient-{{ section.id }} .msr__card { padding: 8px; }
+
+    #Recipient-{{ section.id }} .msr__media {
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm, 10px);
+    }
+
+    #Recipient-{{ section.id }} .msr__label {
+      gap: 0.5rem;
+      padding: 10px 4px 4px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    #Recipient-{{ section.id }} .msr__arrow {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    #Recipient-{{ section.id }} .msr__arrow svg {
+      width: 1.1rem;
+      height: 1.1rem;
     }
   }
 </style>

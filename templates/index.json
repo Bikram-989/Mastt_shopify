@@ -121,12 +121,12 @@
       "name": "t:sections.slideshow.presets.name",
       "settings": {
         "layout": "grid",
-        "slide_height": "adapt_image",
+        "slide_height": "large",
         "slider_visual": "dots",
         "auto_rotate": true,
         "change_slides_speed": 5,
         "image_behavior": "none",
-        "show_text_below": true,
+        "show_text_below": false,
         "accessibility_info": "Slideshow about our brand"
       }
     },
@@ -247,7 +247,7 @@
       ],
       "settings": {
         "heading": "Mastt Top Styles",
-        "products_to_show": 4,
+        "products_to_show": 8,
         "columns_desktop": 4,
         "show_secondary_image": true,
         "quick_add": "standard",
@@ -307,7 +307,7 @@
       ],
       "settings": {
         "heading": "For Her",
-        "products_to_show": 4,
+        "products_to_show": 8,
         "columns_desktop": 4,
         "show_secondary_image": true,
         "quick_add": "standard",
@@ -367,7 +367,7 @@
       ],
       "settings": {
         "heading": "For Him",
-        "products_to_show": 4,
+        "products_to_show": 8,
         "columns_desktop": 4,
         "show_secondary_image": true,
         "quick_add": "standard",
@@ -838,16 +838,35 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "mastt_loved_by_you": {
+      "type": "mastt-loved-by-you",
+      "settings": {
+        "eyebrow": "Most loved this month",
+        "heading": "Loved by You Guys",
+        "collection": "",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_secondary_image": true,
+        "quick_add": "standard",
+        "badge_label": "Bestseller",
+        "badge_count": 3,
+        "show_view_all": true,
+        "view_all_label": "See all",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "slideshow_FPVJpr",
     "kekaa_categories_wpDbbw",
-    "mastt_recently_viewed",
     "mastt_top_styles",
     "mastt_top_styles_women",
     "mastt_top_styles_men",
     "mastt_recipient",
+    "mastt_recently_viewed",
+    "mastt_loved_by_you",
     "176542848128554f43",
     "featured_collection",
     "kekaa_usp_section_9p66aY",

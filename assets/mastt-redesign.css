@@ -1109,3 +1109,88 @@ input:focus-visible {
   outline: 2px solid var(--color-dusty-coral);
   outline-offset: 2px;
 }
+
+
+/* --------------------------------------------------------------------------
+   MOBILE HERO — full screen
+   The homepage slideshow fills the viewport below the header on phones, so
+   the first screen is one uninterrupted image instead of a cropped banner
+   with a strip of empty page under it. Uses svh/dvh so the mobile browser's
+   collapsing address bar does not leave a gap or cause a jump mid-scroll.
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .slideshow.banner {
+    min-height: calc(100vh - var(--header-height, 60px));
+    min-height: calc(100svh - var(--header-height, 60px));
+  }
+
+  .slideshow.banner .slideshow__slide,
+  .slideshow.banner .banner__media {
+    min-height: inherit;
+  }
+
+  .slideshow.banner .banner__media img,
+  .slideshow.banner .banner__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* With the text overlaid rather than stacked below, the CTA needs a legible
+     ground of its own — the brand photography is light and a plain label
+     disappears into it. */
+  .slideshow.banner .banner__content {
+    align-items: flex-end;
+    padding-bottom: clamp(28px, 6vh, 64px);
+  }
+
+  .slideshow.banner .banner__buttons .button {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   MOBILE HEADER — logo flush left
+   Dawn's .header--mobile-left only left-aligns the logo *inside* its grid
+   column; the menu toggle still occupies column one, so the logo never
+   reaches the screen edge. Switching to flex on mobile lets the logo lead and
+   pushes the controls to the right, which is the arrangement people expect on
+   a phone: brand on the left, actions under the right thumb.
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .header--mobile-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    grid-template-columns: none;
+    grid-template-areas: none;
+  }
+
+  .header--mobile-left .header__heading,
+  .header--mobile-left .header__heading-link {
+    order: 1;
+    margin: 0 auto 0 0;   /* the auto right margin does the pushing */
+    text-align: left;
+    justify-self: start;
+    padding-inline: 0;
+  }
+
+  .header--mobile-left .header__heading-logo-wrapper { width: auto; }
+
+  .header--mobile-left .header__heading-logo {
+    max-height: 34px;
+    width: auto;
+  }
+
+  .header--mobile-left .header__icons { order: 2; padding-right: 0; }
+
+  /* Menu toggle last, so it sits at the right edge next to the cart. */
+  .header--mobile-left header-drawer { order: 3; }
+
+  .header--mobile-left .header__icon,
+  .header--mobile-left .header__icon--menu {
+    width: 4rem;
+    height: 4rem;
+  }
+}
