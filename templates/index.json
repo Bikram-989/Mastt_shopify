@@ -200,105 +200,12 @@
         "title": "Shop by Category"
       }
     },
-    "mastt_top_styles": {
-      "type": "mastt-top-styles",
-      "blocks": {
-        "t1": {
-          "type": "tab",
-          "settings": {
-            "label": "All",
-            "collection": "all",
-            "product_type": "",
-            "tag": "",
-            "view_all_url": "/collections/all"
-          }
-        },
-        "t4": {
-          "type": "tab",
-          "settings": {
-            "label": "Rings",
-            "collection": "all",
-            "product_type": "Ring",
-            "tag": "",
-            "view_all_url": "shopify://collections/rings"
-          }
-        },
-        "t3": {
-          "type": "tab",
-          "settings": {
-            "label": "Bracelets",
-            "collection": "all",
-            "product_type": "Bracelet",
-            "tag": "",
-            "view_all_url": "shopify://collections/bracelets"
-          }
-        },
-        "tab_yNnfzG": {
-          "type": "tab",
-          "settings": {
-            "label": "Anklets",
-            "collection": "anklets",
-            "product_type": "Anklets",
-            "tag": "",
-            "view_all_url": "shopify://collections/anklets"
-          }
-        },
-        "t2": {
-          "type": "tab",
-          "settings": {
-            "label": "Necklaces",
-            "collection": "all",
-            "product_type": "Necklace",
-            "tag": "",
-            "view_all_url": "shopify://collections/necklaces"
-          }
-        },
-        "tab_hektUM": {
-          "type": "tab",
-          "settings": {
-            "label": "Earrings",
-            "collection": "earrings",
-            "product_type": "Earrings",
-            "tag": "",
-            "view_all_url": "shopify://collections/earrings"
-          }
-        },
-        "tab_QpFiz7": {
-          "type": "tab",
-          "settings": {
-            "label": "Sets",
-            "collection": "sets",
-            "product_type": "Sets",
-            "tag": "",
-            "view_all_url": "shopify://collections/sets"
-          }
-        }
-      },
-      "block_order": [
-        "t1",
-        "t4",
-        "t3",
-        "tab_yNnfzG",
-        "t2",
-        "tab_hektUM",
-        "tab_QpFiz7"
-      ],
-      "settings": {
-        "heading": "Mastt Top Styles",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "show_secondary_image": true,
-        "quick_add": "standard",
-        "show_view_all": true,
-        "view_all_label": "View all"
-      }
-    },
     "mastt_loved_by_you": {
       "type": "mastt-loved-by-you",
       "disabled": true,
       "settings": {
         "eyebrow": "Most loved this month",
-        "heading": "Loved by You Guys",
+        "heading": "Best Seller",
         "collection": "",
         "products_to_show": 8,
         "columns_desktop": 4,
@@ -308,8 +215,8 @@
         "badge_count": 3,
         "show_view_all": true,
         "view_all_label": "See all",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "mastt_top_styles_women": {
@@ -763,8 +670,8 @@
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "featured_collection": {
@@ -797,8 +704,8 @@
         "quick_add": "standard",
         "columns_mobile": "2",
         "swipe_on_mobile": true,
-        "padding_top": 44,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "kekaa_style_collection_mgQ4zd": {
@@ -919,19 +826,37 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "mastt_new_arrivals": {
+      "type": "mastt-loved-by-you",
+      "settings": {
+        "eyebrow": "Just landed",
+        "heading": "New Arrivals",
+        "collection": "new-arrivals",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_secondary_image": true,
+        "quick_add": "standard",
+        "badge_label": "New",
+        "badge_count": 3,
+        "show_view_all": true,
+        "view_all_label": "See all",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
     "slideshow_FPVJpr",
     "kekaa_categories_wpDbbw",
-    "mastt_top_styles",
-    "mastt_loved_by_you",
+    "mastt_new_arrivals",
     "mastt_top_styles_women",
     "mastt_top_styles_men",
+    "mastt_loved_by_you",
+    "mastt_reviews",
     "mastt_recipient",
     "mastt_recently_viewed",
     "kekaa_usp_section_9p66aY",
-    "mastt_reviews",
     "collapsible_content_pDahx6",
     "featured_collection",
     "kekaa_style_collection_mgQ4zd",
