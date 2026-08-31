@@ -181,9 +181,9 @@
         "collection_card_TUqki9": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Anklet",
+            "collection_url": "/collections/all?filter.p.tag=men",
             "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.42.23_PM.jpg",
-            "custom_title": "Anklets"
+            "custom_title": "Mens"
           }
         }
       },
@@ -200,18 +200,17 @@
         "title": "Shop by Category"
       }
     },
-    "mastt_loved_by_you": {
+    "mastt_new_arrivals": {
       "type": "mastt-loved-by-you",
-      "disabled": true,
       "settings": {
-        "eyebrow": "Most loved this month",
-        "heading": "Best Seller",
-        "collection": "",
+        "eyebrow": "Just landed",
+        "heading": "New Arrivals",
+        "collection": "new-arrivals",
         "products_to_show": 8,
         "columns_desktop": 4,
         "show_secondary_image": true,
         "quick_add": "standard",
-        "badge_label": "Bestseller",
+        "badge_label": "New",
         "badge_count": 3,
         "show_view_all": true,
         "view_all_label": "See all",
@@ -374,6 +373,108 @@
         "view_all_label": "View all for him"
       }
     },
+    "mastt_loved_by_you": {
+      "type": "mastt-loved-by-you",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Most loved this month",
+        "heading": "Best Seller",
+        "collection": "",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_secondary_image": true,
+        "quick_add": "standard",
+        "badge_label": "Bestseller",
+        "badge_count": 3,
+        "show_view_all": true,
+        "view_all_label": "See all",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "mastt_reviews": {
+      "type": "mastt-testimonials",
+      "blocks": {
+        "rv1": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Bought the hammered cuff for my sister's birthday and ended up ordering one for myself. The weight feels proper, not hollow like the stuff I've bought online before.",
+            "photo": "shopify://shop_images/IMG_8143.png",
+            "author": "Ananya Sharma",
+            "product": "Bengaluru",
+            "verified": true
+          }
+        },
+        "rv2": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Wore the rope chain daily through a Chennai summer — gym, commute, everything. Zero fading, zero green marks on my neck. Genuinely impressed.",
+            "photo": "shopify://shop_images/IMG_8163.png",
+            "author": "Rohit Menon",
+            "product": "Chennai",
+            "verified": true
+          }
+        },
+        "rv3": {
+          "type": "review",
+          "settings": {
+            "stars": 4,
+            "quote": "Delivery took a day longer than promised but the packaging made up for it. The ring is exactly the shade shown in the photos, which honestly never happens.",
+            "photo": "shopify://shop_images/IMG_8159.png",
+            "author": "Priya Deshmukh",
+            "product": "Pune",
+            "verified": true
+          }
+        },
+        "rv4": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "My skin reacts to almost every metal, so I was sceptical. Three weeks in with the pendant and not a single itch. That alone is worth it.",
+            "photo": "shopify://shop_images/IMG_8158.png",
+            "author": "Sneha Iyer",
+            "product": "Kochi",
+            "verified": true
+          }
+        },
+        "rv5": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Gifted the woven bracelet to my father on Diwali. He's not a jewellery person and he hasn't taken it off since. Solid clasp, no rattling.",
+            "photo": "shopify://shop_images/IMG_8163.png",
+            "author": "Karan Gupta",
+            "product": "Delhi",
+            "verified": true
+          }
+        },
+        "rv6": {
+          "type": "review",
+          "settings": {
+            "stars": 4,
+            "quote": "Good value for what you pay. Wish there were more designs for men, but the two I ordered have held up well over a couple of months.",
+            "photo": "shopify://shop_images/IMG_8161.png",
+            "author": "Aditya Rao",
+            "product": "Hyderabad",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "rv1",
+        "rv2",
+        "rv3",
+        "rv4",
+        "rv5",
+        "rv6"
+      ],
+      "settings": {
+        "heading": "Loved by Mastt Wearers",
+        "summary_text": "4.8 average from 250+ happy customers"
+      }
+    },
     "mastt_recipient": {
       "type": "mastt-shop-recipient",
       "blocks": {
@@ -465,89 +566,6 @@
       "name": "Our Promise",
       "settings": {
         "heading": "Our Promise"
-      }
-    },
-    "mastt_reviews": {
-      "type": "mastt-testimonials",
-      "blocks": {
-        "rv1": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Bought the hammered cuff for my sister's birthday and ended up ordering one for myself. The weight feels proper, not hollow like the stuff I've bought online before.",
-            "photo": "shopify://shop_images/IMG_8143.png",
-            "author": "Ananya Sharma",
-            "product": "Bengaluru",
-            "verified": true
-          }
-        },
-        "rv2": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Wore the rope chain daily through a Chennai summer — gym, commute, everything. Zero fading, zero green marks on my neck. Genuinely impressed.",
-            "photo": "shopify://shop_images/IMG_8163.png",
-            "author": "Rohit Menon",
-            "product": "Chennai",
-            "verified": true
-          }
-        },
-        "rv3": {
-          "type": "review",
-          "settings": {
-            "stars": 4,
-            "quote": "Delivery took a day longer than promised but the packaging made up for it. The ring is exactly the shade shown in the photos, which honestly never happens.",
-            "photo": "shopify://shop_images/IMG_8159.png",
-            "author": "Priya Deshmukh",
-            "product": "Pune",
-            "verified": true
-          }
-        },
-        "rv4": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "My skin reacts to almost every metal, so I was sceptical. Three weeks in with the pendant and not a single itch. That alone is worth it.",
-            "photo": "shopify://shop_images/IMG_8158.png",
-            "author": "Sneha Iyer",
-            "product": "Kochi",
-            "verified": true
-          }
-        },
-        "rv5": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Gifted the woven bracelet to my father on Diwali. He's not a jewellery person and he hasn't taken it off since. Solid clasp, no rattling.",
-            "photo": "shopify://shop_images/IMG_8163.png",
-            "author": "Karan Gupta",
-            "product": "Delhi",
-            "verified": true
-          }
-        },
-        "rv6": {
-          "type": "review",
-          "settings": {
-            "stars": 4,
-            "quote": "Good value for what you pay. Wish there were more designs for men, but the two I ordered have held up well over a couple of months.",
-            "photo": "shopify://shop_images/IMG_8161.png",
-            "author": "Aditya Rao",
-            "product": "Hyderabad",
-            "verified": true
-          }
-        }
-      },
-      "block_order": [
-        "rv1",
-        "rv2",
-        "rv3",
-        "rv4",
-        "rv5",
-        "rv6"
-      ],
-      "settings": {
-        "heading": "Loved by Mastt Wearers",
-        "summary_text": "4.8 average from 250+ happy customers"
       }
     },
     "collapsible_content_pDahx6": {
@@ -825,24 +843,6 @@
       "disabled": true,
       "settings": {
         "include_margins": true
-      }
-    },
-    "mastt_new_arrivals": {
-      "type": "mastt-loved-by-you",
-      "settings": {
-        "eyebrow": "Just landed",
-        "heading": "New Arrivals",
-        "collection": "new-arrivals",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "show_secondary_image": true,
-        "quick_add": "standard",
-        "badge_label": "New",
-        "badge_count": 3,
-        "show_view_all": true,
-        "view_all_label": "See all",
-        "padding_top": 0,
-        "padding_bottom": 0
       }
     }
   },
