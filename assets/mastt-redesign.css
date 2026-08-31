@@ -1495,19 +1495,18 @@ body.template-index {
 
 .mastt-wish-count {
   position: absolute;
-  top: 4px;
-  right: 2px;
-  /* box-sizing matters here: without it the horizontal padding is added to
-     the width and a single digit renders as an oval, not a disc. */
+  top: 3px;
+  right: 1px;
   box-sizing: border-box;
-  min-width: 18px;
-  width: auto;
+  /* Fixed square by default. A digit's width varies by glyph, so letting the
+     box size itself from content is exactly what made this an oval. */
+  width: 18px;
   height: 18px;
-  padding: 0 5px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
+  border-radius: 999px;
   background: var(--color-dusty-coral);
   color: var(--color-charcoal);
   font-family: var(--font-body-family);
@@ -1517,6 +1516,14 @@ body.template-index {
   font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
+
+/* Ten or more genuinely needs the extra width — a pill, deliberately. */
+.mastt-wish-count.is-wide {
+  width: auto;
+  min-width: 18px;
+  padding: 0 5px;
+}
+
 
 .mastt-wish-count[hidden] { display: none; }
 
@@ -2086,3 +2093,31 @@ body.template-index {
 /* Cart page: the rails are gone, so nothing here should scroll sideways. */
 .cart__items,
 .cart-items { overflow-x: visible; }
+
+
+/* --------------------------------------------------------------------------
+   HOMEPAGE — sections meet edge to edge
+   The custom sections each carried padding-block: calc(--spacer / 2), which at
+   the top of that clamp was 48px above and below every one of them. Zeroed on
+   the homepage so the page reads as one continuous run; the sections keep
+   their own internal padding, so nothing collides.
+   -------------------------------------------------------------------------- */
+.template-index .shopify-section { margin-block: 0; }
+
+.template-index .mastt-top-styles,
+.template-index .mastt-recipient,
+.template-index .mastt-reviews,
+.template-index .mastt-recently-viewed,
+.template-index .mastt-loved,
+.template-index .kk-collection-list,
+.template-index .usp-wrapper {
+  padding-block: 0;
+}
+
+/* A little breathing room between headings and the section above, without
+   reintroducing the gap. */
+.template-index .shopify-section + .shopify-section { padding-top: 22px; }
+
+@media screen and (min-width: 750px) {
+  .template-index .shopify-section + .shopify-section { padding-top: 34px; }
+}

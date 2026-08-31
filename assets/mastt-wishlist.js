@@ -60,6 +60,9 @@
     for (var i = 0; i < badges.length; i++) {
       badges[i].textContent = count > 99 ? '99+' : String(count);
       badges[i].hidden = count === 0;
+      /* One digit is a disc at a fixed size; two or more widen into a pill.
+         Leaving CSS to guess from content is what produced an oval. */
+      badges[i].classList.toggle('is-wide', count > 9);
     }
   }
 
