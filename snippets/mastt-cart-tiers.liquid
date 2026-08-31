@@ -1,0 +1,35 @@
+{%- comment -%}
+  Tiered savings bar.
+
+  Shows how far the cart is from the next saving, and fires a small burst when
+  a tier is crossed. Thresholds and rewards are section settings so they can be
+  changed without touching code.
+
+  IMPORTANT — this bar displays progress. It does not itself discount anything.
+  Shopify applies only one order-class automatic discount per order, so three
+  overlapping automatic discounts cannot be relied on to resolve to the right
+  tier. Whatever thresholds are set here must be mirrored by a discount that
+  actually applies at checkout, or the cart promises money it does not deliver.
+  See the note in the theme settings.
+
+  Accepts:
+  - tiers_json: {String} JSON array of { min, off, label }
+  - context: {String} 'drawer' or 'page', for styling only
+{%- endcomment -%}
+
+<div
+  class="mtier mtier--{{ context | default: 'page' }}"
+  data-mastt-tiers
+  data-tiers="{{ tiers_json | escape }}"
+  data-total="{{ cart.total_price }}"
+>
+  <p class="mtier__msg" data-mtier-msg aria-live="polite"></p>
+
+  <div class="mtier__track" data-mtier-track>
+    <span class="mtier__fill" data-mtier-fill></span>
+    <span class="mtier__nodes" data-mtier-nodes aria-hidden="true"></span>
+  </div>
+
+  <ul class="mtier__legend" data-mtier-legend role="list"></ul>
+  <span class="mtier__burst" data-mtier-burst aria-hidden="true"></span>
+</div>

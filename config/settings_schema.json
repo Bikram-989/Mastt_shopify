@@ -1451,5 +1451,27 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Cart savings tiers",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "This bar shows progress toward a saving. It does NOT apply the discount — Shopify allows only one order-class automatic discount per order, so overlapping tiers cannot be trusted to resolve correctly. Mirror these thresholds with a discount that actually applies at checkout, or the cart promises money it will not deliver."
+      },
+      {
+        "type": "textarea",
+        "id": "cart_tiers_json",
+        "label": "Tiers (JSON)",
+        "default": "[{\"min\":99900,\"off\":10000},{\"min\":159900,\"off\":20000},{\"min\":209900,\"off\":30000}]",
+        "info": "Array of {\"min\": <cart total in paise>, \"off\": <saving in paise>}. 99900 = ₹999."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_tiers_enabled",
+        "label": "Show the savings bar",
+        "default": true
+      }
+    ]
   }
 ]

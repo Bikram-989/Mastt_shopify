@@ -1777,3 +1777,133 @@ body.template-index {
 }
 
 .mpa__toast[hidden] { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   CART — tiered savings bar
+   -------------------------------------------------------------------------- */
+.mtier {
+  position: relative;
+  margin: 0 0 14px;
+  padding: 14px 16px 12px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-white) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+}
+
+.mtier[hidden] { display: none; }
+
+.mtier__msg {
+  margin: 0 0 10px;
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-charcoal-70);
+}
+
+.mtier__msg strong { color: var(--color-charcoal); font-weight: 700; }
+
+.mtier__track {
+  position: relative;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+  overflow: visible;
+}
+
+.mtier__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--color-aqua), var(--color-dusty-coral));
+  transition: width 520ms var(--ease-out);
+}
+
+.mtier__nodes { position: absolute; inset: 0; }
+
+.mtier__node {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--color-white);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+  transition: box-shadow 300ms var(--ease-out), background-color 300ms var(--ease-out);
+}
+
+.mtier__node.is-on {
+  background: var(--color-dusty-coral);
+  box-shadow: 0 0 0 2px var(--color-dusty-coral);
+}
+
+.mtier__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mtier__step {
+  display: grid;
+  gap: 1px;
+  text-align: center;
+  font-family: var(--font-body-family);
+  line-height: 1.2;
+  opacity: 0.5;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.mtier__step.is-on { opacity: 1; }
+
+.mtier__step-off {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+.mtier__step.is-on .mtier__step-off { color: var(--color-coral-dark); }
+
+.mtier__step-min {
+  font-size: 10.5px;
+  color: var(--color-charcoal-45);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Burst. Pieces arc outward from the bar rather than falling from the top —
+   the celebration belongs to the thing that was unlocked. */
+.mtier__burst {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.mtier__bit {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--hue, var(--color-dusty-coral));
+  animation: mtier-pop 900ms var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+  opacity: 0;
+}
+
+@keyframes mtier-pop {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.4); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mtier__fill { transition: none; }
+  .mtier__bit { display: none; }
+}

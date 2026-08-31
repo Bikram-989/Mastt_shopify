@@ -210,7 +210,9 @@
           "shadow": "#503020"
         }
       }
-    }
+    },
+    "cart_tiers_json": "[{\"min\":99900,\"off\":10000},{\"min\":159900,\"off\":20000},{\"min\":209900,\"off\":30000}]",
+    "cart_tiers_enabled": true
   },
   "presets": {
     "Default": {
