@@ -29,10 +29,20 @@
     which sections happen to sit next to each other: an adjacency rule breaks
     silently the moment the page is reordered in Theme Editor.
 
-    "Top half" and "Bottom half" are two halves of one gradient, so a pair of
-    stacked sections reads as a single band instead of two panels.
+    "Top half" and "Bottom half" are two halves of one gradient. They must meet
+    exactly — an overlap paints both semi-transparent layers over each other
+    and shows as a dark strip, a gap shows as a light one. So the top half
+    ends at its own bottom edge, the bottom half starts at its own top edge,
+    and each kills the wrapper padding on the side where they join.
   {%- endcomment -%}
   {%- if section.settings.band != 'none' -%}
+    {%- case section.settings.band -%}
+      {%- when 'top' -%}
+        #shopify-section-{{ section.id }} { padding-bottom: 0 !important; }
+      {%- when 'bottom' -%}
+        #shopify-section-{{ section.id }} { padding-top: 0 !important; }
+    {%- endcase -%}
+
     #TopStyles-{{ section.id }}::before {
       content: '';
       position: absolute;
@@ -43,7 +53,7 @@
       {%- case section.settings.band -%}
         {%- when 'top' -%}
           top: -10px;
-          bottom: -24px;
+          bottom: 0;
           border-radius: var(--radius-lg) var(--radius-lg) 0 0;
           border-top: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
           background: linear-gradient(180deg,
@@ -65,6 +75,19 @@
             color-mix(in srgb, var(--color-blush-pink) 22%, transparent) 0%,
             color-mix(in srgb, var(--color-aqua) 18%, transparent) 100%);
       {%- endcase -%}
+    }
+
+    {%- comment -%}
+      The tab section pads itself with calc(--spacer / 2), which at the top of
+      that clamp is 48px. Halved on the joining side so the two halves sit
+      close enough to read as one band.
+    {%- endcomment -%}
+    #TopStyles-{{ section.id }} {
+      {%- if section.settings.band == 'top' -%}
+        padding-bottom: clamp(14px, 10px + 1vw, 22px);
+      {%- elsif section.settings.band == 'bottom' -%}
+        padding-top: clamp(14px, 10px + 1vw, 22px);
+      {%- endif -%}
     }
   {%- endif -%}
 
