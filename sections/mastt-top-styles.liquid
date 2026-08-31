@@ -19,8 +19,54 @@
 
 <style>
   #TopStyles-{{ section.id }} {
+    position: relative;
+    isolation: isolate;
     padding-block: calc(var(--spacer) / 2);
   }
+
+  {%- comment -%}
+    Background band. Set explicitly per section rather than inferred from
+    which sections happen to sit next to each other: an adjacency rule breaks
+    silently the moment the page is reordered in Theme Editor.
+
+    "Top half" and "Bottom half" are two halves of one gradient, so a pair of
+    stacked sections reads as a single band instead of two panels.
+  {%- endcomment -%}
+  {%- if section.settings.band != 'none' -%}
+    #TopStyles-{{ section.id }}::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      left: -1.1rem;
+      right: -1.1rem;
+      border-inline: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+      {%- case section.settings.band -%}
+        {%- when 'top' -%}
+          top: -10px;
+          bottom: -24px;
+          border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+          border-top: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+          background: linear-gradient(180deg,
+            color-mix(in srgb, var(--color-blush-pink) 22%, transparent) 0%,
+            color-mix(in srgb, var(--color-nude-beige) 26%, transparent) 100%);
+        {%- when 'bottom' -%}
+          top: 0;
+          bottom: -10px;
+          border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+          border-bottom: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+          background: linear-gradient(180deg,
+            color-mix(in srgb, var(--color-nude-beige) 26%, transparent) 0%,
+            color-mix(in srgb, var(--color-aqua) 18%, transparent) 100%);
+        {%- when 'full' -%}
+          inset: -10px -1.1rem;
+          border-radius: var(--radius-lg);
+          border-block: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+          background: linear-gradient(180deg,
+            color-mix(in srgb, var(--color-blush-pink) 22%, transparent) 0%,
+            color-mix(in srgb, var(--color-aqua) 18%, transparent) 100%);
+      {%- endcase -%}
+    }
+  {%- endif -%}
 
   /* ---- Tab strip -------------------------------------------------------
      Mobile leads: one scrollable row rather than a wrapping block, so a long
@@ -322,6 +368,31 @@
       "default": "Mastt Top Styles"
     },
     {
+      "type": "select",
+      "id": "band",
+      "label": "Background band",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top half of a pair"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom half of a pair"
+        },
+        {
+          "value": "full",
+          "label": "Whole band"
+        }
+      ],
+      "default": "none",
+      "info": "Two stacked sections set to Top half and Bottom half share one continuous gradient."
+    },
+    {
       "type": "range",
       "id": "products_to_show",
       "label": "Products per tab",
@@ -350,8 +421,14 @@
       "id": "quick_add",
       "label": "Quick add",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "standard", "label": "Standard" }
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        }
       ],
       "default": "standard"
     },
@@ -411,10 +488,18 @@
     {
       "name": "Mastt Top Styles",
       "blocks": [
-        { "type": "tab" },
-        { "type": "tab" },
-        { "type": "tab" },
-        { "type": "tab" }
+        {
+          "type": "tab"
+        },
+        {
+          "type": "tab"
+        },
+        {
+          "type": "tab"
+        },
+        {
+          "type": "tab"
+        }
       ]
     }
   ]

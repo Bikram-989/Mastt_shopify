@@ -2322,85 +2322,15 @@ body.template-index {
 
 
 /* --------------------------------------------------------------------------
-   RAILS — centred headings
-   New Arrivals, Best Seller and Recently viewed now carry .kk__heading, the
-   same treatment as Shop by Category. These rules only handle the centring;
-   the face, italic and coral-dot rule all come from that shared class.
+   RAILS — "See all" and "Clear" sit below the centred title
+   The heads are centred inside each section, where the id-based selectors
+   live. Overriding them from this stylesheet loses on specificity: an id plus
+   a class beats two classes, every time.
    -------------------------------------------------------------------------- */
-.mastt-loved .mlv__head,
-.mastt-recently-viewed .mrv__head {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  text-align: center;
-  margin-bottom: clamp(16px, 12px + 1vw, 26px);
-}
-
-.mastt-loved .mlv__heading,
-.mastt-recently-viewed .mrv__heading {
-  text-align: center;
-}
-
-/* Clear button on Recently viewed goes below, so it cannot pull the centred
-   title off axis. */
-.mastt-recently-viewed .mrv__clear {
-  order: 3;
-  margin-top: 4px;
-}
+.mastt-recently-viewed .mrv__clear { margin-top: 6px; }
 
 .mlv__viewall-link {
   display: block;
   width: fit-content;
   margin: clamp(16px, 12px + 1vw, 26px) auto 0;
 }
-
-
-/* --------------------------------------------------------------------------
-   FOR HER / FOR HIM — one shared band
-   The two sections sit next to each other, so instead of a panel each they
-   share a single gradient: the first runs blush to the midpoint, the second
-   carries on from that midpoint to aqua. Rounded at the outer corners only,
-   square where they meet, so the pair reads as one block rather than two
-   stacked cards.
-   -------------------------------------------------------------------------- */
-.template-index .shopify-section:has(.mastt-top-styles) {
-  position: relative;
-  isolation: isolate;
-  padding-inline: 1.1rem;
-}
-
-.template-index .shopify-section:has(.mastt-top-styles)::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
-  border-block: 0;
-}
-
-/* First of the pair: rounded top, gradient's upper half. */
-.template-index .shopify-section:has(.mastt-top-styles)::before {
-  background: linear-gradient(180deg,
-    color-mix(in srgb, var(--color-blush-pink) 20%, transparent) 0%,
-    color-mix(in srgb, var(--color-nude-beige) 24%, transparent) 100%);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  border-top: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
-}
-
-/* Second of the pair: rounded bottom, gradient continues to aqua. */
-.template-index .shopify-section:has(.mastt-top-styles)
-  + .shopify-section:has(.mastt-top-styles)::before {
-  background: linear-gradient(180deg,
-    color-mix(in srgb, var(--color-nude-beige) 24%, transparent) 0%,
-    color-mix(in srgb, var(--color-aqua) 16%, transparent) 100%);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  border-top: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
-}
-
-/* Padding is on the band, not between the two halves — a gap there would
-   show the seam the shared gradient exists to hide. */
-.template-index .shopify-section:has(.mastt-top-styles) { padding-top: 26px; }
-
-.template-index .shopify-section:has(.mastt-top-styles)
-  + .shopify-section:has(.mastt-top-styles) { padding-top: 8px; padding-bottom: 26px; }

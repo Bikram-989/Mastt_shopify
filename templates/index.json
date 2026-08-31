@@ -310,7 +310,8 @@
         "show_secondary_image": true,
         "quick_add": "standard",
         "show_view_all": true,
-        "view_all_label": "View all for her"
+        "view_all_label": "View all for her",
+        "band": "top"
       }
     },
     "mastt_top_styles_men": {
@@ -371,7 +372,8 @@
         "show_secondary_image": true,
         "quick_add": "standard",
         "show_view_all": true,
-        "view_all_label": "View all for him"
+        "view_all_label": "View all for him",
+        "band": "bottom"
       }
     },
     "mastt_loved_by_you": {

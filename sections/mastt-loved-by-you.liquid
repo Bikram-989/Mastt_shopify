@@ -41,15 +41,16 @@
     }
   }
 
+  /* Centred, matching Shop by Category. This lives here rather than in
+     mastt-redesign.css because the selector below carries an id: an override
+     from the stylesheet loses to it on specificity every time. */
   #Loved-{{ section.id }} .mlv__head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-4, 1.6rem);
-    margin-bottom: 18px;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    text-align: center;
+    margin-bottom: 16px;
   }
-
-  #Loved-{{ section.id }} .mlv__titles { display: grid; gap: var(--space-1, 0.4rem); }
 
   #Loved-{{ section.id }} .mlv__heading {
     margin: 0;
