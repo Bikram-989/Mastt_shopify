@@ -202,6 +202,7 @@
     },
     "mastt_new_arrivals": {
       "type": "mastt-loved-by-you",
+      "name": "New arrivals",
       "settings": {
         "eyebrow": "Just landed",
         "heading": "New Arrivals",
@@ -214,7 +215,7 @@
         "badge_count": 3,
         "show_view_all": true,
         "view_all_label": "See all",
-        "padding_top": 0,
+        "padding_top": 20,
         "padding_bottom": 0
       }
     },
@@ -375,7 +376,7 @@
     },
     "mastt_loved_by_you": {
       "type": "mastt-loved-by-you",
-      "disabled": true,
+      "name": "Bestseller",
       "settings": {
         "eyebrow": "Most loved this month",
         "heading": "Best Seller",
