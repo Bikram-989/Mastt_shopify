@@ -1,0 +1,181 @@
+{%- comment -%}
+  Mastt side menu.
+
+  Two columns: a rail of groups on the left, that group's tiles on the right.
+  Everything comes from the "Side menu" navigation in Shopify, so adding a
+  category is a menu edit, never a code change. A top-level item with children
+  becomes a group; one without becomes a direct link with an outbound mark.
+
+  Tile images resolve from the linked collection's own image, so uploading a
+  collection image in admin fills the tile with no further work. Until then
+  each shows an empty well rather than a broken frame.
+
+  Panels are all rendered and toggled with CSS, so switching groups costs no
+  request and the whole menu works before any JavaScript runs.
+{%- endcomment -%}
+
+{%- liquid
+  assign menu = linklists['side-menu']
+  if menu == blank or menu.links.size == 0
+    assign menu = linklists[section.settings.menu]
+  endif
+-%}
+
+<details id="Details-menu-drawer-container" class="menu-drawer-container header__icon--menu">
+  <summary
+    class="header__icon header__icon--menu header__icon--summary link focus-inset"
+    aria-label="{{ 'sections.header.menu' | t }}"
+  >
+    <span>
+      <span class="svg-wrapper">{{ 'icon-hamburger.svg' | inline_asset_content }}</span>
+      <span class="svg-wrapper">{{ 'icon-close.svg' | inline_asset_content }}</span>
+    </span>
+  </summary>
+
+  <div id="menu-drawer" class="mmd gradient" tabindex="-1">
+    <div class="mmd__panel">
+
+      <div class="mmd__top">
+        <a href="{{ routes.root_url }}" class="mmd__logo" aria-label="{{ shop.name | escape }}">
+          {%- if settings.logo != blank -%}
+            <img src="{{ settings.logo | image_url: width: 300 }}" alt="{{ shop.name | escape }}" width="132" height="34">
+          {%- else -%}
+            <img src="{{ 'mastt-logo.svg' | asset_url }}" alt="{{ shop.name | escape }}" width="132" height="34">
+          {%- endif -%}
+        </a>
+
+        <button type="button" class="mmd__close" data-mmd-close aria-label="{{ 'accessibility.close' | t }}">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </button>
+      </div>
+
+      <div class="mmd__body">
+        <ul class="mmd__rail" role="tablist" aria-label="Browse by" data-mmd-rail>
+          {%- for link in menu.links -%}
+            {%- if link.links.size > 0 -%}
+              <li>
+                <button
+                  type="button"
+                  class="mmd__tab"
+                  role="tab"
+                  id="MmdTab-{{ forloop.index0 }}"
+                  aria-controls="MmdPanel-{{ forloop.index0 }}"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                >{{ link.title | escape }}</button>
+              </li>
+            {%- else -%}
+              <li>
+                <a class="mmd__tab mmd__tab--link" href="{{ link.url }}">
+                  {{ link.title | escape }}
+                  <svg viewBox="0 0 24 24" class="mmd__out" aria-hidden="true" focusable="false">
+                    <path d="M8 16 16 8M9 8h7v7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+
+        <div class="mmd__panes">
+          {%- for link in menu.links -%}
+            {%- if link.links.size > 0 -%}
+              <div
+                class="mmd__pane"
+                id="MmdPanel-{{ forloop.index0 }}"
+                role="tabpanel"
+                aria-labelledby="MmdTab-{{ forloop.index0 }}"
+                {% unless forloop.first %}hidden{% endunless %}
+              >
+                <ul class="mmd__grid" role="list">
+                  {%- for child in link.links -%}
+                    {%- liquid
+                      comment
+                        Pull the collection handle out of the link so the tile
+                        can borrow that collection's image once one exists.
+                      endcomment
+                      assign handle = ''
+                      if child.url contains '/collections/'
+                        assign after = child.url | split: '/collections/' | last
+                        assign handle = after | split: '?' | first | split: '#' | first
+                      endif
+                      assign tile_image = collections[handle].image
+                    -%}
+                    <li>
+                      <a class="mmd__tile" href="{{ child.url }}">
+                        <span class="mmd__well">
+                          {%- if tile_image != blank -%}
+                            <img src="{{ tile_image | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
+                          {%- endif -%}
+                        </span>
+                        <span class="mmd__label">{{ child.title | escape }}</span>
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+
+                <a class="mmd__viewall" href="{{ link.url }}">View all</a>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="mmd__foot">
+        {%- if linklists.footer.links.size > 0 -%}
+          {%- for l in linklists.footer.links limit: 4 -%}
+            <a href="{{ l.url }}">{{ l.title | escape }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ routes.root_url }}policies/refund-policy">Returns</a>
+          <a href="{{ routes.root_url }}policies/shipping-policy">Shipping</a>
+          <a href="{{ routes.root_url }}pages/contact">Support</a>
+          <a href="{{ routes.root_url }}pages/about-us">About</a>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</details>
+
+<script>
+  (function () {
+    var root = document.getElementById('menu-drawer');
+    if (!root) return;
+
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('.mmd__tab[role="tab"]'));
+
+    function select(i) {
+      tabs.forEach(function (tab, n) {
+        var on = n === i;
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        tab.tabIndex = on ? 0 : -1;
+        var pane = document.getElementById(tab.getAttribute('aria-controls'));
+        if (pane) pane.hidden = !on;
+      });
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(i); });
+      tab.addEventListener('keydown', function (e) {
+        var next = null;
+        if (e.key === 'ArrowDown') next = (i + 1) % tabs.length;
+        if (e.key === 'ArrowUp') next = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = tabs.length - 1;
+        if (next === null) return;
+        e.preventDefault();
+        select(next);
+        tabs[next].focus();
+      });
+    });
+
+    var close = root.querySelector('[data-mmd-close]');
+    if (close) {
+      close.addEventListener('click', function () {
+        var d = document.getElementById('Details-menu-drawer-container');
+        if (d) d.removeAttribute('open');
+      });
+    }
+  })();
+</script>
