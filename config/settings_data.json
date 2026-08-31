@@ -128,7 +128,7 @@
     "show_cart_note": false,
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
-    "cart_tiers_json": "[{\"min\":99900,\"off\":10000},{\"min\":159900,\"off\":20000},{\"min\":209900,\"off\":30000}]",
+    "cart_tiers_json": "[{\"min\":99900,\"off\":10000,\"code\":\"MASTT100\"},{\"min\":159900,\"off\":20000,\"code\":\"MASTT200\"},{\"min\":209900,\"off\":30000,\"code\":\"MASTT300\"}]",
     "cart_tiers_enabled": true,
     "cart_rail_collection": "",
     "sections": {
@@ -213,7 +213,12 @@
           "shadow": "#503020"
         }
       }
+<<<<<<< Updated upstream
     }
+=======
+    },
+    "cart_rail_collection": ""
+>>>>>>> Stashed changes
   },
   "presets": {
     "Default": {

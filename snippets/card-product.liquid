@@ -505,11 +505,11 @@ Custom Card Render Logic
     the variant modal, the product form and the bulk path stay exactly as Dawn
     built them. Sits on the price row so the title keeps the full card width.
   {%- endcomment -%}
-  {%- if quick_add != 'none' and card_product.available -%}
+  {%- if quick_add == 'standard' and card_product.available -%}
     <button
       type="button"
       class="mcard__add"
-      data-mastt-add="quick-add-{{ section_id }}{{ card_product.id }}-submit"
+      data-mastt-add
       aria-label="{{ 'Add ' | append: design_name | escape }}"
       title="Add to cart"
     >+</button>

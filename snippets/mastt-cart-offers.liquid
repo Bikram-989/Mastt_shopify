@@ -1,0 +1,100 @@
+{%- comment -%}
+  Offers, applied through real Shopify discount codes.
+
+  Each tier carries a code. Below its threshold the row is locked and says
+  what is still needed; at or above it, Apply links to
+  /discount/CODE?redirect=/cart, which is Shopify's own mechanism — the code
+  lands on the cart and carries through to checkout.
+
+  Codes are used rather than automatic discounts on purpose. Shopify applies
+  only one order-class automatic discount per order, so three overlapping
+  automatic tiers cannot be relied on to resolve to the right one. A code the
+  customer applies is explicit, visible in the summary, and enforced by
+  Shopify's own minimum-purchase rule — so the cart cannot promise a saving
+  that checkout then refuses.
+
+  Accepts:
+  - tiers_json: {String} JSON array of { min, off, code }
+{%- endcomment -%}
+
+{%- liquid
+  assign tiers = tiers_json | replace: '}{', '}|{' | split: '|'
+  assign total = cart.total_price
+  assign applied_titles = ''
+  for d in cart.cart_level_discount_applications
+    assign applied_titles = applied_titles | append: d.title | append: ','
+  endfor
+-%}
+
+{%- if tiers.size > 0 -%}
+  <div class="moff">
+    <div class="moff__head">
+      <span class="moff__icon" aria-hidden="true">%</span>
+      <div>
+        <p class="moff__title">Offers</p>
+        <p class="moff__sub">Save more on this order</p>
+      </div>
+    </div>
+
+    <ul class="moff__list" role="list">
+      {%- for raw in tiers -%}
+        {%- liquid
+          assign row = raw | remove: '[' | remove: ']' | remove: '{' | remove: '}' | remove: '"'
+          assign parts = row | split: ','
+          assign tmin = 0
+          assign toff = 0
+          assign tcode = ''
+          for part in parts
+            assign kv = part | split: ':'
+            assign k = kv[0] | strip
+            assign v = kv[1] | strip
+            case k
+              when 'min'
+                assign tmin = v | plus: 0
+              when 'off'
+                assign toff = v | plus: 0
+              when 'code'
+                assign tcode = v
+            endcase
+          endfor
+          assign unlocked = false
+          if total >= tmin
+            assign unlocked = true
+          endif
+          assign is_on = false
+          if tcode != blank and applied_titles contains tcode
+            assign is_on = true
+          endif
+          assign gap = tmin | minus: total
+        -%}
+
+        {%- if toff > 0 -%}
+          <li class="moff__row{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
+            <span class="moff__tag" aria-hidden="true">OFFER</span>
+
+            <div class="moff__body">
+              <p class="moff__name">{{ toff | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} off</p>
+              <p class="moff__note">
+                {%- if is_on -%}
+                  Applied to this order
+                {%- elsif unlocked -%}
+                  On orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
+                {%- else -%}
+                  Add {{ gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} more to unlock
+                {%- endif -%}
+              </p>
+            </div>
+
+            {%- if is_on -%}
+              <span class="moff__state">Applied</span>
+            {%- elsif unlocked and tcode != blank -%}
+              <a class="moff__apply" href="{{ routes.root_url }}discount/{{ tcode | url_encode }}?redirect=/cart">Apply</a>
+            {%- else -%}
+              <span class="moff__state moff__state--locked" aria-hidden="true">Locked</span>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

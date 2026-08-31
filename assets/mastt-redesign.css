@@ -1497,11 +1497,16 @@ body.template-index {
   position: absolute;
   top: 4px;
   right: 2px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  display: grid;
-  place-items: center;
+  /* box-sizing matters here: without it the horizontal padding is added to
+     the width and a single digit renders as an oval, not a disc. */
+  box-sizing: border-box;
+  min-width: 18px;
+  width: auto;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-full);
   background: var(--color-dusty-coral);
   color: var(--color-charcoal);
@@ -1956,3 +1961,128 @@ body.template-index {
 .mcr__rail .mcard__ribbon { display: none; }
 .mcr__rail .card__heading { font-size: 12px; }
 .mcr__rail .price { font-size: 12px; }
+
+
+/* --------------------------------------------------------------------------
+   CART — offers box
+   -------------------------------------------------------------------------- */
+.moff {
+  margin: 0 0 20px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-white) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+}
+
+.moff__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+
+.moff__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-aqua-20);
+  color: var(--color-aqua-dark);
+  font-family: var(--font-body-family);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.moff__title {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.moff__sub {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  color: var(--color-charcoal-45);
+}
+
+.moff__list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.moff__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  border: 1px dashed color-mix(in srgb, var(--color-charcoal) 16%, transparent);
+}
+
+.moff__row.is-applied {
+  border-style: solid;
+  border-color: var(--color-aqua);
+  background: var(--color-aqua-10);
+}
+
+/* Locked rows stay legible — greyed to the point of unreadable turns an
+   incentive into noise. */
+.moff__row.is-locked { opacity: 0.68; }
+
+.moff__tag {
+  flex: none;
+  padding: 3px 6px;
+  border-radius: var(--radius-xs);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+}
+
+.moff__row.is-locked .moff__tag { background: var(--color-charcoal-45); }
+.moff__row.is-applied .moff__tag { background: var(--color-aqua-dark); }
+
+.moff__body { flex: 1 1 auto; min-width: 0; }
+
+.moff__name {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+.moff__note {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 11.5px;
+  color: var(--color-charcoal-45);
+}
+
+.moff__apply {
+  flex: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.moff__state {
+  flex: none;
+  font-family: var(--font-body-family);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-aqua-dark);
+  white-space: nowrap;
+}
+
+.moff__state--locked { color: var(--color-charcoal-45); font-weight: 500; }
+
+/* Cart page: the rails are gone, so nothing here should scroll sideways. */
+.cart__items,
+.cart-items { overflow-x: visible; }

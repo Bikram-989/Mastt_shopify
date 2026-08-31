@@ -38,45 +38,10 @@
         "subtotal",
         "buttons"
       ]
-    },
-    "mastt_recently_viewed": {
-      "type": "mastt-recently-viewed",
-      "settings": {
-        "eyebrow": "Still thinking about",
-        "heading": "Recently viewed",
-        "products_to_show": 6,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "scroll_on_mobile": true,
-        "show_clear": false,
-        "clear_label": "Clear",
-        "padding_top": 28,
-        "padding_bottom": 8
-      }
-    },
-    "mastt_loved_by_you": {
-      "type": "mastt-loved-by-you",
-      "settings": {
-        "eyebrow": "Goes well with this",
-        "heading": "Loved by You Guys",
-        "collection": "",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "show_secondary_image": true,
-        "quick_add": "standard",
-        "badge_label": "Bestseller",
-        "badge_count": 2,
-        "show_view_all": true,
-        "view_all_label": "See all",
-        "padding_top": 8,
-        "padding_bottom": 36
-      }
     }
   },
   "order": [
     "cart-items",
-    "cart-footer",
-    "mastt_recently_viewed",
-    "mastt_loved_by_you"
+    "cart-footer"
   ]
 }

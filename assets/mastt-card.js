@@ -17,17 +17,22 @@
     event.preventDefault();
     event.stopPropagation();     // the card is wrapped in a link
 
-    var target = document.getElementById(proxy.dataset.masttAdd);
-    if (target) {
+    /* Scope the lookup to this card rather than matching an id. The id was
+       built from section_id + product id in two places, and any render that
+       omitted quick_add produced a + with no button behind it — which then
+       fell through to navigation. Asking the card for its own submit button
+       cannot drift. */
+    var card = proxy.closest('.card-wrapper') || proxy.closest('.card');
+    var target = card && card.querySelector('.quick-add__submit');
+
+    if (target && !target.disabled) {
       target.click();
       return;
     }
 
-    /* No submit button on the page — the card may be rendered in a context
-       without quick-add. Fall through to the product page rather than
-       silently doing nothing. */
-    var link = proxy.closest('.card-wrapper');
-    var href = link && link.querySelector('a[href]');
-    if (href) window.location.href = href.getAttribute('href');
+    /* Genuinely no quick-add here (sold out, or a context that renders cards
+       without it). Go to the product rather than doing nothing. */
+    var link = card && card.querySelector('a[href]');
+    if (link) window.location.href = link.getAttribute('href');
   });
 })();
