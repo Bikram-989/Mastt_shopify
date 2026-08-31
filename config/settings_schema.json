@@ -1471,6 +1471,12 @@
         "id": "cart_tiers_enabled",
         "label": "Show the savings bar",
         "default": true
+      },
+      {
+        "type": "collection",
+        "id": "cart_rail_collection",
+        "label": "\"Loved by You Guys\" collection in the cart",
+        "info": "Set its sort order to Best selling to rank from real orders. Empty uses the whole catalogue."
       }
     ]
   }

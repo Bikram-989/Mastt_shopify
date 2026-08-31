@@ -104,10 +104,6 @@
                 </small>
               </div>
             {%- else -%}
-              {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-                {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'page' -%}
-              {%- endif -%}
-
               <div class="cart__ctas" {{ block.shopify_attributes }}>
                 <button
                   type="submit"

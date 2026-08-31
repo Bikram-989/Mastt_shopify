@@ -1781,20 +1781,23 @@ body.template-index {
 
 /* --------------------------------------------------------------------------
    CART — tiered savings bar
+   Reward above the node, threshold below it, both centred on the same
+   percentage so each tier reads as one vertical column instead of two rows
+   the eye has to pair up.
    -------------------------------------------------------------------------- */
 .mtier {
   position: relative;
-  margin: 0 0 14px;
-  padding: 14px 16px 12px;
+  margin: 0 0 18px;
+  padding: 13px 14px 12px;
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-white) 70%, transparent);
+  background: color-mix(in srgb, var(--color-white) 74%, transparent);
   border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
 }
 
 .mtier[hidden] { display: none; }
 
 .mtier__msg {
-  margin: 0 0 10px;
+  margin: 0 0 14px;
   font-family: var(--font-body-family);
   font-size: 13px;
   line-height: 1.4;
@@ -1803,12 +1806,49 @@ body.template-index {
 
 .mtier__msg strong { color: var(--color-charcoal); font-weight: 700; }
 
+/* Padding gives the outermost labels room to centre without spilling. */
+.mtier__scale { padding-inline: 30px; }
+
+.mtier__rail { position: relative; }
+
+.mtier__above,
+.mtier__below { position: relative; height: 16px; }
+.mtier__above { margin-bottom: 5px; }
+.mtier__below { margin-top: 5px; height: 14px; }
+
+.mtier__off,
+.mtier__min {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-body-family);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  transition: color 300ms var(--ease-out), opacity 300ms var(--ease-out);
+}
+
+.mtier__off {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-charcoal-45);
+}
+
+.mtier__off.is-on { color: var(--color-coral-dark); }
+
+.mtier__min {
+  font-size: 10.5px;
+  color: var(--color-charcoal-45);
+  opacity: 0.75;
+}
+
+.mtier__min.is-on { opacity: 1; color: var(--color-charcoal-70); }
+
 .mtier__track {
   position: relative;
   height: 7px;
   border-radius: var(--radius-full);
   background: color-mix(in srgb, var(--color-charcoal) 10%, transparent);
-  overflow: visible;
 }
 
 .mtier__fill {
@@ -1840,47 +1880,12 @@ body.template-index {
   box-shadow: 0 0 0 2px var(--color-dusty-coral);
 }
 
-.mtier__legend {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-  margin: 10px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.mtier__step {
-  display: grid;
-  gap: 1px;
-  text-align: center;
-  font-family: var(--font-body-family);
-  line-height: 1.2;
-  opacity: 0.5;
-  transition: opacity 300ms var(--ease-out);
-}
-
-.mtier__step.is-on { opacity: 1; }
-
-.mtier__step-off {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--color-charcoal);
-}
-
-.mtier__step.is-on .mtier__step-off { color: var(--color-coral-dark); }
-
-.mtier__step-min {
-  font-size: 10.5px;
-  color: var(--color-charcoal-45);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Burst. Pieces arc outward from the bar rather than falling from the top —
-   the celebration belongs to the thing that was unlocked. */
+/* Burst arcs outward from the bar, so the celebration belongs to the thing
+   that was unlocked rather than raining from the top of the screen. */
 .mtier__burst {
   position: absolute;
   left: 50%;
-  bottom: 34px;
+  top: 58%;
   width: 0;
   height: 0;
   pointer-events: none;
@@ -1907,3 +1912,47 @@ body.template-index {
   .mtier__fill { transition: none; }
   .mtier__bit { display: none; }
 }
+
+
+/* --------------------------------------------------------------------------
+   CART DRAWER — product rails
+   The drawer is narrow, so both rails scroll horizontally at roughly two
+   cards wide. Sections cannot be rendered inside a snippet, so the drawer
+   gets its own compact rail markup rather than the homepage sections.
+   -------------------------------------------------------------------------- */
+.mcr { margin-top: 20px; }
+.mcr[hidden] { display: none; }
+
+.mcr__head {
+  margin: 0 0 10px;
+  font-family: var(--font-heading-family);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.mcr__rail {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem 4px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.mcr__rail::-webkit-scrollbar { display: none; }
+
+.mcr__rail > li {
+  flex: 0 0 clamp(128px, 40%, 168px);
+  scroll-snap-align: start;
+}
+
+/* The drawer has no room for a quick-add overlay or a ribbon. */
+.mcr__rail .quick-add,
+.mcr__rail .mcard__ribbon { display: none; }
+.mcr__rail .card__heading { font-size: 12px; }
+.mcr__rail .price { font-size: 12px; }

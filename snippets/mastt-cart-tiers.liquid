@@ -1,19 +1,21 @@
 {%- comment -%}
   Tiered savings bar.
 
-  Shows how far the cart is from the next saving, and fires a small burst when
-  a tier is crossed. Thresholds and rewards are section settings so they can be
-  changed without touching code.
+  Layout is deliberate: the reward sits directly above its node and the
+  threshold directly below it, both centred on the same percentage, so the eye
+  reads "₹100 off at ₹999" as one column rather than matching two loose rows.
 
-  IMPORTANT — this bar displays progress. It does not itself discount anything.
-  Shopify applies only one order-class automatic discount per order, so three
-  overlapping automatic discounts cannot be relied on to resolve to the right
-  tier. Whatever thresholds are set here must be mirrored by a discount that
-  actually applies at checkout, or the cart promises money it does not deliver.
-  See the note in the theme settings.
+  The rail is inset inside the padded scale so the first and last labels have
+  room to centre without spilling out of the card.
+
+  IMPORTANT — this bar displays progress. It does not itself discount
+  anything. Shopify applies only one order-class automatic discount per order,
+  so overlapping automatic discounts cannot be relied on to resolve to the
+  right tier. Mirror these thresholds with a discount that actually applies at
+  checkout, or the cart promises money it does not deliver.
 
   Accepts:
-  - tiers_json: {String} JSON array of { min, off, label }
+  - tiers_json: {String} JSON array of { min, off }
   - context: {String} 'drawer' or 'page', for styling only
 {%- endcomment -%}
 
@@ -25,11 +27,18 @@
 >
   <p class="mtier__msg" data-mtier-msg aria-live="polite"></p>
 
-  <div class="mtier__track" data-mtier-track>
-    <span class="mtier__fill" data-mtier-fill></span>
-    <span class="mtier__nodes" data-mtier-nodes aria-hidden="true"></span>
+  <div class="mtier__scale">
+    <div class="mtier__rail">
+      <div class="mtier__above" data-mtier-above aria-hidden="true"></div>
+
+      <div class="mtier__track">
+        <span class="mtier__fill" data-mtier-fill></span>
+        <span class="mtier__nodes" data-mtier-nodes aria-hidden="true"></span>
+      </div>
+
+      <div class="mtier__below" data-mtier-below aria-hidden="true"></div>
+    </div>
   </div>
 
-  <ul class="mtier__legend" data-mtier-legend role="list"></ul>
   <span class="mtier__burst" data-mtier-burst aria-hidden="true"></span>
 </div>

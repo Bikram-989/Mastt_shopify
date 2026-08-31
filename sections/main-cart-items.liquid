@@ -25,6 +25,10 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
+{%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
+  {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'page' -%}
+{%- endif -%}
+
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     <div class="title-wrapper-with-link">

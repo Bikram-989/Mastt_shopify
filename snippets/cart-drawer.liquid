@@ -87,6 +87,10 @@
         >
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
+              {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
+                {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'drawer' -%}
+              {%- endif -%}
+
               <div class="drawer__cart-items-wrapper">
                 <table class="cart-items" role="table">
                   <thead role="rowgroup">
@@ -445,6 +449,12 @@
                   </tbody>
                 </table>
               </div>
+
+              {%- comment -%}
+                Rails sit under the item list: the cart itself is read first,
+                suggestions come after.
+              {%- endcomment -%}
+              {%- render 'mastt-cart-rails' -%}
             {%- endif -%}
             <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
             <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
@@ -538,10 +548,6 @@
             {%- endif -%}
           </small>
         </div>
-
-        {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-          {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'drawer' -%}
-        {%- endif -%}
 
         <!-- CTAs -->
         <div class="cart__ctas" {{ block.shopify_attributes }}>

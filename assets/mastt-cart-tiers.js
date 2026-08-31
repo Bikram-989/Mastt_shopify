@@ -79,23 +79,34 @@
     }
 
     var nodes = root.querySelector('[data-mtier-nodes]');
-    var legend = root.querySelector('[data-mtier-legend]');
+    var above = root.querySelector('[data-mtier-above]');
+    var below = root.querySelector('[data-mtier-below]');
     nodes.innerHTML = '';
-    legend.innerHTML = '';
+    above.innerHTML = '';
+    below.innerHTML = '';
 
     tiers.forEach(function (t) {
       var on = total >= t.min;
+      var at = Math.min(100, (t.min / top) * 100) + '%';
 
       var dot = document.createElement('span');
       dot.className = 'mtier__node' + (on ? ' is-on' : '');
-      dot.style.left = Math.min(100, (t.min / top) * 100) + '%';
+      dot.style.left = at;
       nodes.appendChild(dot);
 
-      var li = document.createElement('li');
-      li.className = 'mtier__step' + (on ? ' is-on' : '');
-      li.innerHTML = '<span class="mtier__step-off">' + money(t.off) + ' off</span>' +
-                     '<span class="mtier__step-min">' + money(t.min) + '</span>';
-      legend.appendChild(li);
+      /* Reward above, threshold below, both centred on the same percentage as
+         the node, so each tier reads as one vertical column. */
+      var off = document.createElement('span');
+      off.className = 'mtier__off' + (on ? ' is-on' : '');
+      off.style.left = at;
+      off.textContent = money(t.off) + ' off';
+      above.appendChild(off);
+
+      var min = document.createElement('span');
+      min.className = 'mtier__min' + (on ? ' is-on' : '');
+      min.style.left = at;
+      min.textContent = money(t.min);
+      below.appendChild(min);
     });
 
     /* Celebrate only tiers crossed for the first time this session. */
