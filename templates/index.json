@@ -378,7 +378,7 @@
       "type": "mastt-loved-by-you",
       "name": "Bestseller",
       "settings": {
-        "eyebrow": "Most loved this month",
+        "eyebrow": "",
         "heading": "Best Seller",
         "collection": "",
         "products_to_show": 8,
@@ -389,8 +389,8 @@
         "badge_count": 3,
         "show_view_all": true,
         "view_all_label": "See all",
-        "padding_top": 0,
-        "padding_bottom": 0
+        "padding_top": 40,
+        "padding_bottom": 20
       }
     },
     "mastt_reviews": {
@@ -502,6 +502,7 @@
         "r1",
         "r2"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Shop by Recipient",
         "image_ratio": "4 / 3"
@@ -509,6 +510,7 @@
     },
     "mastt_recently_viewed": {
       "type": "mastt-recently-viewed",
+      "disabled": true,
       "settings": {
         "eyebrow": "Pick up where you left off",
         "heading": "Recently viewed",
@@ -854,10 +856,10 @@
     "mastt_top_styles_women",
     "mastt_top_styles_men",
     "mastt_loved_by_you",
+    "kekaa_usp_section_9p66aY",
     "mastt_reviews",
     "mastt_recipient",
     "mastt_recently_viewed",
-    "kekaa_usp_section_9p66aY",
     "collapsible_content_pDahx6",
     "featured_collection",
     "kekaa_style_collection_mgQ4zd",
