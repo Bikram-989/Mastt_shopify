@@ -236,6 +236,7 @@
     },
     "mastt_loved_by_you_C8XzTn": {
       "type": "mastt-loved-by-you",
+      "disabled": true,
       "name": "Loved by You Guys",
       "settings": {
         "eyebrow": "Most loved this month",
@@ -249,22 +250,6 @@
         "badge_count": 3,
         "show_view_all": true,
         "view_all_label": "See all",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "mastt_recently_viewed_EgNBMR": {
-      "type": "mastt-recently-viewed",
-      "name": "Recently viewed",
-      "settings": {
-        "eyebrow": "Pick up where you left off",
-        "heading": "Recently viewed",
-        "products_to_show": 5,
-        "columns_desktop": 5,
-        "columns_mobile": "2",
-        "scroll_on_mobile": true,
-        "show_clear": true,
-        "clear_label": "Clear",
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -283,8 +268,24 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "mastt_recently_viewed_EgNBMR": {
+      "type": "mastt-recently-viewed",
+      "name": "Recently viewed",
+      "settings": {
+        "eyebrow": "Pick up where you left off",
+        "heading": "Recently viewed",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "columns_mobile": "2",
+        "scroll_on_mobile": true,
+        "show_clear": true,
+        "clear_label": "Clear",
         "padding_top": 36,
-        "padding_bottom": 28
+        "padding_bottom": 36
       }
     },
     "featured_collection_8haAj6": {
@@ -322,8 +323,8 @@
   "order": [
     "main",
     "mastt_loved_by_you_C8XzTn",
-    "mastt_recently_viewed_EgNBMR",
     "related-products",
+    "mastt_recently_viewed_EgNBMR",
     "featured_collection_8haAj6"
   ]
 }

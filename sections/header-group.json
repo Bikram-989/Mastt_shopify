@@ -17,21 +17,13 @@
         "announcement_QDBkcG": {
           "type": "announcement",
           "settings": {
-            "text": "⭐ Pick Any 2, Pay for 1- Yes, Buy1 Get1 FREE!! ➕ Extra 10% OFF on Prepaid Orders",
+            "text": "₹100 OFF at ₹999  |           ₹200 OFF at ₹1,599  |  ₹300 OFF at ₹2,099",
             "link": "https://www.mastt.co/collections/all?sort_by=best-selling&filter.p.m.custom.shop_for=gid%3A%2F%2Fshopify%2FMetaobject%2F100552835158&filter.v.price.gte=&filter.v.price.lte="
-          }
-        },
-        "announcement-bar-0": {
-          "type": "announcement",
-          "settings": {
-            "text": "🚚 Shipping - FREE!",
-            "link": ""
           }
         }
       },
       "block_order": [
-        "announcement_QDBkcG",
-        "announcement-bar-0"
+        "announcement_QDBkcG"
       ],
       "custom_css": [],
       "settings": {
@@ -77,7 +69,6 @@
     },
     "17461191138c4e716a": {
       "type": "apps",
-      "disabled": true,
       "settings": {
         "include_margins": true
       }

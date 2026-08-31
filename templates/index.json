@@ -290,6 +290,7 @@
     },
     "mastt_loved_by_you": {
       "type": "mastt-loved-by-you",
+      "disabled": true,
       "settings": {
         "eyebrow": "Most loved this month",
         "heading": "Loved by You Guys",
@@ -743,6 +744,7 @@
         "collapsible_row_aUkNVy",
         "collapsible_row_684tT4"
       ],
+      "disabled": true,
       "custom_css": [],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
