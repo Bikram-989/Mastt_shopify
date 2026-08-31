@@ -204,7 +204,7 @@
       "type": "mastt-loved-by-you",
       "name": "New arrivals",
       "settings": {
-        "eyebrow": "Just landed",
+        "eyebrow": "",
         "heading": "New Arrivals",
         "collection": "new-arrivals",
         "products_to_show": 8,
@@ -215,7 +215,7 @@
         "badge_count": 3,
         "show_view_all": true,
         "view_all_label": "See all",
-        "padding_top": 20,
+        "padding_top": 40,
         "padding_bottom": 0
       }
     },
