@@ -509,8 +509,8 @@
         "scroll_on_mobile": true,
         "show_clear": true,
         "clear_label": "Clear",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "kekaa_usp_section_9p66aY": {
