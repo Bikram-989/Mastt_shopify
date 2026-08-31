@@ -148,20 +148,18 @@
 </style>
 
 <div id="Loved-{{ section.id }}" class="mastt-loved page-width section-{{ section.id }}-padding">
+  {%- comment -%}
+    Centred, using the same .kk__heading treatment as Shop by Category so the
+    homepage reads as one composition. "See all" moves below the rail — a
+    right-aligned link cannot coexist with a centred title without one of them
+    looking off-axis.
+  {%- endcomment -%}
   <div class="mlv__head">
-    <div class="mlv__titles">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="mastt-eyebrow">{{ section.settings.eyebrow | escape }}</span>
-      {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="mlv__heading">{{ section.settings.heading | escape }}</h2>
-      {%- endif -%}
-    </div>
-
-    {%- if section.settings.show_view_all -%}
-      <a href="{{ source.url | default: '/collections/all' }}" class="mlv__viewall-link">
-        {{ section.settings.view_all_label | default: 'See all' | escape }}
-      </a>
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="mastt-eyebrow">{{ section.settings.eyebrow | escape }}</span>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mlv__heading kk__heading">{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
   </div>
 
@@ -194,6 +192,12 @@
       <li class="mlv__empty">Bestsellers land here as soon as orders start coming in.</li>
     {%- endif -%}
   </ul>
+
+  {%- if section.settings.show_view_all and shown > 0 -%}
+    <a href="{{ source.url | default: '/collections/all' }}" class="mlv__viewall-link">
+      {{ section.settings.view_all_label | default: 'See all' | escape }}
+    </a>
+  {%- endif -%}
 </div>
 
 {% schema %}
