@@ -216,7 +216,7 @@
         "show_view_all": true,
         "view_all_label": "See all",
         "padding_top": 40,
-        "padding_bottom": 0
+        "padding_bottom": 20
       }
     },
     "mastt_top_styles_women": {
@@ -305,13 +305,13 @@
       "name": "For HER",
       "settings": {
         "heading": "For Her",
+        "band": "top",
         "products_to_show": 8,
         "columns_desktop": 4,
         "show_secondary_image": true,
         "quick_add": "standard",
         "show_view_all": true,
-        "view_all_label": "View all for her",
-        "band": "top"
+        "view_all_label": "View all for her"
       }
     },
     "mastt_top_styles_men": {
@@ -367,13 +367,13 @@
       "name": "For HIM",
       "settings": {
         "heading": "For Him",
+        "band": "bottom",
         "products_to_show": 8,
         "columns_desktop": 4,
         "show_secondary_image": true,
         "quick_add": "standard",
         "show_view_all": true,
-        "view_all_label": "View all for him",
-        "band": "bottom"
+        "view_all_label": "View all for him"
       }
     },
     "mastt_loved_by_you": {
@@ -393,6 +393,53 @@
         "view_all_label": "See all",
         "padding_top": 40,
         "padding_bottom": 20
+      }
+    },
+    "kekaa_usp_section_9p66aY": {
+      "type": "kekaa__usp__section",
+      "blocks": {
+        "usp_jEkcnb": {
+          "type": "usp",
+          "settings": {
+            "icon": "shopify://shop_images/looking-up-in-circlular-architecture.jpg",
+            "title": "Quality Assured",
+            "description": "Every piece, Checked with care"
+          }
+        },
+        "usp_xfCgAb": {
+          "type": "usp",
+          "settings": {
+            "icon": "shopify://shop_images/IMG_8137copy.png",
+            "title": "Skin-Friendly",
+            "description": "Hypoallergenic Jewellery crafted for Comfort"
+          }
+        },
+        "usp_me944Q": {
+          "type": "usp",
+          "settings": {
+            "icon": "shopify://shop_images/IMG_8140_copy.png",
+            "title": "True Craft",
+            "description": "Surgical-grade steel, finished to last"
+          }
+        },
+        "usp_CrnVTD": {
+          "type": "usp",
+          "settings": {
+            "icon": "shopify://shop_images/IMG_8134_copy.png",
+            "title": "Fade Proof",
+            "description": "Premium Designs crafted to have a lasting shine"
+          }
+        }
+      },
+      "block_order": [
+        "usp_jEkcnb",
+        "usp_xfCgAb",
+        "usp_me944Q",
+        "usp_CrnVTD"
+      ],
+      "name": "Our Promise",
+      "settings": {
+        "heading": "Our Promise"
       }
     },
     "mastt_reviews": {
@@ -524,53 +571,6 @@
         "clear_label": "Clear",
         "padding_top": 0,
         "padding_bottom": 0
-      }
-    },
-    "kekaa_usp_section_9p66aY": {
-      "type": "kekaa__usp__section",
-      "blocks": {
-        "usp_jEkcnb": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/looking-up-in-circlular-architecture.jpg",
-            "title": "Quality Assured",
-            "description": "Every piece, Checked with care"
-          }
-        },
-        "usp_xfCgAb": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/IMG_8137copy.png",
-            "title": "Skin-Friendly",
-            "description": "Hypoallergenic Jewellery crafted for Comfort"
-          }
-        },
-        "usp_me944Q": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/IMG_8140_copy.png",
-            "title": "True Craft",
-            "description": "Surgical-grade steel, finished to last"
-          }
-        },
-        "usp_CrnVTD": {
-          "type": "usp",
-          "settings": {
-            "icon": "shopify://shop_images/IMG_8134_copy.png",
-            "title": "Fade Proof",
-            "description": "Premium Designs crafted to have a lasting shine"
-          }
-        }
-      },
-      "block_order": [
-        "usp_jEkcnb",
-        "usp_xfCgAb",
-        "usp_me944Q",
-        "usp_CrnVTD"
-      ],
-      "name": "Our Promise",
-      "settings": {
-        "heading": "Our Promise"
       }
     },
     "collapsible_content_pDahx6": {
