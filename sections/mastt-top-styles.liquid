@@ -82,11 +82,17 @@
       that clamp is 48px. Halved on the joining side so the two halves sit
       close enough to read as one band.
     {%- endcomment -%}
+    {%- comment -%}
+      Inside a band the section's own calc(--spacer / 2) is too much air: the
+      band already separates this block from what is above it, so the padding
+      was doing the same job twice.
+    {%- endcomment -%}
     #TopStyles-{{ section.id }} {
+      padding-top: clamp(12px, 8px + 0.8vw, 18px);
       {%- if section.settings.band == 'top' -%}
         padding-bottom: clamp(14px, 10px + 1vw, 22px);
       {%- elsif section.settings.band == 'bottom' -%}
-        padding-top: clamp(14px, 10px + 1vw, 22px);
+        padding-top: clamp(10px, 7px + 0.7vw, 16px);
       {%- endif -%}
     }
   {%- endif -%}
@@ -119,7 +125,7 @@
     cursor: pointer;
     flex: 0 0 auto;
     scroll-snap-align: start;
-    border: 1px solid var(--color-charcoal-15, rgba(32,27,25,.15));
+    border: 1px solid var(--color-charcoal, #201B19);
     background: transparent;
     color: var(--color-charcoal, #201B19);
     border-radius: var(--radius-full, 999px);

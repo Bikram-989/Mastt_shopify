@@ -1090,8 +1090,8 @@ button.shopify-payment-button__button--unbranded:hover {
   width: 8.4rem;
   height: 5px;
   background:
-    linear-gradient(var(--color-charcoal-15), var(--color-charcoal-15)) left center / calc(50% - 9px) 1px no-repeat,
-    linear-gradient(var(--color-charcoal-15), var(--color-charcoal-15)) right center / calc(50% - 9px) 1px no-repeat,
+    linear-gradient(var(--color-charcoal), var(--color-charcoal)) left center / calc(50% - 9px) 1px no-repeat,
+    linear-gradient(var(--color-charcoal), var(--color-charcoal)) right center / calc(50% - 9px) 1px no-repeat,
     radial-gradient(circle, var(--color-dusty-coral) 2.5px, transparent 2.6px) center / 100% 100% no-repeat;
 }
 
