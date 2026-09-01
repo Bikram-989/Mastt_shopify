@@ -57,33 +57,24 @@
   <div id="menu-drawer" class="gradient menu-drawer motion-reduce mmd" tabindex="-1">
     <div class="menu-drawer__inner-container mmd__panel">
 
-      <div class="mmd__top">
-        <a href="{{ routes.root_url }}" class="mmd__logo" aria-label="{{ shop.name | escape }}">
-          {%- if settings.logo != blank -%}
-            <img src="{{ settings.logo | image_url: width: 300 }}" alt="{{ shop.name | escape }}" width="132" height="34">
-          {%- else -%}
-            <img src="{{ 'mastt-logo.svg' | asset_url }}" alt="{{ shop.name | escape }}" width="132" height="34">
-          {%- endif -%}
-        </a>
-
-        <button type="button" class="mmd__close" data-mmd-close aria-label="{{ 'accessibility.close' | t }}">
-          {{- 'icon-close.svg' | inline_asset_content -}}
-        </button>
-      </div>
-
       <div class="mmd__body">
         <ul class="mmd__rail" role="tablist" aria-label="Browse by" data-mmd-rail>
           {%- for tab in tabs -%}
             <li>
-              <button
-                type="button"
+              {%- comment -%}
+                Deliberately not a <button>. Dawn's MenuDrawer binds a
+                close-the-drawer handler to every button inside it
+                (global.js: 'button:not(.localization-selector)...'), so a tab
+                built as a button shut the menu on every tap.
+              {%- endcomment -%}
+              <span
                 class="mmd__tab"
                 role="tab"
                 id="MmdTab-{{ forloop.index0 }}"
                 aria-controls="MmdPanel-{{ forloop.index0 }}"
                 aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
                 tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
-              >{{ tab }}</button>
+              >{{ tab }}</span>
             </li>
           {%- endfor -%}
         </ul>
@@ -161,8 +152,17 @@
     }
 
     tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { select(i); });
+      tab.addEventListener('click', function (e) {
+        e.stopPropagation();
+        select(i);
+      });
       tab.addEventListener('keydown', function (e) {
+        /* A span is not a button, so Enter and Space have to be wired up. */
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          select(i);
+          return;
+        }
         var next = null;
         if (e.key === 'ArrowDown') next = (i + 1) % tabs.length;
         if (e.key === 'ArrowUp') next = (i - 1 + tabs.length) % tabs.length;
@@ -175,12 +175,5 @@
       });
     });
 
-    var close = root.querySelector('[data-mmd-close]');
-    if (close) {
-      close.addEventListener('click', function () {
-        var d = document.getElementById('Details-menu-drawer-container');
-        if (d) d.removeAttribute('open');
-      });
-    }
   })();
 </script>

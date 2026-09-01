@@ -1,10 +1,14 @@
 {%- comment -%}
   Offers, applied through real Shopify discount codes.
 
-  Each tier carries a code. Below its threshold the row is locked and says
+  Every tier is always listed. Below its threshold a row is locked and says
   what is still needed; at or above it, Apply links to
   /discount/CODE?redirect=/cart, which is Shopify's own mechanism — the code
   lands on the cart and carries through to checkout.
+
+  Worth knowing: Shopify accepts one order-level code at a time, so applying a
+  lower tier while a higher one is also unlocked takes the smaller saving.
+  Both are offered because the choice is the customer's to make.
 
   Codes are used rather than automatic discounts on purpose. Shopify applies
   only one order-class automatic discount per order, so three overlapping
@@ -18,29 +22,8 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign tiers = tiers_json | replace: '}{', '}|{' | split: '|'
+  assign tiers = tiers_json | replace: '},{', '}|{' | split: '|'
   assign total = cart.total_price
-
-  comment
-    Find the highest threshold the cart clears. Only that tier gets an Apply
-    button: Shopify accepts one order-level code, so offering ₹100 when ₹300
-    is already earned would quietly cost the customer money.
-  endcomment
-  assign best_min = -1
-  for raw_scan in tiers
-    assign scan = raw_scan | remove: '[' | remove: ']' | remove: '{' | remove: '}' | remove: '"'
-    assign scan_parts = scan | split: ','
-    for part in scan_parts
-      assign kv = part | split: ':'
-      assign kv_key = kv[0] | strip
-      if kv_key == 'min'
-        assign m = kv[1] | strip | plus: 0
-        if total >= m and m > best_min
-          assign best_min = m
-        endif
-      endif
-    endfor
-  endfor
 
   assign applied_titles = ''
   for d in cart.cart_level_discount_applications
@@ -80,12 +63,8 @@
             endcase
           endfor
           assign unlocked = false
-          if tmin == best_min
-            assign unlocked = true
-          endif
-          assign cleared = false
           if total >= tmin
-            assign cleared = true
+            assign unlocked = true
           endif
           assign is_on = false
           if tcode != blank and applied_titles contains tcode
@@ -95,7 +74,7 @@
         -%}
 
         {%- if toff > 0 -%}
-          <li class="moff__row{% unless cleared %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
+          <li class="moff__row{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
             <span class="moff__tag" aria-hidden="true">OFFER</span>
 
             <div class="moff__body">
@@ -104,9 +83,7 @@
                 {%- if is_on -%}
                   Applied to this order
                 {%- elsif unlocked -%}
-                  Ready to apply — on orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
-                {%- elsif cleared -%}
-                  Superseded by the better offer above
+                  On orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
                 {%- else -%}
                   Add {{ gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} more to unlock
                 {%- endif -%}
