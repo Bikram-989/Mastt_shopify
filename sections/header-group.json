@@ -69,6 +69,7 @@
     },
     "17461191138c4e716a": {
       "type": "apps",
+      "disabled": true,
       "settings": {
         "include_margins": true
       }
