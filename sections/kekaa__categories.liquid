@@ -139,10 +139,23 @@
       {% assign url = block.settings.collection_url %}
       {% if url != blank %}
         <a href="{{ url }}" class="collection-list__card">
+          {%- comment -%}
+            Block image first, then the linked collection's own image. Upload
+            to the collection in admin and it appears here and in the side
+            menu at once — the block picker stays for a one-off override.
+          {%- endcomment -%}
+          {%- liquid
+            assign tile_image = block.settings.image
+            if tile_image == blank and url contains '/collections/'
+              assign after = url | split: '/collections/' | last
+              assign chandle = after | split: '?' | first | split: '#' | first
+              assign tile_image = collections[chandle].image
+            endif
+          -%}
           <div class="collection-list__image">
-            {% if block.settings.image %}
+            {% if tile_image != blank %}
               <img
-                src="{{ block.settings.image | image_url: width: 600 }}"
+                src="{{ tile_image | image_url: width: 600 }}"
                 alt="{{ block.settings.custom_title | default: 'Visit link' | escape }}"
                 loading="lazy"
               >
@@ -187,7 +200,8 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Card image"
+          "label": "Card image",
+          "info": "Optional. Falls back to the linked collection's own image, which the side menu also uses."
         },
         {
           "type": "text",

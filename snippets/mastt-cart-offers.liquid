@@ -75,31 +75,83 @@
 
         {%- if toff > 0 -%}
           <li class="moff__row{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
-            <span class="moff__tag" aria-hidden="true">OFFER</span>
+            <label class="moff__pick">
+              {%- comment -%}
+                A radio rather than an Apply button per row: only one code can
+                be on the order, so picking one has to visibly deselect the
+                others. Locked rows are disabled instead of hidden, so the
+                ladder above the current spend stays readable.
+              {%- endcomment -%}
+              <input
+                type="radio"
+                name="mastt-offer"
+                class="moff__radio"
+                value="{{ tcode | escape }}"
+                data-code="{{ tcode | escape }}"
+                {% unless unlocked %}disabled{% endunless %}
+                {% if is_on %}checked{% endif %}
+              >
+              <span class="moff__dot" aria-hidden="true"></span>
 
-            <div class="moff__body">
-              <p class="moff__name">{{ toff | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} off</p>
-              <p class="moff__note">
-                {%- if is_on -%}
-                  Applied to this order
-                {%- elsif unlocked -%}
-                  On orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
-                {%- else -%}
-                  Add {{ gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} more to unlock
-                {%- endif -%}
-              </p>
-            </div>
+              <span class="moff__body">
+                <span class="moff__name">{{ toff | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} off</span>
+                <span class="moff__note">
+                  {%- if is_on -%}
+                    Applied to this order
+                  {%- elsif unlocked -%}
+                    On orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
+                  {%- else -%}
+                    Add {{ gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} more to unlock
+                  {%- endif -%}
+                </span>
+              </span>
 
-            {%- if is_on -%}
-              <span class="moff__state">Applied</span>
-            {%- elsif unlocked and tcode != blank -%}
-              <a class="moff__apply" href="{{ routes.root_url }}discount/{{ tcode | url_encode }}?redirect=/cart">Apply</a>
-            {%- else -%}
-              <span class="moff__state moff__state--locked" aria-hidden="true">Locked</span>
-            {%- endif -%}
+              {%- if is_on -%}
+                <span class="moff__state">Applied</span>
+              {%- elsif unlocked == false -%}
+                <span class="moff__state moff__state--locked" aria-hidden="true">Locked</span>
+              {%- endif -%}
+            </label>
           </li>
         {%- endif -%}
       {%- endfor -%}
     </ul>
+
+    <a class="moff__apply" href="#" data-moff-apply aria-disabled="true">Apply offer</a>
+    <p class="moff__hint" data-moff-hint>Select an unlocked offer to apply it.</p>
   </div>
+
+  <script>
+    (function () {
+      var box = document.currentScript.closest('.moff');
+      if (!box) return;
+
+      var apply = box.querySelector('[data-moff-apply]');
+      var hint = box.querySelector('[data-moff-hint]');
+
+      function sync() {
+        var picked = box.querySelector('.moff__radio:checked:not([disabled])');
+        if (picked && picked.dataset.code) {
+          apply.setAttribute('href', '/discount/' + encodeURIComponent(picked.dataset.code) + '?redirect=/cart');
+          apply.removeAttribute('aria-disabled');
+          hint.hidden = true;
+        } else {
+          /* No href at all, so a disabled control cannot be followed. */
+          apply.removeAttribute('href');
+          apply.setAttribute('aria-disabled', 'true');
+          hint.hidden = false;
+        }
+      }
+
+      box.addEventListener('change', function (e) {
+        if (e.target.classList.contains('moff__radio')) sync();
+      });
+
+      apply.addEventListener('click', function (e) {
+        if (apply.getAttribute('aria-disabled') === 'true') e.preventDefault();
+      });
+
+      sync();
+    })();
+  </script>
 {%- endif -%}

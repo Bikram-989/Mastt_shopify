@@ -1493,15 +1493,19 @@ body.template-index {
    -------------------------------------------------------------------------- */
 .header__icon--wishlist { position: relative; }
 
+/* Selector deliberately carries .header__icon: base.css line 2551 sets
+   `.header__icon span { height: 100% }`, which stretched this badge to the
+   full 44px icon height while its width stayed 18px — the capsule shape.
+   That rule is (0,1,1); a bare .mastt-wish-count is (0,1,0) and loses. */
+.header__icon .mastt-wish-count,
 .mastt-wish-count {
   position: absolute;
   top: 3px;
   right: 1px;
   box-sizing: border-box;
-  /* Fixed square by default. A digit's width varies by glyph, so letting the
-     box size itself from content is exactly what made this an oval. */
   width: 18px;
   height: 18px;
+  aspect-ratio: 1;
   padding: 0;
   display: inline-flex;
   align-items: center;
@@ -1518,8 +1522,10 @@ body.template-index {
 }
 
 /* Ten or more genuinely needs the extra width — a pill, deliberately. */
+.header__icon .mastt-wish-count.is-wide,
 .mastt-wish-count.is-wide {
   width: auto;
+  aspect-ratio: auto;
   min-width: 18px;
   padding: 0 5px;
 }
@@ -2461,3 +2467,116 @@ body.template-index {
   font-weight: 600;
   color: var(--color-charcoal);
 }
+
+
+/* --------------------------------------------------------------------------
+   SIDE MENU — category tiles match the homepage
+   Same square well, same radius, same caption beneath, so a category reads
+   identically whether it is met on the homepage or in the menu.
+   -------------------------------------------------------------------------- */
+.mmd__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+.mmd__tile {
+  gap: 7px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+}
+
+.mmd__tile .mmd__well { border-radius: var(--radius-sm); }
+
+.mmd__label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+
+/* --------------------------------------------------------------------------
+   CART — offers as a choice
+   One code can sit on an order, so the rows are radios: picking one visibly
+   releases the others, which a row of Apply buttons never made clear.
+   -------------------------------------------------------------------------- */
+.moff__pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.moff__row.is-locked .moff__pick { cursor: not-allowed; }
+
+.moff__radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.moff__dot {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  border: 2px solid var(--color-charcoal-15);
+  background: var(--color-white);
+  display: grid;
+  place-items: center;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.moff__dot::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-aqua-dark);
+  transform: scale(0);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.moff__radio:checked + .moff__dot { border-color: var(--color-aqua-dark); }
+.moff__radio:checked + .moff__dot::after { transform: scale(1); }
+
+.moff__radio:focus-visible + .moff__dot {
+  outline: 2px solid var(--color-charcoal);
+  outline-offset: 2px;
+}
+
+.moff__row.is-locked .moff__dot { opacity: 0.5; }
+
+.moff__body { display: grid; gap: 1px; flex: 1 1 auto; min-width: 0; }
+
+.moff__apply {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px 16px;
+  border-radius: var(--radius-full);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+/* Dimmed and inert rather than removed — a button that vanishes when nothing
+   is selected makes the box look broken. */
+.moff__apply[aria-disabled='true'] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.moff__hint {
+  margin: 7px 0 0;
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 11.5px;
+  color: var(--color-charcoal-45);
+}
+
+.moff__hint[hidden] { display: none; }
