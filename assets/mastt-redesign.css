@@ -1552,6 +1552,13 @@ body.template-index {
 .card-wrapper .card__heading { margin: 0; }
 
 .mcard__add {
+  /* component-card.css line 349 stretches `.card__heading a::after` across the
+     whole card at z-index 1 to make it one big tap target. Without lifting the
+     + above that, every tap landed on the link overlay and navigated to the
+     product instead of adding — which is why rewriting the click handler
+     changed nothing: the handler was never reached. */
+  position: relative;
+  z-index: 2;
   flex: 0 0 auto;
   display: grid;
   place-items: center;

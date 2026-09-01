@@ -191,17 +191,60 @@
 
   /* Dawn replaces cart markup wholesale after every change, so watch for the
      swap rather than trying to hook each control. */
+  /* Dawn replaces cart markup wholesale after a quantity change or a removal,
+     so watching for that swap is how we know to re-read the cart.
+
+     The catch: boot() and paintOffers() write back into that same markup —
+     the savings bar, the chip labels, the Apply links. Without pausing, every
+     paint retriggered the observer 120ms later, forever. That loop is what
+     made the cart flicker when a line was deleted.
+
+     So: only react to cart line items appearing or disappearing, and
+     disconnect while painting. */
   if (window.MutationObserver) {
     var queued = false;
-    new MutationObserver(function (records) {
-      var touched = records.some(function (r) {
-        return r.target.closest &&
-               r.target.closest('cart-drawer, cart-items, .cart, #main-cart-items, #CartDrawer');
+    var painting = false;
+
+    var observer = new MutationObserver(function (records) {
+      if (painting || queued) return;
+
+      var cartChanged = records.some(function (r) {
+        if (!r.target.closest) return false;
+        if (!r.target.closest('cart-drawer, cart-items, .cart, #main-cart-items, #CartDrawer')) {
+          return false;
+        }
+        var lists = [r.addedNodes, r.removedNodes];
+        for (var l = 0; l < lists.length; l++) {
+          for (var i = 0; i < lists[l].length; i++) {
+            var n = lists[l][i];
+            /* A line item, or a wrapper carrying them — not our own text. */
+            if (n.nodeType !== 1) continue;
+            if (n.matches('.cart-item, tr, tbody, cart-items, .js-contents') ||
+                n.querySelector('.cart-item')) {
+              return true;
+            }
+          }
+        }
+        return false;
       });
-      if (!touched || queued) return;
+
+      if (!cartChanged) return;
+
       queued = true;
-      window.setTimeout(function () { queued = false; boot(); refresh(); }, 120);
-    }).observe(document.documentElement, { childList: true, subtree: true });
+      window.setTimeout(function () {
+        queued = false;
+        painting = true;
+        observer.disconnect();
+        boot();
+        refresh();
+        window.requestAnimationFrame(function () {
+          painting = false;
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+        });
+      }, 120);
+    });
+
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
   document.addEventListener('cart:refresh', refresh);
