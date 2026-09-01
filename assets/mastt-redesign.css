@@ -2505,3 +2505,15 @@ body.template-index {
 }
 
 .moff__badge--locked { color: var(--color-charcoal-45); font-weight: 600; }
+
+
+/* Action slot in an offer chip. Present on the cart, absent on the product
+   page — there the chip states the offer and the cart applies it. */
+.moff__action { display: block; }
+
+.moff__action .moff__go,
+.moff__action .moff__badge { display: block; margin-top: 5px; }
+
+/* Product page: no action row, so the chip closes up rather than leaving a
+   gap where a button would have been. */
+.template-product .moff__chip { padding-block: 9px; }

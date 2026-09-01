@@ -123,15 +123,53 @@
     }
   }
 
+  /* Offers are server-rendered, so without this a tier only unlocked on the
+     next page load. Re-evaluating here means adding a product opens the offer
+     immediately. */
+  function paintOffers(total) {
+    var boxes = document.querySelectorAll('[data-moff]');
+    for (var b = 0; b < boxes.length; b++) {
+      var chips = boxes[b].querySelectorAll('[data-moff-chip]');
+      for (var i = 0; i < chips.length; i++) {
+        var chip = chips[i];
+        var min = parseInt(chip.dataset.min, 10) || 0;
+        var unlocked = total >= min;
+        var applied = chip.classList.contains('is-applied');
+
+        chip.classList.toggle('is-locked', !unlocked);
+
+        var cond = chip.querySelector('[data-moff-cond]');
+        if (cond) {
+          var text = unlocked ? cond.dataset.over : 'add ' + money(min - total);
+          if (cond.textContent.trim() !== text) cond.textContent = text;
+        }
+
+        /* Absent on the product page, where there is no Apply to swap. */
+        var action = chip.querySelector('[data-moff-action]');
+        if (!action || applied) continue;
+
+        var wantApply = unlocked && chip.dataset.code;
+        var hasApply = !!action.querySelector('.moff__go');
+        if (wantApply === hasApply) continue;
+
+        action.innerHTML = wantApply
+          ? '<a class="moff__go" href="' + chip.dataset.applyUrl + '">Apply</a>'
+          : '<span class="moff__badge moff__badge--locked">Locked</span>';
+      }
+    }
+  }
+
   function refresh() {
     var roots = document.querySelectorAll('[data-mastt-tiers]');
-    if (!roots.length) return;
+    var boxes = document.querySelectorAll('[data-moff]');
+    if (!roots.length && !boxes.length) return;
 
     fetch('/cart.js', { headers: { Accept: 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (cart) {
         if (!cart) return;
         for (var i = 0; i < roots.length; i++) render(roots[i], cart.total_price);
+        paintOffers(cart.total_price);
       })
       .catch(function () { /* offline or blocked — leave the server-rendered state */ });
   }
@@ -141,6 +179,8 @@
     for (var i = 0; i < roots.length; i++) {
       render(roots[i], parseInt(roots[i].dataset.total, 10) || 0);
     }
+    var box = document.querySelector('[data-moff]');
+    if (box) paintOffers(parseInt(box.dataset.total, 10) || 0);
   }
 
   if (document.readyState === 'loading') {
@@ -165,5 +205,22 @@
   }
 
   document.addEventListener('cart:refresh', refresh);
+  /* Fired by mastt-card.js after a successful /cart/add.js */
+  document.addEventListener('mastt:cart:added', refresh);
+
+  /* Dawn's own add-to-cart publishes through its pub/sub rather than a DOM
+     event, and on a product page there is no cart markup for the observer to
+     notice changing. Subscribe when it is available so adding from the
+     product form opens an offer just as adding from a card does. */
+  /* Bare identifiers, not window.*: PUB_SUB_EVENTS is a top-level const, and
+     const bindings never become properties of window. */
+  if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+    try {
+      subscribe(PUB_SUB_EVENTS.cartUpdate, refresh);
+    } catch (e) {
+      /* Signature changed in a Dawn upgrade — the observer and the custom
+         event still cover the common paths. */
+    }
+  }
   window.MasttTiers = { refresh: refresh };
 })();

@@ -13,8 +13,15 @@
   Locked chips stay in the strip so the ladder above the current spend is
   visible and worth reaching for.
 
+  Chips carry their threshold and code as data attributes so
+  mastt-cart-tiers.js can re-evaluate them the moment the cart changes —
+  without that, an offer only unlocked on the next page load.
+
   Accepts:
   - tiers_json: {String} JSON array of { min, off, code }
+  - show_apply: {Boolean} render the Apply control. False on the product page,
+    where the cart total is not the number in front of the customer and an
+    Apply button would act on a cart they cannot see.
 {%- endcomment -%}
 
 {%- liquid
@@ -27,10 +34,10 @@
 -%}
 
 {%- if tiers.size > 0 -%}
-  <div class="moff">
+  <div class="moff" data-moff data-total="{{ cart.total_price }}">
     <div class="moff__head">
       <p class="moff__title">Offers</p>
-      <p class="moff__sub">One applies per order</p>
+      <p class="moff__sub">{% if show_apply == false %}Applied in the cart{% else %}One applies per order{% endif %}</p>
     </div>
 
     <ul class="moff__strip" role="list">
@@ -72,9 +79,15 @@
         -%}
 
         {%- if toff > 0 -%}
-          <li class="moff__chip{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
+          <li
+            class="moff__chip{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}"
+            data-moff-chip
+            data-min="{{ tmin }}"
+            data-code="{{ tcode | escape }}"
+            data-apply-url="{{ routes.root_url }}discount/{{ tcode | url_encode }}?redirect=/cart"
+          >
             <span class="moff__amt">{{ off_label }} OFF</span>
-            <span class="moff__cond">
+            <span class="moff__cond" data-moff-cond data-over="over {{ min_label }}">
               {%- if unlocked -%}
                 over {{ min_label }}
               {%- else -%}
@@ -82,12 +95,16 @@
               {%- endif -%}
             </span>
 
-            {%- if is_on -%}
-              <span class="moff__badge">Applied</span>
-            {%- elsif unlocked and tcode != blank -%}
-              <a class="moff__go" href="{{ routes.root_url }}discount/{{ tcode | url_encode }}?redirect=/cart">Apply</a>
-            {%- else -%}
-              <span class="moff__badge moff__badge--locked">Locked</span>
+            {%- if show_apply != false -%}
+              <span class="moff__action" data-moff-action>
+                {%- if is_on -%}
+                  <span class="moff__badge">Applied</span>
+                {%- elsif unlocked and tcode != blank -%}
+                  <a class="moff__go" href="{{ routes.root_url }}discount/{{ tcode | url_encode }}?redirect=/cart">Apply</a>
+                {%- else -%}
+                  <span class="moff__badge moff__badge--locked">Locked</span>
+                {%- endif -%}
+              </span>
             {%- endif -%}
           </li>
         {%- endif -%}

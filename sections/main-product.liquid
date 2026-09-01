@@ -613,7 +613,7 @@
                 -%}
 
                 {%- if settings.cart_tiers_enabled -%}
-                  {%- render 'mastt-cart-offers', tiers_json: settings.cart_tiers_json -%}
+                  {%- render 'mastt-cart-offers', tiers_json: settings.cart_tiers_json, show_apply: false -%}
                 {%- endif -%}
 
 {%- when 'rating' -%}
