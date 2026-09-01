@@ -2524,3 +2524,11 @@ body.template-index {
 /* Product page: no action row, so the chip closes up rather than leaving a
    gap where a button would have been. */
 .template-product .moff__chip { padding-block: 9px; }
+
+
+/* Share button confirms the copy on itself as well as in the toast — on a
+   phone the toast can sit under a thumb. */
+.mpa__btn.is-copied {
+  background: var(--color-aqua-dark);
+  color: var(--color-white);
+}
