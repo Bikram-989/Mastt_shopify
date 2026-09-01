@@ -268,12 +268,13 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "padding_top": 0,
-        "padding_bottom": 0
+        "padding_top": 40,
+        "padding_bottom": 32
       }
     },
     "mastt_recently_viewed_EgNBMR": {
       "type": "mastt-recently-viewed",
+      "disabled": true,
       "name": "Recently viewed",
       "settings": {
         "eyebrow": "Pick up where you left off",
