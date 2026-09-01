@@ -1,10 +1,9 @@
 {%- comment -%}
   Share and save, floating over the product gallery.
 
-  Share copies the product link and confirms with a small toast, the same on
-  phone and desktop. It deliberately does not call navigator.share: the OS
-  sheet is a good flow, but it made one button do two different things
-  depending on the device.
+  Share opens the OS sheet where the browser offers one, and copies the link
+  where it does not — or where the sheet fails to appear. Either way the tap
+  ends in something visible.
 
   The heart reuses the same [data-mastt-wish] contract as the product cards,
   so mastt-wishlist.js drives it with no extra code and hearting here shows up
@@ -36,8 +35,8 @@
     data-mastt-share
     data-title="{{ product.title | escape }}"
     data-url="{{ shop.url }}{{ product.url }}"
-    aria-label="Copy link to {{ product.title | escape }}"
-    title="Copy link"
+    aria-label="Share {{ product.title | escape }}"
+    title="Share"
   >
     <svg viewBox="0 0 24 24" class="mpa__icon" aria-hidden="true" focusable="false">
       <circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
