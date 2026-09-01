@@ -50,7 +50,7 @@
         "scroll_on_mobile": true,
         "show_clear": false,
         "clear_label": "Clear",
-        "padding_top": 28,
+        "padding_top": 12,
         "padding_bottom": 8
       }
     },
@@ -68,8 +68,8 @@
         "badge_count": 2,
         "show_view_all": true,
         "view_all_label": "See all",
-        "padding_top": 8,
-        "padding_bottom": 36
+        "padding_top": 20,
+        "padding_bottom": 32
       }
     }
   },
