@@ -17,6 +17,24 @@
         "padding_bottom": 36
       }
     },
+    "mastt_loved_by_you": {
+      "type": "mastt-loved-by-you",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Loved by You Guys",
+        "collection": "",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_secondary_image": true,
+        "quick_add": "standard",
+        "badge_label": "Bestseller",
+        "badge_count": 2,
+        "show_view_all": true,
+        "view_all_label": "See all",
+        "padding_top": 20,
+        "padding_bottom": 32
+      }
+    },
     "cart-footer": {
       "type": "main-cart-footer",
       "blocks": {
@@ -37,24 +55,6 @@
         "color_scheme": "scheme-1",
         "padding_top": 20,
         "padding_bottom": 40
-      }
-    },
-    "mastt_loved_by_you": {
-      "type": "mastt-loved-by-you",
-      "settings": {
-        "eyebrow": "Goes well with this",
-        "heading": "Loved by You Guys",
-        "collection": "",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "show_secondary_image": true,
-        "quick_add": "standard",
-        "badge_label": "Bestseller",
-        "badge_count": 2,
-        "show_view_all": true,
-        "view_all_label": "See all",
-        "padding_top": 20,
-        "padding_bottom": 32
       }
     }
   },
