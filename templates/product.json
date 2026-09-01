@@ -137,10 +137,13 @@
           "name": "MASTT-Features",
           "settings": {
             "feature_1_text": "Skin Safe",
-            "feature_1_image": "shopify://shop_images/OTH_R_F_0200.jpg",
-            "feature_2_text": "Anti-Tarnish",
-            "feature_3_text": "Thick Plating",
-            "feature_4_text": "Easy Exchange"
+            "feature_1_image": "shopify://shop_images/WhatsApp_Image_2026-09-01_at_3.52.38_PM.jpg",
+            "feature_2_text": "Thick Plating",
+            "feature_2_image": "shopify://shop_images/WhatsApp_Image_2026-09-01_at_3.52.39_PM_1.jpg",
+            "feature_3_text": "Anti-Tarnish",
+            "feature_3_image": "shopify://shop_images/WhatsApp_Image_2026-09-01_at_3.52.39_PM_2.jpg",
+            "feature_4_text": "Easy Exchange",
+            "feature_4_image": "shopify://shop_images/WhatsApp_Image_2026-09-01_at_3.52.39_PM.jpg"
           }
         },
         "collapsible_tab_QJfrPU": {
