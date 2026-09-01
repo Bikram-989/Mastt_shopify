@@ -2408,3 +2408,56 @@ body.template-index {
   font-family: var(--font-body-family);
   font-size: 12.5px;
 }
+
+
+/* --------------------------------------------------------------------------
+   CART — totals breakdown
+   Label left, figure right, aligned on a tabular column so the numbers stack
+   cleanly and a discount reads as subtraction rather than another price.
+   -------------------------------------------------------------------------- */
+.mtot { margin: 0 0 14px; padding: 0; display: grid; gap: 9px; }
+
+.mtot__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.mtot__row dt,
+.mtot__row dd {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 14px;
+  color: var(--color-charcoal-70);
+}
+
+.mtot__row dd { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.mtot__row--save dt,
+.mtot__row--save dd { color: var(--color-aqua-dark); font-weight: 600; }
+
+.mtot__tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  background: var(--color-aqua-10);
+  border: 1px dashed var(--color-aqua);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.mtot__row--total {
+  margin-top: 3px;
+  padding-top: 11px;
+  border-top: 1px solid var(--color-charcoal-15);
+}
+
+.mtot__row--total dt,
+.mtot__row--total dd {
+  font-family: var(--font-heading-family);
+  font-size: clamp(16px, 14px + 0.6vw, 19px);
+  font-weight: 600;
+  color: var(--color-charcoal);
+}

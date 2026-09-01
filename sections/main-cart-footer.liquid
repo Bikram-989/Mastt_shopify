@@ -44,24 +44,56 @@
               {% render block %}
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
-                <div>
-                  {%- if cart.cart_level_discount_applications.size > 0 -%}
-                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                      {%- for discount in cart.cart_level_discount_applications -%}
-                        <li class="discounts__discount discounts__discount--position">
-                          {{- 'icon-discount.svg' | inline_asset_content -}}
-                          {{ discount.title | escape }}
-                          (-{{ discount.total_allocated_amount | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }})
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  {%- endif -%}
-                </div>
+                {%- comment -%}
+                  A column breakdown rather than one figure: MRP saving and
+                  any applied offer are the two numbers a shopper checks
+                  before paying, and a single "estimated total" hides both.
 
-                <div class="totals">
-                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  <p class="totals__total-value">{{ cart.total_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</p>
-                </div>
+                  items_subtotal_price is after line discounts and before
+                  cart-level ones, so the offer rows below never double-count.
+                {%- endcomment -%}
+                {%- liquid
+                  assign mrp_saving = 0
+                  for item in cart.items
+                    if item.variant.compare_at_price > item.variant.price
+                      assign diff = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity
+                      assign mrp_saving = mrp_saving | plus: diff
+                    endif
+                  endfor
+                  assign list_total = cart.items_subtotal_price | plus: mrp_saving
+                -%}
+
+                <dl class="mtot">
+                  {%- if mrp_saving > 0 -%}
+                    <div class="mtot__row">
+                      <dt>Item total</dt>
+                      <dd>{{ list_total | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
+                    </div>
+                    <div class="mtot__row mtot__row--save">
+                      <dt>MRP discount</dt>
+                      <dd>&minus;{{ mrp_saving | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
+                    </div>
+                  {%- endif -%}
+
+                  <div class="mtot__row">
+                    <dt>Subtotal</dt>
+                    <dd>{{ cart.items_subtotal_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
+                  </div>
+
+                  {%- for discount in cart.cart_level_discount_applications -%}
+                    <div class="mtot__row mtot__row--save">
+                      <dt>
+                        <span class="mtot__tag">{{ discount.title | escape }}</span>
+                      </dt>
+                      <dd>&minus;{{ discount.total_allocated_amount | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
+                    </div>
+                  {%- endfor -%}
+
+                  <div class="mtot__row mtot__row--total">
+                    <dt>{{ 'sections.cart.estimated_total' | t }}</dt>
+                    <dd>{{ cart.total_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
+                  </div>
+                </dl>
 
                 <small class="tax-note caption-large rte">
                   {%- if cart.duties_included and cart.taxes_included -%}
