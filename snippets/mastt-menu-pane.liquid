@@ -1,0 +1,62 @@
+{%- comment -%}
+  One product pane in the side menu: four rows of two.
+
+  Accepts:
+  - idx: {Number} panel index, for the tab/panel pairing
+  - source: {String} collection handle to draw from
+  - tags: {String} optional comma-separated tags to narrow by
+  - url: {String} where "View all" goes
+
+  Pulls from the same collections the homepage rails use, so the menu and the
+  page cannot disagree about what is new or what sells.
+{%- endcomment -%}
+
+{%- liquid
+  assign src = collections[source]
+  assign want_tags = tags | downcase | split: ','
+  assign shown = 0
+-%}
+
+<div class="mmd__pane" id="MmdPanel-{{ idx }}" role="tabpanel" aria-labelledby="MmdTab-{{ idx }}" hidden>
+  <ul class="mmd__pgrid" role="list">
+    {%- for product in src.products -%}
+      {%- liquid
+        assign ok = true
+        if want_tags.size > 0
+          assign ok = false
+          for t in product.tags
+            assign td = t | downcase | strip
+            for w in want_tags
+              assign wc = w | strip
+              if wc != blank and td == wc
+                assign ok = true
+              endif
+            endfor
+          endfor
+        endif
+      -%}
+      {%- if ok and shown < 8 -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <li>
+          <a class="mmd__ptile" href="{{ product.url }}">
+            <span class="mmd__well">
+              {%- if product.featured_media -%}
+                <img src="{{ product.featured_media | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
+              {%- endif -%}
+            </span>
+            <span class="mmd__pname">{{ product.title | split: '|' | first | strip | escape }}</span>
+            <span class="mmd__pprice">
+              {{- product.price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' -}}
+            </span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if shown == 0 -%}
+      <li class="mmd__empty">Nothing here yet — new pieces landing soon.</li>
+    {%- endif -%}
+  </ul>
+
+  <a class="mmd__viewall" href="{{ url }}">View all</a>
+</div>

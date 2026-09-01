@@ -19,6 +19,20 @@
   if menu == blank or menu.links.size == 0
     assign menu = linklists[section.settings.menu]
   endif
+
+  comment
+    The Category pane still comes from the "Side menu" navigation, so adding a
+    category stays a menu edit. The four product panes are fixed, because each
+    maps to a collection the homepage already uses — keeping menu and page in
+    agreement matters more than making them configurable.
+  endcomment
+  for l in menu.links
+    if l.links.size > 0 and cat_group == blank
+      assign cat_group = l
+    endif
+  endfor
+
+  assign tabs = 'Category,New Arrivals,For Her,For Him,Best Seller' | split: ','
 -%}
 
 <details id="Details-menu-drawer-container" class="menu-drawer-container header__icon--menu">
@@ -51,73 +65,55 @@
 
       <div class="mmd__body">
         <ul class="mmd__rail" role="tablist" aria-label="Browse by" data-mmd-rail>
-          {%- for link in menu.links -%}
-            {%- if link.links.size > 0 -%}
-              <li>
-                <button
-                  type="button"
-                  class="mmd__tab"
-                  role="tab"
-                  id="MmdTab-{{ forloop.index0 }}"
-                  aria-controls="MmdPanel-{{ forloop.index0 }}"
-                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-                  tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
-                >{{ link.title | escape }}</button>
-              </li>
-            {%- else -%}
-              <li>
-                <a class="mmd__tab mmd__tab--link" href="{{ link.url }}">
-                  {{ link.title | escape }}
-                  <svg viewBox="0 0 24 24" class="mmd__out" aria-hidden="true" focusable="false">
-                    <path d="M8 16 16 8M9 8h7v7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </li>
-            {%- endif -%}
+          {%- for tab in tabs -%}
+            <li>
+              <button
+                type="button"
+                class="mmd__tab"
+                role="tab"
+                id="MmdTab-{{ forloop.index0 }}"
+                aria-controls="MmdPanel-{{ forloop.index0 }}"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+              >{{ tab }}</button>
+            </li>
           {%- endfor -%}
         </ul>
 
         <div class="mmd__panes">
-          {%- for link in menu.links -%}
-            {%- if link.links.size > 0 -%}
-              <div
-                class="mmd__pane"
-                id="MmdPanel-{{ forloop.index0 }}"
-                role="tabpanel"
-                aria-labelledby="MmdTab-{{ forloop.index0 }}"
-                {% unless forloop.first %}hidden{% endunless %}
-              >
-                <ul class="mmd__grid" role="list">
-                  {%- for child in link.links -%}
-                    {%- liquid
-                      comment
-                        Pull the collection handle out of the link so the tile
-                        can borrow that collection's image once one exists.
-                      endcomment
-                      assign handle = ''
-                      if child.url contains '/collections/'
-                        assign after = child.url | split: '/collections/' | last
-                        assign handle = after | split: '?' | first | split: '#' | first
-                      endif
-                      assign tile_image = collections[handle].image
-                    -%}
-                    <li>
-                      <a class="mmd__tile" href="{{ child.url }}">
-                        <span class="mmd__well">
-                          {%- if tile_image != blank -%}
-                            <img src="{{ tile_image | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
-                          {%- endif -%}
-                        </span>
-                        <span class="mmd__label">{{ child.title | escape }}</span>
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
 
-                <a class="mmd__viewall" href="{{ link.url }}">View all</a>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
+          {%- comment -%} 1. Category — collection tiles {%- endcomment -%}
+          <div class="mmd__pane" id="MmdPanel-0" role="tabpanel" aria-labelledby="MmdTab-0">
+            <ul class="mmd__grid" role="list">
+              {%- for child in cat_group.links limit: 8 -%}
+                {%- liquid
+                  assign handle = ''
+                  if child.url contains '/collections/'
+                    assign after = child.url | split: '/collections/' | last
+                    assign handle = after | split: '?' | first | split: '#' | first
+                  endif
+                  assign tile_image = collections[handle].image
+                -%}
+                <li>
+                  <a class="mmd__tile" href="{{ child.url }}">
+                    <span class="mmd__well">
+                      {%- if tile_image != blank -%}
+                        <img src="{{ tile_image | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
+                      {%- endif -%}
+                    </span>
+                    <span class="mmd__label">{{ child.title | escape }}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+            <a class="mmd__viewall" href="{{ cat_group.url | default: '/collections/all' }}">View all</a>
+          </div>
+
+          {%- render 'mastt-menu-pane', idx: 1, source: 'new-arrivals', tags: '', url: '/collections/new-arrivals' -%}
+          {%- render 'mastt-menu-pane', idx: 2, source: 'all', tags: 'women,her', url: '/collections/all?filter.p.tag=women' -%}
+          {%- render 'mastt-menu-pane', idx: 3, source: 'all', tags: 'men,him', url: '/collections/all?filter.p.tag=men' -%}
+          {%- render 'mastt-menu-pane', idx: 4, source: 'best-sellers', tags: '', url: '/collections/best-sellers' -%}
+
         </div>
       </div>
 

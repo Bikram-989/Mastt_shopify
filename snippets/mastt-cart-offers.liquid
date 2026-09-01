@@ -20,6 +20,28 @@
 {%- liquid
   assign tiers = tiers_json | replace: '}{', '}|{' | split: '|'
   assign total = cart.total_price
+
+  comment
+    Find the highest threshold the cart clears. Only that tier gets an Apply
+    button: Shopify accepts one order-level code, so offering ₹100 when ₹300
+    is already earned would quietly cost the customer money.
+  endcomment
+  assign best_min = -1
+  for raw_scan in tiers
+    assign scan = raw_scan | remove: '[' | remove: ']' | remove: '{' | remove: '}' | remove: '"'
+    assign scan_parts = scan | split: ','
+    for part in scan_parts
+      assign kv = part | split: ':'
+      assign kv_key = kv[0] | strip
+      if kv_key == 'min'
+        assign m = kv[1] | strip | plus: 0
+        if total >= m and m > best_min
+          assign best_min = m
+        endif
+      endif
+    endfor
+  endfor
+
   assign applied_titles = ''
   for d in cart.cart_level_discount_applications
     assign applied_titles = applied_titles | append: d.title | append: ','
@@ -58,8 +80,12 @@
             endcase
           endfor
           assign unlocked = false
-          if total >= tmin
+          if tmin == best_min
             assign unlocked = true
+          endif
+          assign cleared = false
+          if total >= tmin
+            assign cleared = true
           endif
           assign is_on = false
           if tcode != blank and applied_titles contains tcode
@@ -69,7 +95,7 @@
         -%}
 
         {%- if toff > 0 -%}
-          <li class="moff__row{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
+          <li class="moff__row{% unless cleared %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
             <span class="moff__tag" aria-hidden="true">OFFER</span>
 
             <div class="moff__body">
@@ -78,7 +104,9 @@
                 {%- if is_on -%}
                   Applied to this order
                 {%- elsif unlocked -%}
-                  On orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
+                  Ready to apply — on orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
+                {%- elsif cleared -%}
+                  Superseded by the better offer above
                 {%- else -%}
                   Add {{ gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} more to unlock
                 {%- endif -%}

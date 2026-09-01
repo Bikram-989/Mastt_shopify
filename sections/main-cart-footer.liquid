@@ -24,10 +24,6 @@
 >
   <div class="page-width">
     <div class="cart__footer isolate section-{{ section.id }}-padding">
-        {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-          {%- render 'mastt-cart-offers', tiers_json: settings.cart_tiers_json -%}
-        {%- endif -%}
-
       {%- if settings.show_cart_note -%}
         <cart-note class="cart__note field">
           <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
@@ -55,7 +51,7 @@
                         <li class="discounts__discount discounts__discount--position">
                           {{- 'icon-discount.svg' | inline_asset_content -}}
                           {{ discount.title | escape }}
-                          (-{{ discount.total_allocated_amount | money }})
+                          (-{{ discount.total_allocated_amount | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }})
                         </li>
                       {%- endfor -%}
                     </ul>

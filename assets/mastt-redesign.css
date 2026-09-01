@@ -2334,3 +2334,105 @@ body.template-index {
   width: fit-content;
   margin: clamp(16px, 12px + 1vw, 26px) auto 0;
 }
+
+
+/* --------------------------------------------------------------------------
+   SECTION HEADINGS — one size everywhere
+   .kk__heading carried the face and the rule but never a size, so each
+   section fell back to whatever h2 gave it and they all differed slightly.
+   -------------------------------------------------------------------------- */
+.kk__heading {
+  font-size: clamp(22px, 18px + 1.4vw, 32px) !important;
+  line-height: 1.15;
+  margin-top: 0;
+  text-wrap: balance;
+}
+
+
+/* --------------------------------------------------------------------------
+   CART PAGE
+   -------------------------------------------------------------------------- */
+.template-cart .cart__count {
+  font-family: var(--font-body-family);
+  font-size: 0.5em;
+  font-weight: 400;
+  color: var(--color-charcoal-45);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+/* Line totals on one line — the column is narrow and "Rs. 399.00" was
+   wrapping mid-figure. */
+.template-cart .cart-item__totals,
+.template-cart .cart-item__price-wrapper,
+.template-cart .cart-item__price-wrapper .price,
+.cart-drawer .cart-item__price-wrapper {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.template-cart .cart-item__price-wrapper .price { display: inline-flex; gap: 6px; }
+
+/* No footer in the cart: once someone is here the job is checkout, and a
+   footer full of links is an exit. */
+.template-cart #shopify-section-sections--footer,
+.template-cart .shopify-section-group-footer-group {
+  display: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   SIDE MENU — product panes
+   Four rows of two, matching the reference. Tiles are lightweight markup
+   rather than card-product: five panels of full cards would be forty product
+   cards rendered on every page load, for a drawer most visitors never open.
+   -------------------------------------------------------------------------- */
+.mmd__pgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mmd__ptile {
+  display: grid;
+  gap: 5px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  text-decoration: none;
+  color: var(--color-charcoal);
+  box-shadow: var(--shadow-sm);
+}
+
+.mmd__pname {
+  font-family: var(--font-body-family);
+  font-size: 11.5px;
+  line-height: 1.3;
+  /* Two lines then ellipsis: jewellery titles are long and a ragged third
+     line breaks the grid's rhythm. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mmd__pprice {
+  font-family: var(--font-body-family);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.mmd__empty {
+  grid-column: 1 / -1;
+  padding: 26px 12px;
+  text-align: center;
+  border: 1px dashed var(--color-charcoal-15);
+  border-radius: var(--radius-md);
+  color: var(--color-charcoal-70);
+  font-family: var(--font-body-family);
+  font-size: 12.5px;
+}

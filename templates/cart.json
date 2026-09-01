@@ -76,8 +76,7 @@
   },
   "order": [
     "cart-items",
-    "cart-footer",
-    "mastt_recently_viewed",
-    "mastt_loved_by_you"
+    "mastt_loved_by_you",
+    "cart-footer"
   ]
 }
