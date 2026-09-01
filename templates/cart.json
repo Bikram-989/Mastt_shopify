@@ -39,22 +39,6 @@
         "padding_bottom": 40
       }
     },
-    "mastt_recently_viewed": {
-      "type": "mastt-recently-viewed",
-      "disabled": true,
-      "settings": {
-        "eyebrow": "Still thinking about",
-        "heading": "Recently viewed",
-        "products_to_show": 6,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "scroll_on_mobile": true,
-        "show_clear": false,
-        "clear_label": "Clear",
-        "padding_top": 12,
-        "padding_bottom": 8
-      }
-    },
     "mastt_loved_by_you": {
       "type": "mastt-loved-by-you",
       "settings": {

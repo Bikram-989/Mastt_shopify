@@ -35,7 +35,15 @@
   assign tabs = 'Category,New Arrivals,For Her,For Him,Best Seller' | split: ','
 -%}
 
-<details id="Details-menu-drawer-container" class="menu-drawer-container header__icon--menu">
+{%- comment -%}
+  Wrapped in Dawn's <header-drawer> and carrying its .menu-drawer class on the
+  panel. Standing outside that element meant no grid placement in the header
+  and none of Dawn's open/close handling — MenuDrawer drives the panel with a
+  .menu-opening class, which nothing was applying. Inheriting the mechanics
+  and styling only the inside is far less to keep working.
+{%- endcomment -%}
+<header-drawer data-breakpoint="tablet">
+<details id="Details-menu-drawer-container" class="menu-drawer-container">
   <summary
     class="header__icon header__icon--menu header__icon--summary link focus-inset"
     aria-label="{{ 'sections.header.menu' | t }}"
@@ -46,8 +54,8 @@
     </span>
   </summary>
 
-  <div id="menu-drawer" class="mmd gradient" tabindex="-1">
-    <div class="mmd__panel">
+  <div id="menu-drawer" class="gradient menu-drawer motion-reduce mmd" tabindex="-1">
+    <div class="menu-drawer__inner-container mmd__panel">
 
       <div class="mmd__top">
         <a href="{{ routes.root_url }}" class="mmd__logo" aria-label="{{ shop.name | escape }}">
@@ -133,6 +141,7 @@
     </div>
   </div>
 </details>
+</header-drawer>
 
 <script>
   (function () {

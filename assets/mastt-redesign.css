@@ -2129,27 +2129,23 @@ body.template-index {
    rendered and toggled with the hidden attribute, so switching groups costs
    no request and the menu is usable before any JS runs.
    -------------------------------------------------------------------------- */
+/* Dawn positions and animates .menu-drawer itself via the .menu-opening
+   class on the details. We only paint it and size the inner columns — the
+   sliding is Dawn's, which is why it now works. */
 #menu-drawer.mmd {
-  position: fixed;
-  inset: 0 auto 0 0;
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  z-index: 100;
   background: var(--color-pearl-beige);
-  transform: translateX(-100%);
-  transition: transform 320ms var(--ease-out);
-  border: 0;
   padding: 0;
-  overflow: hidden;
+  border: 0;
+  max-width: 100%;
+  width: 100%;
 }
 
-.menu-drawer-container[open] > #menu-drawer.mmd { transform: translateX(0); }
 
 .mmd__panel {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
 }
 
 /* --- header --- */

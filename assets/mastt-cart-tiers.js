@@ -18,13 +18,13 @@
     return '₹' + rupees.toLocaleString('en-IN');
   }
 
-  function seen() {
-    try { return JSON.parse(window.sessionStorage.getItem(SEEN) || '[]') || []; }
-    catch (e) { return []; }
+  function seenTop() {
+    try { return window.sessionStorage.getItem(SEEN) || '0'; }
+    catch (e) { return '0'; }
   }
 
-  function remember(list) {
-    try { window.sessionStorage.setItem(SEEN, JSON.stringify(list)); } catch (e) {}
+  function rememberTop(v) {
+    try { window.sessionStorage.setItem(SEEN, String(v)); } catch (e) {}
   }
 
   function burst(root) {
@@ -109,12 +109,17 @@
       below.appendChild(min);
     });
 
-    /* Celebrate only tiers crossed for the first time this session. */
-    var already = seen();
-    var fresh = reached.filter(function (t) { return already.indexOf(t.min) === -1; });
-    if (fresh.length && already.length + fresh.length <= tiers.length) {
+    /* Celebrate when the best tier reached goes up. Tracking the highest
+       rather than a set means it re-fires if the cart drops and climbs back,
+       and it cannot silently swallow the first crossing the way the old
+       length check could. */
+    var top_reached = reached.length ? reached[reached.length - 1].min : 0;
+    var prev = parseInt(seenTop(), 10) || 0;
+    if (top_reached > prev) {
       burst(root);
-      remember(already.concat(fresh.map(function (t) { return t.min; })));
+      rememberTop(top_reached);
+    } else if (top_reached < prev) {
+      rememberTop(top_reached);
     }
   }
 
