@@ -6,14 +6,16 @@
 .section-{{ section.id }} .collection-list__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  /* Row gap larger than the column gap: the caption sits under each tile, so
+     without it the next row's image crowds the label above it. */
+  gap: 20px 8px;
   margin: 0 auto;
 }
 
 @media screen and (min-width: 750px) {
   .section-{{ section.id }} .collection-list__grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: clamp(14px, 9px + 1.2vw, 24px);
+    gap: clamp(26px, 18px + 1.6vw, 38px) clamp(14px, 9px + 1.2vw, 24px);
     max-width: clamp(600px, 411.1111px + 27.7778vw, 800px);
   }
 }
@@ -49,8 +51,10 @@
   border-radius: var(--radius-md, 16px);
   overflow: hidden;
   background: var(--color-pearl-beige, #F5E7DF);
-  box-shadow: var(--shadow-sm, 0 1px 2px rgba(32, 27, 25, .1)),
-              0 0 0 1px rgba(32, 27, 25, .06);
+  /* A drawn black frame rather than a faint tint ring — each category needs
+     to read as its own object against the panel behind it. */
+  border: 1px solid var(--color-charcoal, #201B19);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(32, 27, 25, .1));
   transition: transform 420ms cubic-bezier(.16, 1, .3, 1),
               box-shadow 420ms cubic-bezier(.16, 1, .3, 1);
 }

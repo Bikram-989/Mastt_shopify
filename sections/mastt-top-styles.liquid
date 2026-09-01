@@ -226,6 +226,22 @@
     justify-content: center;
     margin-top: clamp(20px, 14px + 1.2vw, 40px);
   }
+
+  /* Dawn's secondary button borrows the scheme's button colour for its
+     outline, which on this tinted band came out barely visible. */
+  #TopStyles-{{ section.id }} .mts__viewall .button--secondary {
+    box-shadow: 0 0 0 1px var(--color-charcoal, #201B19);
+    border: 0;
+    color: var(--color-charcoal, #201B19);
+    background: transparent;
+  }
+
+  @media (hover: hover) {
+    #TopStyles-{{ section.id }} .mts__viewall .button--secondary:hover {
+      background: var(--color-charcoal, #201B19);
+      color: var(--color-pearl-beige, #F5E7DF);
+    }
+  }
 </style>
 
 <div id="TopStyles-{{ section.id }}" class="mastt-top-styles kk__wrapper page-width">
