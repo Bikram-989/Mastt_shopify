@@ -1977,131 +1977,6 @@ body.template-index {
 
 
 /* --------------------------------------------------------------------------
-   CART — offers box
-   -------------------------------------------------------------------------- */
-.moff {
-  margin: 0 0 20px;
-  padding: 14px;
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-white) 74%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
-}
-
-.moff__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-
-.moff__icon {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--color-aqua-20);
-  color: var(--color-aqua-dark);
-  font-family: var(--font-body-family);
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.moff__title {
-  margin: 0;
-  font-family: var(--font-heading-family);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-charcoal);
-}
-
-.moff__sub {
-  margin: 0;
-  font-family: var(--font-body-family);
-  font-size: 12px;
-  color: var(--color-charcoal-45);
-}
-
-.moff__list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-
-.moff__row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border-radius: var(--radius-sm);
-  background: var(--color-white);
-  border: 1px dashed color-mix(in srgb, var(--color-charcoal) 16%, transparent);
-}
-
-.moff__row.is-applied {
-  border-style: solid;
-  border-color: var(--color-aqua);
-  background: var(--color-aqua-10);
-}
-
-/* Locked rows stay legible — greyed to the point of unreadable turns an
-   incentive into noise. */
-.moff__row.is-locked { opacity: 0.68; }
-
-.moff__tag {
-  flex: none;
-  padding: 3px 6px;
-  border-radius: var(--radius-xs);
-  background: var(--color-charcoal);
-  color: var(--color-pearl-beige);
-  font-family: var(--font-body-family);
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: var(--tracking-wide);
-}
-
-.moff__row.is-locked .moff__tag { background: var(--color-charcoal-45); }
-.moff__row.is-applied .moff__tag { background: var(--color-aqua-dark); }
-
-.moff__body { flex: 1 1 auto; min-width: 0; }
-
-.moff__name {
-  margin: 0;
-  font-family: var(--font-body-family);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--color-charcoal);
-}
-
-.moff__note {
-  margin: 0;
-  font-family: var(--font-body-family);
-  font-size: 11.5px;
-  color: var(--color-charcoal-45);
-}
-
-.moff__apply {
-  flex: none;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  background: var(--color-charcoal);
-  color: var(--color-pearl-beige);
-  font-family: var(--font-body-family);
-  font-size: 12px;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.moff__state {
-  flex: none;
-  font-family: var(--font-body-family);
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--color-aqua-dark);
-  white-space: nowrap;
-}
-
-.moff__state--locked { color: var(--color-charcoal-45); font-weight: 500; }
-
-/* Cart page: the rails are gone, so nothing here should scroll sideways. */
-.cart__items,
-.cart-items { overflow-x: visible; }
-
-
-/* --------------------------------------------------------------------------
    HOMEPAGE — sections meet edge to edge
    The custom sections each carried padding-block: calc(--spacer / 2), which at
    the top of that clamp was 48px above and below every one of them. Zeroed on
@@ -2351,12 +2226,7 @@ body.template-index {
 
 .template-cart .cart-item__price-wrapper .price { display: inline-flex; gap: 6px; }
 
-/* No footer in the cart: once someone is here the job is checkout, and a
-   footer full of links is an exit. */
-.template-cart #shopify-section-sections--footer,
-.template-cart .shopify-section-group-footer-group {
-  display: none;
-}
+
 
 
 /* --------------------------------------------------------------------------
@@ -2492,91 +2362,146 @@ body.template-index {
 
 
 /* --------------------------------------------------------------------------
-   CART — offers as a choice
-   One code can sit on an order, so the rows are radios: picking one visibly
-   releases the others, which a row of Apply buttons never made clear.
+   RAILS — first card must not be clipped
+   The rails bleed to the screen edge with a 1.5rem inner gutter. With
+   `mandatory` snapping the browser lands on the nearest snap point as soon as
+   the rail is laid out, which sits at the card edge and swallows that gutter —
+   so the first card arrived already cut. `proximity` only snaps once a real
+   scroll happens, and scroll-padding keeps the gutter reserved.
    -------------------------------------------------------------------------- */
-.moff__pick {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  cursor: pointer;
+.mlv__grid,
+.mts__grid,
+.mrv__grid,
+.mcr__rail {
+  scroll-snap-type: x proximity;
+  scroll-padding-inline-start: 1.5rem;
 }
 
-.moff__row.is-locked .moff__pick { cursor: not-allowed; }
 
-.moff__radio {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-  pointer-events: none;
-}
-
-.moff__dot {
-  flex: none;
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-  border: 2px solid var(--color-charcoal-15);
-  background: var(--color-white);
-  display: grid;
-  place-items: center;
-  transition: border-color var(--duration-fast) var(--ease-out);
-}
-
-.moff__dot::after {
-  content: '';
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
+/* --------------------------------------------------------------------------
+   CARD — the + confirms itself
+   -------------------------------------------------------------------------- */
+.mcard__add.is-done {
   background: var(--color-aqua-dark);
-  transform: scale(0);
-  transition: transform var(--duration-fast) var(--ease-out);
+  border-color: var(--color-aqua-dark);
+  color: var(--color-white);
 }
 
-.moff__radio:checked + .moff__dot { border-color: var(--color-aqua-dark); }
-.moff__radio:checked + .moff__dot::after { transform: scale(1); }
-
-.moff__radio:focus-visible + .moff__dot {
-  outline: 2px solid var(--color-charcoal);
-  outline-offset: 2px;
+.mcard__add.is-failed {
+  background: var(--color-dusty-coral);
+  border-color: var(--color-dusty-coral);
+  color: var(--color-charcoal);
 }
 
-.moff__row.is-locked .moff__dot { opacity: 0.5; }
+.mcard__add[disabled] { cursor: default; }
 
-.moff__body { display: grid; gap: 1px; flex: 1 1 auto; min-width: 0; }
 
-.moff__apply {
-  display: block;
-  width: 100%;
-  margin-top: 12px;
-  padding: 11px 16px;
-  border-radius: var(--radius-full);
-  background: var(--color-charcoal);
-  color: var(--color-pearl-beige);
-  font-family: var(--font-body-family);
-  font-size: 13.5px;
-  font-weight: 700;
-  text-align: center;
-  text-decoration: none;
-  transition: opacity var(--duration-fast) var(--ease-out);
+/* --------------------------------------------------------------------------
+   OFFERS STRIP
+   Slim chips that scroll sideways, used on both the cart and the product
+   page. Locked chips stay in the strip: the ladder above the current spend is
+   the reason to add another piece.
+   -------------------------------------------------------------------------- */
+.moff { margin: 0 0 18px; }
+
+.moff__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 9px;
 }
 
-/* Dimmed and inert rather than removed — a button that vanishes when nothing
-   is selected makes the box look broken. */
-.moff__apply[aria-disabled='true'] {
-  opacity: 0.4;
-  pointer-events: none;
+.moff__title {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-charcoal);
 }
 
-.moff__hint {
-  margin: 7px 0 0;
-  text-align: center;
+.moff__sub {
+  margin: 0;
   font-family: var(--font-body-family);
   font-size: 11.5px;
   color: var(--color-charcoal-45);
 }
 
-.moff__hint[hidden] { display: none; }
+.moff__strip {
+  display: flex;
+  gap: 8px;
+  margin: 0 -1.5rem;
+  padding: 2px 1.5rem 4px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline-start: 1.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.moff__strip::-webkit-scrollbar { display: none; }
+
+.moff__chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: grid;
+  gap: 1px;
+  padding: 8px 11px;
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  border: 1px dashed color-mix(in srgb, var(--color-charcoal) 18%, transparent);
+  min-width: 118px;
+}
+
+.moff__chip.is-applied {
+  border-style: solid;
+  border-color: var(--color-aqua-dark);
+  background: var(--color-aqua-10);
+}
+
+/* Dimmed, not greyed out — an incentive nobody can read is not an incentive. */
+.moff__chip.is-locked { opacity: 0.62; }
+
+.moff__amt {
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--color-charcoal);
+  white-space: nowrap;
+}
+
+.moff__chip.is-applied .moff__amt { color: var(--color-aqua-dark); }
+
+.moff__cond {
+  font-family: var(--font-body-family);
+  font-size: 10.5px;
+  color: var(--color-charcoal-45);
+  white-space: nowrap;
+}
+
+.moff__go {
+  margin-top: 5px;
+  padding: 4px 0;
+  border-radius: var(--radius-full);
+  background: var(--color-charcoal);
+  color: var(--color-pearl-beige);
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.moff__badge {
+  margin-top: 5px;
+  padding: 4px 0;
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-aqua-dark);
+}
+
+.moff__badge--locked { color: var(--color-charcoal-45); font-weight: 600; }

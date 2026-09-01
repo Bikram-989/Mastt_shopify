@@ -1,3 +1,11 @@
+{%- comment -%}
+  No footer on the cart. Once someone is here the job is checkout, and a
+  footer full of links is an exit. Returned as nothing rather than hidden with
+  CSS, so it is not in the document at all.
+{%- endcomment -%}
+{%- if template.name == 'cart' -%}
+  {%- comment -%} intentionally empty {%- endcomment -%}
+{%- else -%}
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {{ 'section-footer.css' | asset_url | stylesheet_tag }}
 {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
@@ -361,6 +369,8 @@
     </div>
   </div>
 </footer>
+
+{%- endif -%}
 
 {% schema %}
 {

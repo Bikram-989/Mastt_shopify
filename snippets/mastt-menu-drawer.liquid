@@ -82,8 +82,40 @@
         <div class="mmd__panes">
 
           {%- comment -%} 1. Category — collection tiles {%- endcomment -%}
+          {%- comment -%}
+            Category tiles read the same six collections the homepage cards
+            point at, and take their image from the collection itself — so
+            uploading once in admin fills both places. Falls back to the
+            Side menu navigation if those collections are ever renamed.
+          {%- endcomment -%}
+          {%- liquid
+            assign cat_handles = 'anklets,bracelets,earrings,necklaces,rings,sets' | split: ','
+            assign have_collections = false
+            for h in cat_handles
+              if collections[h] != blank and collections[h].handle == h
+                assign have_collections = true
+              endif
+            endfor
+          -%}
           <div class="mmd__pane" id="MmdPanel-0" role="tabpanel" aria-labelledby="MmdTab-0">
             <ul class="mmd__grid" role="list">
+              {%- if have_collections -%}
+                {%- for h in cat_handles -%}
+                  {%- assign c = collections[h] -%}
+                  {%- if c != blank and c.handle == h -%}
+                    <li>
+                      <a class="mmd__tile" href="{{ c.url }}">
+                        <span class="mmd__well">
+                          {%- if c.image != blank -%}
+                            <img src="{{ c.image | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
+                          {%- endif -%}
+                        </span>
+                        <span class="mmd__label">{{ c.title | escape }}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
               {%- for child in cat_group.links limit: 8 -%}
                 {%- liquid
                   assign handle = ''
@@ -104,6 +136,7 @@
                   </a>
                 </li>
               {%- endfor -%}
+              {%- endif -%}
             </ul>
             <a class="mmd__viewall" href="{{ cat_group.url | default: '/collections/all' }}">View all</a>
           </div>

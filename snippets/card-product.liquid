@@ -510,6 +510,9 @@ Custom Card Render Logic
       type="button"
       class="mcard__add"
       data-mastt-add
+      data-variant-id="{{ card_product.selected_or_first_available_variant.id }}"
+      data-has-options="{% if card_product.variants_count > 1 %}true{% else %}false{% endif %}"
+      data-product-url="{{ card_product.url }}"
       aria-label="{{ 'Add ' | append: design_name | escape }}"
       title="Add to cart"
     >+</button>

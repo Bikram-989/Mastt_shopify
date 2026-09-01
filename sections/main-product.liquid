@@ -597,6 +597,13 @@
                 {%- endunless -%}             
 
               {%- when 'buy_buttons' -%}
+                {%- comment -%}
+                  Offers strip sits directly under the buy buttons: the same
+                  slim chips as the cart, so an offer looks identical wherever
+                  it is met. Thresholds are cart-wide, so no product knows
+                  whether one is unlocked — every chip shows its condition and
+                  reads as an incentive rather than a claim.
+                {%- endcomment -%}
                 {%- render 'buy-buttons',
                   block: block,
                   product: product,
@@ -604,8 +611,12 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
-              
-              {%- when 'rating' -%}
+
+                {%- if settings.cart_tiers_enabled -%}
+                  {%- render 'mastt-cart-offers', tiers_json: settings.cart_tiers_json -%}
+                {%- endif -%}
+
+{%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
                     {% liquid

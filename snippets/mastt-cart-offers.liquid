@@ -1,21 +1,17 @@
 {%- comment -%}
-  Offers, applied through real Shopify discount codes.
+  Cart offers — a slim horizontal strip.
 
-  Every tier is always listed. Below its threshold a row is locked and says
-  what is still needed; at or above it, Apply links to
-  /discount/CODE?redirect=/cart, which is Shopify's own mechanism — the code
-  lands on the cart and carries through to checkout.
+  Each tier is its own chip with its own Apply. Nothing is applied by default:
+  Apply is a link to /discount/CODE?redirect=/cart, Shopify's own mechanism, so
+  the code only lands when the customer asks for it.
 
-  Worth knowing: Shopify accepts one order-level code at a time, so applying a
-  lower tier while a higher one is also unlocked takes the smaller saving.
-  Both are offered because the choice is the customer's to make.
+  Any unlocked tier can be chosen, including a lower one while a higher is also
+  available — that is the customer's call, not ours. Shopify accepts one
+  order-level code at a time, so choosing a second replaces the first, and the
+  totals breakdown below shows whichever is live.
 
-  Codes are used rather than automatic discounts on purpose. Shopify applies
-  only one order-class automatic discount per order, so three overlapping
-  automatic tiers cannot be relied on to resolve to the right one. A code the
-  customer applies is explicit, visible in the summary, and enforced by
-  Shopify's own minimum-purchase rule — so the cart cannot promise a saving
-  that checkout then refuses.
+  Locked chips stay in the strip so the ladder above the current spend is
+  visible and worth reaching for.
 
   Accepts:
   - tiers_json: {String} JSON array of { min, off, code }
@@ -24,7 +20,6 @@
 {%- liquid
   assign tiers = tiers_json | replace: '},{', '}|{' | split: '|'
   assign total = cart.total_price
-
   assign applied_titles = ''
   for d in cart.cart_level_discount_applications
     assign applied_titles = applied_titles | append: d.title | append: ','
@@ -34,14 +29,11 @@
 {%- if tiers.size > 0 -%}
   <div class="moff">
     <div class="moff__head">
-      <span class="moff__icon" aria-hidden="true">%</span>
-      <div>
-        <p class="moff__title">Offers</p>
-        <p class="moff__sub">One offer applies per order</p>
-      </div>
+      <p class="moff__title">Offers</p>
+      <p class="moff__sub">One applies per order</p>
     </div>
 
-    <ul class="moff__list" role="list">
+    <ul class="moff__strip" role="list">
       {%- for raw in tiers -%}
         {%- liquid
           assign row = raw | remove: '[' | remove: ']' | remove: '{' | remove: '}' | remove: '"'
@@ -62,96 +54,44 @@
                 assign tcode = v
             endcase
           endfor
+
           assign unlocked = false
           if total >= tmin
             assign unlocked = true
           endif
+
           assign is_on = false
           if tcode != blank and applied_titles contains tcode
             assign is_on = true
           endif
+
           assign gap = tmin | minus: total
+          assign off_label = toff | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
+          assign min_label = tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
+          assign gap_label = gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹'
         -%}
 
         {%- if toff > 0 -%}
-          <li class="moff__row{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
-            <label class="moff__pick">
-              {%- comment -%}
-                A radio rather than an Apply button per row: only one code can
-                be on the order, so picking one has to visibly deselect the
-                others. Locked rows are disabled instead of hidden, so the
-                ladder above the current spend stays readable.
-              {%- endcomment -%}
-              <input
-                type="radio"
-                name="mastt-offer"
-                class="moff__radio"
-                value="{{ tcode | escape }}"
-                data-code="{{ tcode | escape }}"
-                {% unless unlocked %}disabled{% endunless %}
-                {% if is_on %}checked{% endif %}
-              >
-              <span class="moff__dot" aria-hidden="true"></span>
-
-              <span class="moff__body">
-                <span class="moff__name">{{ toff | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} off</span>
-                <span class="moff__note">
-                  {%- if is_on -%}
-                    Applied to this order
-                  {%- elsif unlocked -%}
-                    On orders over {{ tmin | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
-                  {%- else -%}
-                    Add {{ gap | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} more to unlock
-                  {%- endif -%}
-                </span>
-              </span>
-
-              {%- if is_on -%}
-                <span class="moff__state">Applied</span>
-              {%- elsif unlocked == false -%}
-                <span class="moff__state moff__state--locked" aria-hidden="true">Locked</span>
+          <li class="moff__chip{% unless unlocked %} is-locked{% endunless %}{% if is_on %} is-applied{% endif %}">
+            <span class="moff__amt">{{ off_label }} OFF</span>
+            <span class="moff__cond">
+              {%- if unlocked -%}
+                over {{ min_label }}
+              {%- else -%}
+                add {{ gap_label }}
               {%- endif -%}
-            </label>
+            </span>
+
+            {%- if is_on -%}
+              <span class="moff__badge">Applied</span>
+            {%- elsif unlocked and tcode != blank -%}
+              <a class="moff__go" href="{{ routes.root_url }}discount/{{ tcode | url_encode }}?redirect=/cart">Apply</a>
+            {%- else -%}
+              <span class="moff__badge moff__badge--locked">Locked</span>
+            {%- endif -%}
           </li>
         {%- endif -%}
       {%- endfor -%}
     </ul>
-
-    <a class="moff__apply" href="#" data-moff-apply aria-disabled="true">Apply offer</a>
-    <p class="moff__hint" data-moff-hint>Select an unlocked offer to apply it.</p>
   </div>
-
-  <script>
-    (function () {
-      var box = document.currentScript.closest('.moff');
-      if (!box) return;
-
-      var apply = box.querySelector('[data-moff-apply]');
-      var hint = box.querySelector('[data-moff-hint]');
-
-      function sync() {
-        var picked = box.querySelector('.moff__radio:checked:not([disabled])');
-        if (picked && picked.dataset.code) {
-          apply.setAttribute('href', '/discount/' + encodeURIComponent(picked.dataset.code) + '?redirect=/cart');
-          apply.removeAttribute('aria-disabled');
-          hint.hidden = true;
-        } else {
-          /* No href at all, so a disabled control cannot be followed. */
-          apply.removeAttribute('href');
-          apply.setAttribute('aria-disabled', 'true');
-          hint.hidden = false;
-        }
-      }
-
-      box.addEventListener('change', function (e) {
-        if (e.target.classList.contains('moff__radio')) sync();
-      });
-
-      apply.addEventListener('click', function (e) {
-        if (apply.getAttribute('aria-disabled') === 'true') e.preventDefault();
-      });
-
-      sync();
-    })();
-  </script>
 {%- endif -%}

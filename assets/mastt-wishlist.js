@@ -57,8 +57,13 @@
      number would be the same for every visitor, and Shopify caches pages. */
   function paintCount(count) {
     var badges = document.querySelectorAll('[data-mastt-wish-count]');
+    var label = count > 99 ? '99+' : String(count);
     for (var i = 0; i < badges.length; i++) {
-      badges[i].textContent = count > 99 ? '99+' : String(count);
+      /* Only write when it actually changes. Setting textContent is a
+         childList mutation, and the observer below watches childList — writing
+         it unconditionally made sync() trigger itself forever, which is what
+         the flickering was. */
+      if (badges[i].textContent !== label) badges[i].textContent = label;
       badges[i].hidden = count === 0;
       /* One digit is a disc at a fixed size; two or more widen into a pill.
          Leaving CSS to guess from content is what produced an oval. */
@@ -126,14 +131,28 @@
   /* Cards arriving after load (Recently Viewed, facet updates, quick add). */
   if (window.MutationObserver) {
     var pending = false;
-    new MutationObserver(function () {
-      if (pending) return;
+    var observer = new MutationObserver(function (records) {
+      /* Only care about cards arriving, not about our own class and text
+         writes — otherwise the observer re-triggers on its own output. */
+      var relevant = records.some(function (r) {
+        for (var i = 0; i < r.addedNodes.length; i++) {
+          var n = r.addedNodes[i];
+          if (n.nodeType === 1 && (n.matches('[data-mastt-wish]') || n.querySelector('[data-mastt-wish]'))) {
+            return true;
+          }
+        }
+        return false;
+      });
+      if (!relevant || pending) return;
       pending = true;
       window.requestAnimationFrame(function () {
         pending = false;
+        observer.disconnect();
         sync();
+        observer.observe(document.documentElement, { childList: true, subtree: true });
       });
-    }).observe(document.documentElement, { childList: true, subtree: true });
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
   window.MasttWishlist = { read: read, sync: sync };
