@@ -141,7 +141,7 @@
         "collection_card_eiT98h": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Ring",
+            "collection_url": "/collections/rings",
             "image": "shopify://shop_images/OTH_R_F_0013.jpg",
             "custom_title": "Rings"
           }
@@ -149,7 +149,7 @@
         "collection_card_yrQqym": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Necklace",
+            "collection_url": "/collections/necklaces",
             "image": "shopify://shop_images/WhatsApp_Image_2026-08-18_at_4.48.34_PM.jpg",
             "custom_title": "Necklaces"
           }
@@ -157,7 +157,7 @@
         "collection_card_D9yqpL": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Bracelet",
+            "collection_url": "/collections/bracelets",
             "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_12.53.22_PM.jpg",
             "custom_title": "Bracelets"
           }
@@ -165,7 +165,7 @@
         "collection_card_9tQnGm": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Earring",
+            "collection_url": "/collections/earrings",
             "image": "shopify://shop_images/OTH_E_F_0069.jpg",
             "custom_title": "Earrings"
           }
@@ -173,7 +173,7 @@
         "collection_card_khPWpT": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.product_type=Set",
+            "collection_url": "/collections/sets",
             "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.12.04_PM.jpg",
             "custom_title": "Sets"
           }
@@ -181,9 +181,9 @@
         "collection_card_TUqki9": {
           "type": "collection_card",
           "settings": {
-            "collection_url": "/collections/all?filter.p.tag=men",
+            "collection_url": "/collections/anklets",
             "image": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.42.23_PM.jpg",
-            "custom_title": "Mens"
+            "custom_title": "Anklets"
           }
         }
       },
@@ -226,70 +226,70 @@
           "type": "tab",
           "settings": {
             "label": "All",
-            "collection": "all",
+            "collection": "for-her",
             "product_type": "",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women"
+            "tag": "",
+            "view_all_url": "/collections/for-her"
           }
         },
         "w4": {
           "type": "tab",
           "settings": {
             "label": "Rings",
-            "collection": "all",
-            "product_type": "Ring",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Ring"
+            "collection": "women-rings",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/women-rings"
           }
         },
         "w3": {
           "type": "tab",
           "settings": {
             "label": "Bracelets",
-            "collection": "all",
-            "product_type": "Bracelet",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Bracelet"
+            "collection": "women-bracelets",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/women-bracelets"
           }
         },
         "w2": {
           "type": "tab",
           "settings": {
             "label": "Necklaces",
-            "collection": "all",
-            "product_type": "Necklace",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Necklace"
+            "collection": "women-necklaces",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/women-necklaces"
           }
         },
         "tab_AikhCU": {
           "type": "tab",
           "settings": {
             "label": "Earrings",
-            "collection": "all",
-            "product_type": "Earrings",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Earrings"
+            "collection": "women-earrings",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/women-earrings"
           }
         },
         "tab_KNtpqN": {
           "type": "tab",
           "settings": {
             "label": "Anklets",
-            "collection": "all",
-            "product_type": "Anklets",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Ring"
+            "collection": "women-anklets",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/women-anklets"
           }
         },
         "tab_qBK7hT": {
           "type": "tab",
           "settings": {
             "label": "Sets",
-            "collection": "all",
-            "product_type": "Sets",
-            "tag": "women, her",
-            "view_all_url": "/collections/all?filter.p.tag=women&filter.p.product_type=Ring"
+            "collection": "women-sets",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/women-sets"
           }
         }
       },
@@ -321,48 +321,59 @@
           "type": "tab",
           "settings": {
             "label": "All",
-            "collection": "all",
+            "collection": "for-him",
             "product_type": "",
-            "tag": "men, him",
-            "view_all_url": "/collections/all?filter.p.tag=men"
+            "tag": "",
+            "view_all_url": "/collections/for-him"
           }
         },
-        "m4": {
+        "m2": {
           "type": "tab",
           "settings": {
             "label": "Rings",
-            "collection": "all",
-            "product_type": "Ring",
-            "tag": "men, him",
-            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Ring"
+            "collection": "men-rings",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/men-rings"
           }
         },
         "m3": {
           "type": "tab",
           "settings": {
             "label": "Bracelets",
-            "collection": "all",
-            "product_type": "Bracelet",
-            "tag": "men, him",
-            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Bracelet"
+            "collection": "men-bracelets",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/men-bracelets"
           }
         },
-        "m2": {
+        "m4": {
           "type": "tab",
           "settings": {
             "label": "Necklaces",
-            "collection": "all",
-            "product_type": "Necklace",
-            "tag": "men, him",
-            "view_all_url": "/collections/all?filter.p.tag=men&filter.p.product_type=Necklace"
+            "collection": "men-necklaces",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/men-necklaces"
+          }
+        },
+        "m5": {
+          "type": "tab",
+          "settings": {
+            "label": "Sets",
+            "collection": "men-sets",
+            "product_type": "",
+            "tag": "",
+            "view_all_url": "/collections/men-sets"
           }
         }
       },
       "block_order": [
         "m1",
-        "m4",
+        "m2",
         "m3",
-        "m2"
+        "m4",
+        "m5"
       ],
       "name": "For HIM",
       "settings": {
@@ -534,7 +545,7 @@
             "image": "shopify://shop_images/IMG_8147_f3225381-75e7-4307-9c38-a5649415436a.png",
             "label_light": "Gifts For",
             "label_strong": "Her",
-            "link": "/collections/all?filter.p.tag=women"
+            "link": "/collections/for-her"
           }
         },
         "r2": {
@@ -543,7 +554,7 @@
             "image": "shopify://shop_images/IMG_8155.png",
             "label_light": "Gifts For",
             "label_strong": "Him",
-            "link": "/collections/all?filter.p.tag=men"
+            "link": "/collections/for-him"
           }
         }
       },

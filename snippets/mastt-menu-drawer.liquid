@@ -142,8 +142,14 @@
           </div>
 
           {%- render 'mastt-menu-pane', idx: 1, source: 'new-arrivals', tags: '', url: '/collections/new-arrivals' -%}
-          {%- render 'mastt-menu-pane', idx: 2, source: 'all', tags: 'women,her', url: '/collections/all?filter.p.tag=women' -%}
-          {%- render 'mastt-menu-pane', idx: 3, source: 'all', tags: 'men,him', url: '/collections/all?filter.p.tag=men' -%}
+          {%- comment -%}
+            Point at the real collections rather than filtering collections.all
+            by tag: a `for` loop over a collection only ever sees its first 50
+            products, so tag-filtering the whole catalogue showed whatever
+            happened to sort first — which for For Him was nothing at all.
+          {%- endcomment -%}
+          {%- render 'mastt-menu-pane', idx: 2, source: 'for-her', tags: '', url: '/collections/for-her' -%}
+          {%- render 'mastt-menu-pane', idx: 3, source: 'for-him', tags: '', url: '/collections/for-him' -%}
           {%- render 'mastt-menu-pane', idx: 4, source: 'best-sellers', tags: '', url: '/collections/best-sellers' -%}
 
         </div>

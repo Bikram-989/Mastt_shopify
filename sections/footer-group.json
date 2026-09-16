@@ -25,7 +25,7 @@
           "settings": {
             "heading": "Shop",
             "link_labels": "All Jewellery, Rings, Necklaces, Bracelets, Men's Jewellery, Women's Jewellery",
-            "link_urls": "/collections/all, /collections/all?filter.p.product_type=Rings, /collections/all?filter.p.product_type=Necklaces, /collections/all?filter.p.product_type=Bracelets, /collections/all?filter.p.tag=men, /collections/all?filter.p.tag=women"
+            "link_urls": "/collections/all, /collections/rings, /collections/necklaces, /collections/bracelets, /collections/for-him, /collections/for-her"
           }
         },
         "mastt_cares_main": {
