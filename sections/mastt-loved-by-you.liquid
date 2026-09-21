@@ -22,7 +22,7 @@
 
 {%- liquid
   assign source = section.settings.collection
-  if source == blank or source.products_count == 0
+  if source == blank
     assign source = collections.all
   endif
   assign limit = section.settings.products_to_show
