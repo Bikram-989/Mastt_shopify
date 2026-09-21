@@ -6,7 +6,7 @@
 - Published Shopify theme: Mastt_shopify/main, ID 139536891989.
 - The published theme's index.json, cart.json, settings_data.json and mastt-cart-tiers.js MD5 checksums matched the checkout before edits.
 - A second unpublished theme has the same name (ID 139209736277). Do not select by name alone.
-- Theme name and matching files do not prove an active GitHub subscription. Verify the published theme receives this commit after pushing.
+- Push 22f4367 was received by published theme 139536891989: the changed cart script, both offer snippets and cart template match the pushed content. Shopify reports processing=false and processingFailed=false. This verifies the active main-branch deployment path.
 
 ## Collection wiring
 
