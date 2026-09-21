@@ -1,7 +1,7 @@
 /*
  * Tiered savings bar.
  *
- * Reads thresholds from data-tiers, tracks cart.total_price, and celebrates
+ * Reads thresholds from data-tiers, tracks cart.items_subtotal_price, and celebrates
  * when a tier is crossed — once per tier per session, because a burst on every
  * quantity tweak stops meaning anything.
  *
@@ -126,7 +126,7 @@
   /* Offers are server-rendered, so without this a tier only unlocked on the
      next page load. Re-evaluating here means adding a product opens the offer
      immediately. */
-  function paintOffers(total) {
+  function paintOffers(total, appliedCodes) {
     var boxes = document.querySelectorAll('[data-moff]');
     for (var b = 0; b < boxes.length; b++) {
       var chips = boxes[b].querySelectorAll('[data-moff-chip]');
@@ -134,42 +134,56 @@
         var chip = chips[i];
         var min = parseInt(chip.dataset.min, 10) || 0;
         var unlocked = total >= min;
-        var applied = chip.classList.contains('is-applied');
+        var applied = unlocked && (appliedCodes
+          ? appliedCodes.indexOf((chip.dataset.code || '').toUpperCase()) !== -1
+          : chip.classList.contains('is-applied'));
+        chip.classList.toggle('is-applied', applied);
 
         chip.classList.toggle('is-locked', !unlocked);
 
         var cond = chip.querySelector('[data-moff-cond]');
         if (cond) {
-          var text = unlocked ? cond.dataset.over : 'add ' + money(min - total);
+          var text = !chip.querySelector('[data-moff-action]') || unlocked
+            ? cond.dataset.over : 'add ' + money(min - total);
           if (cond.textContent.trim() !== text) cond.textContent = text;
         }
 
         /* Absent on the product page, where there is no Apply to swap. */
         var action = chip.querySelector('[data-moff-action]');
-        if (!action || applied) continue;
+        if (!action) continue;
 
-        var wantApply = unlocked && chip.dataset.code;
-        var hasApply = !!action.querySelector('.moff__go');
-        if (wantApply === hasApply) continue;
-
-        action.innerHTML = wantApply
-          ? '<a class="moff__go" href="' + chip.dataset.applyUrl + '">Apply</a>'
-          : '<span class="moff__badge moff__badge--locked">Locked</span>';
+        var state = applied ? 'applied' : unlocked && chip.dataset.code ? 'available' : 'locked';
+        if (action.dataset.state === state) continue;
+        action.dataset.state = state;
+        var control = document.createElement(state === 'available' ? 'a' : 'span');
+        control.className = state === 'available' ? 'moff__go' :
+          'moff__badge' + (state === 'locked' ? ' moff__badge--locked' : '');
+        control.textContent = state === 'applied' ? 'Applied' : state === 'available' ? 'Apply' : 'Locked';
+        if (state === 'available') control.href = chip.dataset.applyUrl;
+        action.replaceChildren(control);
       }
     }
   }
 
+  var refreshVersion = 0;
+
   function refresh() {
+    var version = ++refreshVersion;
     var roots = document.querySelectorAll('[data-mastt-tiers]');
     var boxes = document.querySelectorAll('[data-moff]');
     if (!roots.length && !boxes.length) return;
 
-    fetch('/cart.js', { headers: { Accept: 'application/json' } })
+    fetch((window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/') + 'cart.js', { headers: { Accept: 'application/json' }, cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (cart) {
-        if (!cart) return;
-        for (var i = 0; i < roots.length; i++) render(roots[i], cart.total_price);
-        paintOffers(cart.total_price);
+        if (!cart || version !== refreshVersion) return;
+        var total = cart.items_subtotal_price;
+        var appliedCodes = (cart.cart_level_discount_applications || []).map(function (discount) {
+          return String(discount.title).toUpperCase();
+        });
+        roots = document.querySelectorAll('[data-mastt-tiers]');
+        for (var i = 0; i < roots.length; i++) render(roots[i], total);
+        paintOffers(total, appliedCodes);
       })
       .catch(function () { /* offline or blocked — leave the server-rendered state */ });
   }

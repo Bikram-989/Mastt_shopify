@@ -26,15 +26,12 @@
 
 {%- liquid
   assign tiers = tiers_json | replace: '},{', '}|{' | split: '|'
-  assign total = cart.total_price
-  assign applied_titles = ''
-  for d in cart.cart_level_discount_applications
-    assign applied_titles = applied_titles | append: d.title | append: ','
-  endfor
+  assign total = cart.items_subtotal_price
+  assign applied_titles = cart.cart_level_discount_applications | map: 'title' | join: ',' | upcase | split: ','
 -%}
 
 {%- if tiers.size > 0 -%}
-  <div class="moff" data-moff data-total="{{ cart.total_price }}">
+  <div class="moff" data-moff data-total="{{ cart.items_subtotal_price }}">
     <div class="moff__head">
       <p class="moff__title">Offers</p>
       <p class="moff__sub">{% if show_apply == false %}Applied in the cart{% else %}One applies per order{% endif %}</p>
@@ -68,7 +65,8 @@
           endif
 
           assign is_on = false
-          if tcode != blank and applied_titles contains tcode
+          assign normalized_code = tcode | upcase
+          if unlocked and tcode != blank and applied_titles contains normalized_code
             assign is_on = true
           endif
 
@@ -88,7 +86,7 @@
           >
             <span class="moff__amt">{{ off_label }} OFF</span>
             <span class="moff__cond" data-moff-cond data-over="over {{ min_label }}">
-              {%- if unlocked -%}
+              {%- if show_apply == false or unlocked -%}
                 over {{ min_label }}
               {%- else -%}
                 add {{ gap_label }}

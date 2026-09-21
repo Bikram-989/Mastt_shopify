@@ -23,7 +23,7 @@
   class="mtier mtier--{{ context | default: 'page' }}"
   data-mastt-tiers
   data-tiers="{{ tiers_json | escape }}"
-  data-total="{{ cart.total_price }}"
+  data-total="{{ cart.items_subtotal_price }}"
 >
   <p class="mtier__msg" data-mtier-msg aria-live="polite"></p>
 
