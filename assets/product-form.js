@@ -97,6 +97,7 @@ if (!customElements.get('product-form')) {
             }
           })
           .catch((e) => {
+            this.handleErrorMessage(window.cartStrings.error);
             console.error(e);
           })
           .finally(() => {

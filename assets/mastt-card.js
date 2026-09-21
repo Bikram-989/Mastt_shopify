@@ -16,14 +16,14 @@
   function refreshCartCount() {
     /* Repaint Shopify's own bubble so the header count is right without a
        full reload. */
-    return fetch('/?sections=cart-icon-bubble', { headers: { Accept: 'application/json' } })
+    return fetch((window.Shopify?.routes?.root || '/') + '?sections=cart-icon-bubble', { headers: { Accept: 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (data) {
         if (!data || !data['cart-icon-bubble']) return;
         var host = document.getElementById('cart-icon-bubble');
         if (!host) return;
         var parsed = new DOMParser().parseFromString(data['cart-icon-bubble'], 'text/html');
-        var fresh = parsed.querySelector('#cart-icon-bubble');
+        var fresh = parsed.querySelector('.shopify-section');
         if (fresh) host.innerHTML = fresh.innerHTML;
       })
       .catch(function () {});
@@ -63,7 +63,7 @@
 
     button.disabled = true;
 
-    fetch('/cart/add.js', {
+    fetch(window.routes?.cart_add_url || '/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ items: [{ id: Number(id), quantity: 1 }] })

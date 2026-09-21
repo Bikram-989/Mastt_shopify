@@ -38,6 +38,7 @@
       {%- endif -%}
 
       <div class="cart__blocks">
+        <h2 class="h2">{{ 'sections.cart.summary' | t }}</h2>
         {% for block in section.blocks %}
           {%- case block.type -%}
             {%- when '@app' -%}
@@ -60,7 +61,8 @@
                       assign mrp_saving = mrp_saving | plus: diff
                     endif
                   endfor
-                  assign list_total = cart.items_subtotal_price | plus: mrp_saving
+                  assign original_total = cart.items | sum: 'original_line_price'
+                  assign list_total = original_total | plus: mrp_saving
                 -%}
 
                 <dl class="mtot">
@@ -159,7 +161,7 @@
           {%- endcase -%}
         {% endfor %}
 
-        <div id="cart-errors"></div>
+        <div id="cart-errors" role="alert"></div>
       </div>
     </div>
   </div>

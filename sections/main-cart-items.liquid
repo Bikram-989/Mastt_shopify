@@ -25,10 +25,6 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
-{%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
-  {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'page' -%}
-{%- endif -%}
-
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     {%- comment -%}
@@ -39,7 +35,7 @@
     {%- endcomment -%}
     <div class="title-wrapper">
       <h1 class="title title--primary">
-        Cart
+        {{ 'sections.cart.title' | t }}
         {%- if cart.item_count > 0 -%}
           <span class="cart__count">({{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }})</span>
         {%- endif -%}
@@ -47,7 +43,7 @@
     </div>
 
     <div class="cart__warnings">
-      <h1 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h1>
+      <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
       <a href="{{ routes.all_products_collection_url }}" class="button">
         {{ 'general.continue_shopping' | t }}
       </a>
@@ -59,6 +55,10 @@
         </p>
       {%- endif -%}
     </div>
+
+    {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
+      {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'page' -%}
+    {%- endif -%}
 
     <form action="{{ routes.cart_url }}" class="cart__contents critical-hidden" method="post" id="cart">
       <div class="cart__items" id="main-cart-items" data-id="{{ section.id }}">
@@ -510,3 +510,70 @@
   ]
 }
 {% endschema %}
+
+{% stylesheet %}
+  .template-cart #MainContent {
+    max-width: 1280px;
+    width: 100%;
+    margin-inline: auto;
+    padding: 28px 20px 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    align-content: start;
+  }
+  .template-cart #MainContent > .shopify-section { min-width: 0; }
+  .template-cart #MainContent .page-width { padding-inline: 0; }
+  .template-cart cart-items { padding: 0; background: transparent; }
+  .template-cart cart-items .title-wrapper { margin: 0 0 24px; }
+  .template-cart cart-items .title { margin: 0; font-size: clamp(28px, 4vw, 40px); }
+  .template-cart .cart__items { padding: 0; border: 0; }
+  .template-cart .cart-items { border-collapse: separate; border-spacing: 0 14px; }
+  .template-cart .cart-items tbody tr { background: var(--color-white, #fff); }
+  .template-cart .cart-items td { padding-block: 18px; border-block: 1px solid #e9ded7; }
+  .template-cart .cart-items td:first-child { padding-left: 16px; border-left: 1px solid #e9ded7; border-radius: 16px 0 0 16px; }
+  .template-cart .cart-items td:last-child { padding-right: 16px; border-right: 1px solid #e9ded7; border-radius: 0 16px 16px 0; }
+  .template-cart .cart-item__image { border-radius: 10px; object-fit: contain; }
+  .template-cart .cart-item__name { text-wrap: pretty; line-height: 1.5; }
+  .template-cart .cart__footer { padding: 0; display: block; }
+  .template-cart .cart__footer > * { width: 100%; margin: 0; }
+  .template-cart .cart__footer .cart__blocks {
+    background: var(--color-white, #fff);
+    border: 1px solid #e9ded7;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 8px 28px rgb(32 27 25 / 4%);
+  }
+  .template-cart .cart__blocks > h2 { font-size: 23px; margin: 0 0 24px; }
+  .template-cart .mtot { gap: 14px; }
+  .template-cart .mtot__row--total { margin-top: 8px; padding-top: 18px; }
+  .template-cart .tax-note { text-align: left; margin: 18px 0; line-height: 1.6; }
+  .template-cart .cart__checkout-button { max-width: none; min-height: 52px; }
+  .template-cart .cart__ctas { display: block; }
+  .template-cart .cart__dynamic-checkout-buttons { max-width: none; margin-top: 16px; }
+  .template-cart .cart__note { margin-bottom: 48px; }
+  .template-cart .cart__warnings { padding: 32px 16px; border: 1px solid #e9ded7; border-radius: 20px; }
+  .template-cart .cart__empty-text { margin-top: 0; }
+  .template-cart .cart__footer-wrapper:has(#main-cart-footer.is-empty) { display: none; }
+  .template-cart cart-items.is-empty ~ * { margin-top: 0; }
+  @media (min-width: 990px) {
+    .template-cart #MainContent { grid-template-columns: minmax(0, 1fr) 360px; gap: 32px; padding-top: 40px; }
+    .template-cart #MainContent > .shopify-section { grid-column: 1 / -1; }
+    .template-cart #MainContent > .shopify-section:has(cart-items) { grid-column: 1; }
+    .template-cart #MainContent > .cart__footer-wrapper { grid-column: 2; grid-row: 1; align-self: start; position: sticky; top: 140px; }
+    .template-cart #MainContent:has(cart-items.is-empty) > .shopify-section:has(cart-items) { grid-column: 1 / -1; }
+    .template-cart .cart-item__details { padding-left: 16px; }
+  }
+  @media (max-width: 749px) {
+    .template-cart #MainContent { padding: 24px 16px 32px; gap: 20px; }
+    .template-cart .cart-items tbody tr { border: 1px solid #e9ded7; border-radius: 16px; padding: 16px; margin-bottom: 14px; gap: 14px; }
+    .template-cart .cart-items td { padding: 0; border: 0; }
+    .template-cart .cart-items td:first-child,
+    .template-cart .cart-items td:last-child { padding: 0; border: 0; }
+    .template-cart .cart-item__totals .price { font-size: 14px; }
+    .template-cart .cart-item__details { overflow-wrap: anywhere; }
+    .template-cart .cart__footer .cart__blocks { padding: 20px; }
+    .template-cart .cart-item .quantity { min-height: 44px; }
+    .template-cart cart-remove-button .button { min-width: 44px; min-height: 44px; }
+  }
+{% endstylesheet %}
