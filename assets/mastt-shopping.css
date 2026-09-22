@@ -143,6 +143,13 @@ cart-items[data-offer-pending] .moff__go { pointer-events: none; opacity: .65; }
 .footer .footer-block__brand-info p { max-width: 36ch; font-family: var(--font-body-family); font-size: 13px; line-height: 1.7; }
 .footer .footer-block__details-content .list-menu__item--link { font-family: var(--font-body-family); font-size: 13px; min-height: 40px; padding-block: 8px; }
 .footer .footer-block--menu .footer-block__details-content { display: block; }
+.footer .footer-block__details-content, .footer .footer-block__brand-info p, .footer .copyright__content { letter-spacing: normal; word-spacing: normal; }
+.footer .footer__copyright { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 12px; }
+.footer .footer__copyright .policies { margin: 0; padding: 0; }
+@media (min-width: 750px) {
+  .footer .footer-block__details-content .list-menu__item--link { min-height: 0; padding-block: 5px; line-height: 1.5; letter-spacing: normal; }
+  .footer .footer-block__details-content > :first-child .list-menu__item--link { padding-top: 5px; }
+}
 @media (max-width: 749px) {
   .footer .footer__content-top.page-width { padding: 24px 16px 12px; }
   .footer .footer__content-top .footer__blocks-wrapper { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }

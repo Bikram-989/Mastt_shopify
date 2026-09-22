@@ -58,6 +58,8 @@ test('all three tiers unlock at their exact pre-order-discount thresholds', asyn
     const s = setup(); s.refresh(); await s.complete(0, subtotal);
     assert.deepEqual(s.chips.map(c => c.action.child.textContent),
       s.chips.map((_, i) => i < unlocked ? 'Apply' : 'Locked'));
+    assert.equal(s.pending.length, 1, 'eligibility only reads the cart; it must not apply an offer');
+    assert.notEqual(s.pending[0].options.method, 'POST');
   }
 });
 test('applied discount does not relock itself and lower tier remains selectable', async () => {

@@ -29,6 +29,7 @@ class MasttWishlistPage extends HTMLElement {
     const root = window.Shopify?.routes?.root || '/';
     let failures = 0;
     let unavailable = 0;
+    const unavailableHandles = [];
     let next = 0;
     const activeCard = document.activeElement.closest('[data-wishlist-handle]');
     const removedFocusedCard = activeCard && !handles.includes(activeCard.dataset.wishlistHandle);
@@ -48,12 +49,21 @@ class MasttWishlistPage extends HTMLElement {
         try {
           const response = await fetch(`${root}products/${encodeURIComponent(handle)}?section_id=mastt-rv-card`);
           if (version !== this.version) return;
-          if (response.status === 404) { unavailable++; continue; }
+          if (response.status === 404) { unavailable++; unavailableHandles.push(handle); continue; }
           if (!response.ok) throw new Error('Product request failed');
           const html = await response.text();
           if (version !== this.version) return;
           const card = new DOMParser().parseFromString(html, 'text/html').querySelector('.card-wrapper');
-          if (!card) { unavailable++; continue; }
+          if (!card) {
+            // Shopify can return 200 + an empty section for a missing product.
+            // Confirm with product JSON before dropping a saved favourite.
+            const productResponse = await fetch(`${root}products/${encodeURIComponent(handle)}.js`);
+            if (version !== this.version) return;
+            if (productResponse.status === 404) {
+              unavailable++; unavailableHandles.push(handle); continue;
+            }
+            throw new Error('Saved product card could not be rendered');
+          }
           const item = document.createElement('li');
           item.dataset.wishlistHandle = handle;
           item.append(card);
@@ -63,6 +73,7 @@ class MasttWishlistPage extends HTMLElement {
     };
     await Promise.all(Array.from({ length: Math.min(4, missing.length) }, load));
     if (version !== this.version || !this.isConnected) return;
+    if (unavailableHandles.length && window.MasttWishlist?.remove(unavailableHandles)) return;
     let position = 0;
     for (const handle of handles) {
       const card = this.cards.get(handle);

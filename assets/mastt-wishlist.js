@@ -113,6 +113,17 @@
     }
   }
 
+  // Called only after the wishlist page confirms that these products are gone.
+  // Re-read storage to preserve favourites added while its requests were running.
+  function remove(handles) {
+    var list = read();
+    var kept = list.filter(function (handle) { return handles.indexOf(handle) === -1; });
+    if (kept.length === list.length || !write(kept)) return false;
+    sync();
+    broadcast(kept.length);
+    return true;
+  }
+
   document.addEventListener('click', function (event) {
     var button = event.target.closest && event.target.closest('[data-mastt-wish]');
     if (!button) return;
@@ -161,5 +172,11 @@
     broadcast(read().length);
   });
 
-  window.MasttWishlist = { read: read, sync: sync };
+  window.addEventListener('pageshow', function (event) {
+    if (!event.persisted) return;
+    sync();
+    broadcast(read().length);
+  });
+
+  window.MasttWishlist = { read: read, sync: sync, remove: remove };
 })();

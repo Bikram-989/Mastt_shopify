@@ -169,6 +169,32 @@ class CartItems extends HTMLElement {
     document.dispatchEvent(new CustomEvent('mastt:cart:rendered'));
   }
 
+  async clearIneligibleOffers(cart) {
+    const codes = cart.discount_codes || [];
+    const tiers = new Map(Array.from(this.querySelectorAll('[data-moff-chip][data-code]'), chip =>
+      [chip.dataset.code.toUpperCase(), Number(chip.dataset.min)]));
+    const retained = codes.filter(discount => {
+      const minimum = tiers.get(String(discount.code).toUpperCase());
+      return minimum === undefined || (cart.item_count > 0 && cart.items_subtotal_price >= minimum && discount.applicable);
+    });
+    if (retained.length === codes.length) return cart;
+
+    // Shopify keeps ineligible codes and reactivates them later. Forget only
+    // expired tier selections, so unlocking a tier again requires a new Apply.
+    const response = await fetch(routes.cart_update_url, {
+      ...fetchConfig(),
+      body: JSON.stringify({
+        discount: retained.map(discount => discount.code).join(','),
+        sections: this.getSectionsToRender().map(section => section.section),
+        sections_url: window.location.pathname,
+      }),
+    });
+    if (!response.ok) throw new Error('Could not clear the ineligible offer');
+    const updated = await response.json();
+    if (updated.errors) throw new Error('Could not clear the ineligible offer');
+    return updated;
+  }
+
   updateQuantity(line, quantity, event, name, variantId) {
     if (this.hasAttribute('data-offer-pending')) {
       this.resetQuantityInput(line);
@@ -189,8 +215,9 @@ class CartItems extends HTMLElement {
       .then((response) => {
         return response.text();
       })
-      .then((state) => {
-        const parsedState = JSON.parse(state);
+      .then(async (state) => {
+        let parsedState = JSON.parse(state);
+        if (!parsedState.errors) parsedState = await this.clearIneligibleOffers(parsedState);
 
         CartPerformance.measure(`${eventTarget}:paint-updated-sections"`, () => {
           const quantityElement =
