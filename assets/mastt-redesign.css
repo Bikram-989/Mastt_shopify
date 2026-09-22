@@ -1259,7 +1259,7 @@ body.template-index {
   content: '';
   position: absolute;
   z-index: -1;
-  inset: -6px -1.1rem 8px;
+  inset: -6px 0 8px;
   border-radius: var(--radius-lg, 24px);
   background:
     linear-gradient(180deg,
@@ -1270,7 +1270,7 @@ body.template-index {
 
 @media screen and (min-width: 750px) {
   .kk-collection-list::before {
-    inset: -12px -24px 16px;
+    inset: -12px 0 16px;
   }
 }
 

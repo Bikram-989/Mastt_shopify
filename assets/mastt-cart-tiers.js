@@ -56,14 +56,16 @@
     tiers.sort(function (a, b) { return a.min - b.min; });
     root.hidden = false;
 
-    var top = tiers[tiers.length - 1].min;
     var reached = tiers.filter(function (t) { return total >= t.min; });
     var next = tiers.find(function (t) { return total < t.min; });
 
-    /* Scale by the top tier so the bar fills as the goal is reached, rather
-       than resetting between tiers — a bar that restarts reads as lost
-       progress. */
-    var pct = Math.max(0, Math.min(100, (total / top) * 100));
+    /* Equal checkpoint spacing keeps labels readable on 320px screens.
+       Interpolate each spend range into its own segment so fill and labels
+       meet at the exact threshold without resetting progress. */
+    var nextIndex = reached.length;
+    var previousMin = nextIndex ? tiers[nextIndex - 1].min : 0;
+    var fraction = next ? Math.max(0, (total - previousMin) / (next.min - previousMin)) : 0;
+    var pct = Math.min(100, ((nextIndex + fraction) / tiers.length) * 100);
     root.querySelector('[data-mtier-fill]').style.width = pct + '%';
 
     var msg = root.querySelector('[data-mtier-msg]');
@@ -85,9 +87,9 @@
     above.innerHTML = '';
     below.innerHTML = '';
 
-    tiers.forEach(function (t) {
+    tiers.forEach(function (t, index) {
       var on = total >= t.min;
-      var at = Math.min(100, (t.min / top) * 100) + '%';
+      var at = ((index + 1) / tiers.length) * 100 + '%';
 
       var dot = document.createElement('span');
       dot.className = 'mtier__node' + (on ? ' is-on' : '');

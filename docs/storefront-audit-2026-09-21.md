@@ -1,5 +1,7 @@
 # Mastt storefront audit — 21 September 2026
 
+This is the original baseline. Publication, live testing and subsequent fixes are documented in [the 22 September follow-up](shopping-redesign-2026-09-22.md).
+
 ## Verified baseline
 
 - GitHub: Bikram-989/Mastt_shopify, main, baseline 7de1add.

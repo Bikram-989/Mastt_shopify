@@ -168,7 +168,8 @@
       flex-wrap: nowrap;
       gap: 10px;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: 1.5rem;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       overscroll-behavior-x: contain;
@@ -181,7 +182,7 @@
     #Reviews-{{ section.id }} .mrv__card {
       flex: 0 0 82vw;
       max-width: 330px;
-      scroll-snap-align: center;
+      scroll-snap-align: start;
       padding: 16px;
       gap: 0.8rem;
       border-radius: var(--radius-md, 16px);

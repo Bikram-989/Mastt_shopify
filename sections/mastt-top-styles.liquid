@@ -47,8 +47,8 @@
       content: '';
       position: absolute;
       z-index: -1;
-      left: -1.1rem;
-      right: -1.1rem;
+      left: 0;
+      right: 0;
       border-inline: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
       {%- case section.settings.band -%}
         {%- when 'top' -%}
@@ -68,7 +68,7 @@
             color-mix(in srgb, var(--color-nude-beige) 26%, transparent) 0%,
             color-mix(in srgb, var(--color-aqua) 18%, transparent) 100%);
         {%- when 'full' -%}
-          inset: -10px -1.1rem;
+          inset: -10px 0;
           border-radius: var(--radius-lg);
           border-block: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
           background: linear-gradient(180deg,
