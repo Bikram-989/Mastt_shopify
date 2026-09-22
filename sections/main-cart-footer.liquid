@@ -60,21 +60,30 @@
                       assign mrp_saving = mrp_saving | plus: diff
                     endif
                   endfor
-                  assign list_total = cart.items_subtotal_price | plus: mrp_saving
+                  assign list_total = cart.original_total_price | plus: mrp_saving
+                  assign product_saving = cart.original_total_price | minus: cart.items_subtotal_price
                 -%}
 
                 <dl class="mtot">
-                  {%- if mrp_saving > 0 -%}
+                  {%- if mrp_saving > 0 or product_saving > 0 -%}
                     <div class="mtot__row">
                       <dt>Item total</dt>
                       <dd>{{ list_total | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
                     </div>
+                    {%- if mrp_saving > 0 -%}
                     <div class="mtot__row mtot__row--save">
                       <dt>MRP discount</dt>
                       <dd>&minus;{{ mrp_saving | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
                     </div>
+                    {%- endif -%}
                   {%- endif -%}
 
+                  {%- if product_saving > 0 -%}
+                    <div class="mtot__row mtot__row--save">
+                      <dt>Product discounts</dt>
+                      <dd>&minus;{{ product_saving | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>
+                    </div>
+                  {%- endif -%}
                   <div class="mtot__row">
                     <dt>Subtotal</dt>
                     <dd>{{ cart.items_subtotal_price | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}</dd>

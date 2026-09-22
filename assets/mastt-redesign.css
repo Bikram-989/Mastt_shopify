@@ -1940,50 +1940,6 @@ body.template-index {
 
 
 /* --------------------------------------------------------------------------
-   CART DRAWER — product rails
-   The drawer is narrow, so both rails scroll horizontally at roughly two
-   cards wide. Sections cannot be rendered inside a snippet, so the drawer
-   gets its own compact rail markup rather than the homepage sections.
-   -------------------------------------------------------------------------- */
-.mcr { margin-top: 20px; }
-.mcr[hidden] { display: none; }
-
-.mcr__head {
-  margin: 0 0 10px;
-  font-family: var(--font-heading-family);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-charcoal);
-}
-
-.mcr__rail {
-  display: flex;
-  gap: 10px;
-  list-style: none;
-  margin: 0 -1.5rem;
-  padding: 0 1.5rem 4px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-
-.mcr__rail::-webkit-scrollbar { display: none; }
-
-.mcr__rail > li {
-  flex: 0 0 clamp(128px, 40%, 168px);
-  scroll-snap-align: start;
-}
-
-/* The drawer has no room for a quick-add overlay or a ribbon. */
-.mcr__rail .quick-add,
-.mcr__rail .mcard__ribbon { display: none; }
-.mcr__rail .card__heading { font-size: 12px; }
-.mcr__rail .price { font-size: 12px; }
-
-
-/* --------------------------------------------------------------------------
    HOMEPAGE — sections meet edge to edge
    The custom sections each carried padding-block: calc(--spacer / 2), which at
    the top of that clamp was 48px above and below every one of them. Zeroed on
@@ -2060,7 +2016,6 @@ body.template-index {
 }
 
 .mmd__tab {
-  /* A span, not a button — see the note in mastt-menu-drawer.liquid. */
   display: flex;
   user-select: none;
   align-items: center;
@@ -2378,8 +2333,7 @@ body.template-index {
    -------------------------------------------------------------------------- */
 .mlv__grid,
 .mts__grid,
-.mrv__grid,
-.mcr__rail {
+.mrv__grid {
   scroll-snap-type: x proximity;
   scroll-padding-inline-start: 1.5rem;
 }

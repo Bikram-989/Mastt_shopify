@@ -149,17 +149,17 @@
             menu at once — the block picker stays for a one-off override.
           {%- endcomment -%}
           {%- liquid
-            assign tile_image = block.settings.image
-            if tile_image == blank and url contains '/collections/'
-              assign after = url | split: '/collections/' | last
-              assign chandle = after | split: '?' | first | split: '#' | first
-              assign tile_image = collections[chandle].image
-            endif
+            assign after = url | split: '/collections/' | last
+            assign chandle = after | split: '?' | first | split: '#' | first
+            assign image_key = 'mastt_category_image_' | append: chandle
+            assign tile_image = settings[image_key] | default: block.settings.image | default: collections[chandle].image
           -%}
           <div class="collection-list__image">
             {% if tile_image != blank %}
               <img
                 src="{{ tile_image | image_url: width: 600 }}"
+                width="600"
+                height="{{ 600 | divided_by: tile_image.aspect_ratio | round }}"
                 alt="{{ block.settings.custom_title | default: 'Visit link' | escape }}"
                 loading="lazy"
               >

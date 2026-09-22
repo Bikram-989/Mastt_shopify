@@ -1,0 +1,19 @@
+{% doc %}
+  Renders a category tile using the shared Mastt category image.
+  @param {collection} collection - Linked category collection
+  @param {string} [label] - Optional menu label
+{% enddoc %}
+{%- liquid
+  assign image_key = 'mastt_category_image_' | append: collection.handle
+  assign tile_image = settings[image_key] | default: collection.image
+-%}
+<li>
+  <a class="mmd__tile" href="{{ collection.url }}">
+    <span class="mmd__well">
+      {%- if tile_image != blank -%}
+        {{ tile_image | image_url: width: 320 | image_tag: alt: '', loading: 'lazy', width: 160, height: 160 }}
+      {%- endif -%}
+    </span>
+    <span class="mmd__label">{{ label | default: collection.title | escape }}</span>
+  </a>
+</li>

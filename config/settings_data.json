@@ -213,7 +213,13 @@
           "shadow": "#503020"
         }
       }
-    }
+    },
+    "mastt_category_image_rings": "shopify://shop_images/OTH_R_F_0013.jpg",
+    "mastt_category_image_necklaces": "shopify://shop_images/WhatsApp_Image_2026-08-18_at_4.48.34_PM.jpg",
+    "mastt_category_image_bracelets": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_12.53.22_PM.jpg",
+    "mastt_category_image_earrings": "shopify://shop_images/OTH_E_F_0069.jpg",
+    "mastt_category_image_sets": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.12.04_PM.jpg",
+    "mastt_category_image_anklets": "shopify://shop_images/WhatsApp_Image_2026-08-19_at_1.42.23_PM.jpg"
   },
   "presets": {
     "Default": {

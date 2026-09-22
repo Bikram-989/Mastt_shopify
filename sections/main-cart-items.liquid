@@ -25,29 +25,28 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
+<cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
+  <div class="page-width mastt-cart-shell">
 {%- if settings.cart_tiers_enabled and cart.item_count > 0 -%}
   {%- render 'mastt-cart-tiers', tiers_json: settings.cart_tiers_json, context: 'page' -%}
 {%- endif -%}
 
-<cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
-  <div class="page-width">
+
     {%- comment -%}
       "Cart summary" rather than "Your cart", and no continue-shopping link:
       on a phone that link sat between the heading and the first product and
       pushed the cart itself below the fold for a tap almost nobody uses.
       Leaving is what the back gesture and the header logo are for.
     {%- endcomment -%}
-    <div class="title-wrapper">
+    <div class="title-wrapper mastt-cart-heading">
       <h1 class="title title--primary">
-        Cart
-        {%- if cart.item_count > 0 -%}
-          <span class="cart__count">({{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }})</span>
-        {%- endif -%}
+        Cart <span class="cart__count">({{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }})</span>
       </h1>
     </div>
 
-    <div class="cart__warnings">
-      <h1 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h1>
+    <div class="cart__warnings mastt-cart-empty">
+      <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
+      <p>Find a piece that feels like you.</p>
       <a href="{{ routes.all_products_collection_url }}" class="button">
         {{ 'general.continue_shopping' | t }}
       </a>

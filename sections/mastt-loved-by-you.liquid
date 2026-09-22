@@ -22,7 +22,7 @@
 
 {%- liquid
   assign source = section.settings.collection
-  if source == blank or source.products_count == 0
+  if source == blank
     assign source = collections.all
   endif
   assign limit = section.settings.products_to_show
@@ -191,7 +191,7 @@
     {%- endfor -%}
 
     {%- if shown == 0 -%}
-      <li class="mlv__empty">Bestsellers land here as soon as orders start coming in.</li>
+      <li class="mlv__empty">No pieces are available in this collection yet.</li>
     {%- endif -%}
   </ul>
 

@@ -264,6 +264,7 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'mastt-redesign.css' | asset_url | stylesheet_tag }}
+    {{ 'mastt-shopping.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -307,7 +308,7 @@
   
 	</head>
 
-  <body class="{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+  <body class="template-{{ template.name | handle }} {% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -322,7 +323,9 @@
       {{ content_for_layout }}
     </main>
 
-    {% sections 'footer-group' %}
+    {%- unless template.name == 'cart' -%}
+      {% sections 'footer-group' %}
+    {%- endunless -%}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
@@ -383,6 +386,8 @@
     {%- endif -%}
 
     <script src="{{ 'mastt-wishlist.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'mastt-wishlist-page.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'mastt-menu.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'mastt-card.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'mastt-share.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'mastt-cart-tiers.js' | asset_url }}" defer="defer"></script>

@@ -1,218 +1,63 @@
-{%- comment -%}
-  Mastt side menu.
-
-  Two columns: a rail of groups on the left, that group's tiles on the right.
-  Everything comes from the "Side menu" navigation in Shopify, so adding a
-  category is a menu edit, never a code change. A top-level item with children
-  becomes a group; one without becomes a direct link with an outbound mark.
-
-  Tile images resolve from the linked collection's own image, so uploading a
-  collection image in admin fills the tile with no further work. Until then
-  each shows an empty well rather than a broken frame.
-
-  Panels are all rendered and toggled with CSS, so switching groups costs no
-  request and the whole menu works before any JavaScript runs.
-{%- endcomment -%}
-
 {%- liquid
-  assign menu = linklists['side-menu']
-  if menu == blank or menu.links.size == 0
-    assign menu = linklists[section.settings.menu]
-  endif
-
-  comment
-    The Category pane still comes from the "Side menu" navigation, so adding a
-    category stays a menu edit. The four product panes are fixed, because each
-    maps to a collection the homepage already uses — keeping menu and page in
-    agreement matters more than making them configurable.
-  endcomment
-  for l in menu.links
-    if l.links.size > 0 and cat_group == blank
-      assign cat_group = l
-    endif
-  endfor
-
+  assign category_links = section.settings.mastt_category_menu.links
+  assign cat_handles = 'rings,necklaces,bracelets,earrings,sets,anklets' | split: ','
+  assign new_arrivals_source = section.settings.mastt_new_arrivals.handle | default: 'new-arrivals'
+  assign her_source = section.settings.mastt_for_her.handle | default: 'for-her'
+  assign him_source = section.settings.mastt_for_him.handle | default: 'for-him'
+  assign best_source = section.settings.mastt_best_sellers.handle | default: 'best-sellers'
   assign tabs = 'Category,New Arrivals,For Her,For Him,Best Seller' | split: ','
 -%}
-
-{%- comment -%}
-  Wrapped in Dawn's <header-drawer> and carrying its .menu-drawer class on the
-  panel. Standing outside that element meant no grid placement in the header
-  and none of Dawn's open/close handling — MenuDrawer drives the panel with a
-  .menu-opening class, which nothing was applying. Inheriting the mechanics
-  and styling only the inside is far less to keep working.
-{%- endcomment -%}
 <header-drawer data-breakpoint="tablet">
-<details id="Details-menu-drawer-container" class="menu-drawer-container">
-  <summary
-    class="header__icon header__icon--menu header__icon--summary link focus-inset"
-    aria-label="{{ 'sections.header.menu' | t }}"
-  >
-    <span>
-      <span class="svg-wrapper">{{ 'icon-hamburger.svg' | inline_asset_content }}</span>
-      <span class="svg-wrapper">{{ 'icon-close.svg' | inline_asset_content }}</span>
-    </span>
-  </summary>
-
-  <div id="menu-drawer" class="gradient menu-drawer motion-reduce mmd" tabindex="-1">
-    <div class="menu-drawer__inner-container mmd__panel">
-
-      <div class="mmd__body">
-        <ul class="mmd__rail" role="tablist" aria-label="Browse by" data-mmd-rail>
-          {%- for tab in tabs -%}
-            <li>
-              {%- comment -%}
-                Deliberately not a <button>. Dawn's MenuDrawer binds a
-                close-the-drawer handler to every button inside it
-                (global.js: 'button:not(.localization-selector)...'), so a tab
-                built as a button shut the menu on every tap.
-              {%- endcomment -%}
-              <span
-                class="mmd__tab"
-                role="tab"
-                id="MmdTab-{{ forloop.index0 }}"
-                aria-controls="MmdPanel-{{ forloop.index0 }}"
-                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-                tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
-              >{{ tab }}</span>
-            </li>
-          {%- endfor -%}
-        </ul>
-
-        <div class="mmd__panes">
-
-          {%- comment -%} 1. Category — collection tiles {%- endcomment -%}
-          {%- comment -%}
-            Category tiles read the same six collections the homepage cards
-            point at, and take their image from the collection itself — so
-            uploading once in admin fills both places. Falls back to the
-            Side menu navigation if those collections are ever renamed.
-          {%- endcomment -%}
-          {%- liquid
-            assign cat_handles = 'anklets,bracelets,earrings,necklaces,rings,sets' | split: ','
-            assign have_collections = false
-            for h in cat_handles
-              if collections[h] != blank and collections[h].handle == h
-                assign have_collections = true
-              endif
-            endfor
-          -%}
-          <div class="mmd__pane" id="MmdPanel-0" role="tabpanel" aria-labelledby="MmdTab-0">
-            <ul class="mmd__grid" role="list">
-              {%- if have_collections -%}
-                {%- for h in cat_handles -%}
-                  {%- assign c = collections[h] -%}
-                  {%- if c != blank and c.handle == h -%}
-                    <li>
-                      <a class="mmd__tile" href="{{ c.url }}">
-                        <span class="mmd__well">
-                          {%- if c.image != blank -%}
-                            <img src="{{ c.image | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
-                          {%- endif -%}
-                        </span>
-                        <span class="mmd__label">{{ c.title | escape }}</span>
-                      </a>
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              {%- else -%}
-              {%- for child in cat_group.links limit: 8 -%}
-                {%- liquid
-                  assign handle = ''
-                  if child.url contains '/collections/'
-                    assign after = child.url | split: '/collections/' | last
-                    assign handle = after | split: '?' | first | split: '#' | first
-                  endif
-                  assign tile_image = collections[handle].image
-                -%}
-                <li>
-                  <a class="mmd__tile" href="{{ child.url }}">
-                    <span class="mmd__well">
-                      {%- if tile_image != blank -%}
-                        <img src="{{ tile_image | image_url: width: 320 }}" alt="" loading="lazy" width="160" height="160">
-                      {%- endif -%}
-                    </span>
-                    <span class="mmd__label">{{ child.title | escape }}</span>
-                  </a>
-                </li>
-              {%- endfor -%}
-              {%- endif -%}
-            </ul>
-            <a class="mmd__viewall" href="{{ cat_group.url | default: '/collections/all' }}">View all</a>
+  <details id="Details-menu-drawer-container" class="menu-drawer-container">
+    <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="{{ 'sections.header.menu' | t }}">
+      <span>
+        <span class="svg-wrapper">{{ 'icon-hamburger.svg' | inline_asset_content }}</span>
+        <span class="svg-wrapper">{{ 'icon-close.svg' | inline_asset_content }}</span>
+      </span>
+    </summary>
+    <div id="menu-drawer" class="gradient menu-drawer motion-reduce mmd" tabindex="-1">
+      <div class="menu-drawer__inner-container mmd__panel">
+        <mastt-menu-tabs class="mmd__body">
+          <ul class="mmd__rail" role="tablist" aria-label="Browse by" aria-orientation="vertical">
+            {%- for tab in tabs -%}
+              <li role="presentation">
+                <button type="button" class="mmd__tab" role="tab" id="MmdTab-{{ forloop.index0 }}" aria-controls="MmdPanel-{{ forloop.index0 }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">{{ tab }}</button>
+              </li>
+            {%- endfor -%}
+          </ul>
+          <div class="mmd__panes">
+            <div class="mmd__pane" id="MmdPanel-0" role="tabpanel" aria-labelledby="MmdTab-0">
+              <p class="mmd__eyebrow">Find your everyday favourite</p>
+              <ul class="mmd__grid" role="list">
+                {%- if category_links.size > 0 -%}
+                  {%- for category in category_links -%}
+                    {%- if category.type == 'collection_link' -%}
+                      {%- render 'mastt-menu-category', collection: category.object, label: category.title -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- for handle in cat_handles -%}
+                    {%- assign category = collections[handle] -%}
+                    {%- if category != blank -%}
+                      {%- render 'mastt-menu-category', collection: category -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              </ul>
+              <a class="mmd__viewall" href="{{ routes.all_products_collection_url }}">Explore all pieces <span aria-hidden="true">↗</span></a>
+            </div>
+            {%- render 'mastt-menu-pane', idx: 1, source: new_arrivals_source -%}
+            {%- render 'mastt-menu-pane', idx: 2, source: her_source -%}
+            {%- render 'mastt-menu-pane', idx: 3, source: him_source -%}
+            {%- render 'mastt-menu-pane', idx: 4, source: best_source -%}
           </div>
-
-          {%- render 'mastt-menu-pane', idx: 1, source: 'new-arrivals', tags: '', url: '/collections/new-arrivals' -%}
-          {%- comment -%}
-            Point at the real collections rather than filtering collections.all
-            by tag: a `for` loop over a collection only ever sees its first 50
-            products, so tag-filtering the whole catalogue showed whatever
-            happened to sort first — which for For Him was nothing at all.
-          {%- endcomment -%}
-          {%- render 'mastt-menu-pane', idx: 2, source: 'for-her', tags: '', url: '/collections/for-her' -%}
-          {%- render 'mastt-menu-pane', idx: 3, source: 'for-him', tags: '', url: '/collections/for-him' -%}
-          {%- render 'mastt-menu-pane', idx: 4, source: 'best-sellers', tags: '', url: '/collections/best-sellers' -%}
-
-        </div>
+        </mastt-menu-tabs>
+        <nav class="mmd__foot" aria-label="Helpful links">
+          <a href="{{ routes.root_url }}pages/wishlist">Saved pieces</a>
+          <a href="{{ routes.root_url }}pages/contact">Contact</a>
+          <a href="{{ routes.root_url }}pages/about-mastt">Our story</a>
+        </nav>
       </div>
-
-      <div class="mmd__foot">
-        {%- if linklists.footer.links.size > 0 -%}
-          {%- for l in linklists.footer.links limit: 4 -%}
-            <a href="{{ l.url }}">{{ l.title | escape }}</a>
-          {%- endfor -%}
-        {%- else -%}
-          <a href="{{ routes.root_url }}policies/refund-policy">Returns</a>
-          <a href="{{ routes.root_url }}policies/shipping-policy">Shipping</a>
-          <a href="{{ routes.root_url }}pages/contact">Support</a>
-          <a href="{{ routes.root_url }}pages/about-us">About</a>
-        {%- endif -%}
-      </div>
-
     </div>
-  </div>
-</details>
+  </details>
 </header-drawer>
-
-<script>
-  (function () {
-    var root = document.getElementById('menu-drawer');
-    if (!root) return;
-
-    var tabs = Array.prototype.slice.call(root.querySelectorAll('.mmd__tab[role="tab"]'));
-
-    function select(i) {
-      tabs.forEach(function (tab, n) {
-        var on = n === i;
-        tab.setAttribute('aria-selected', on ? 'true' : 'false');
-        tab.tabIndex = on ? 0 : -1;
-        var pane = document.getElementById(tab.getAttribute('aria-controls'));
-        if (pane) pane.hidden = !on;
-      });
-    }
-
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function (e) {
-        e.stopPropagation();
-        select(i);
-      });
-      tab.addEventListener('keydown', function (e) {
-        /* A span is not a button, so Enter and Space have to be wired up. */
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          e.preventDefault();
-          select(i);
-          return;
-        }
-        var next = null;
-        if (e.key === 'ArrowDown') next = (i + 1) % tabs.length;
-        if (e.key === 'ArrowUp') next = (i - 1 + tabs.length) % tabs.length;
-        if (e.key === 'Home') next = 0;
-        if (e.key === 'End') next = tabs.length - 1;
-        if (next === null) return;
-        e.preventDefault();
-        select(next);
-        tabs[next].focus();
-      });
-    });
-
-  })();
-</script>

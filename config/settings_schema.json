@@ -1457,14 +1457,14 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "This bar shows progress toward a saving. It does NOT apply the discount — Shopify allows only one order-class automatic discount per order, so overlapping tiers cannot be trusted to resolve correctly. Mirror these thresholds with a discount that actually applies at checkout, or the cart promises money it will not deliver."
+        "content": "This bar shows progress toward a saving. It does NOT apply the discount \u2014 Shopify allows only one order-class automatic discount per order, so overlapping tiers cannot be trusted to resolve correctly. Mirror these thresholds with a discount that actually applies at checkout, or the cart promises money it will not deliver."
       },
       {
         "type": "textarea",
         "id": "cart_tiers_json",
         "label": "Tiers (JSON)",
         "default": "[{\"min\":99900,\"off\":10000},{\"min\":159900,\"off\":20000},{\"min\":209900,\"off\":30000}]",
-        "info": "Array of {\"min\": <cart total in paise>, \"off\": <saving in paise>}. 99900 = ₹999."
+        "info": "Array of {\"min\": <cart total in paise>, \"off\": <saving in paise>}. 99900 = \u20b9999."
       },
       {
         "type": "checkbox",
@@ -1477,6 +1477,45 @@
         "id": "cart_rail_collection",
         "label": "\"Loved by You Guys\" collection in the cart",
         "info": "Set its sort order to Best selling to rank from real orders. Empty uses the whole catalogue."
+      }
+    ]
+  },
+  {
+    "name": "Mastt category images",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shared by Shop by Category and the side menu. If empty, the collection image is used."
+      },
+      {
+        "type": "image_picker",
+        "id": "mastt_category_image_rings",
+        "label": "Rings"
+      },
+      {
+        "type": "image_picker",
+        "id": "mastt_category_image_necklaces",
+        "label": "Necklaces"
+      },
+      {
+        "type": "image_picker",
+        "id": "mastt_category_image_bracelets",
+        "label": "Bracelets"
+      },
+      {
+        "type": "image_picker",
+        "id": "mastt_category_image_earrings",
+        "label": "Earrings"
+      },
+      {
+        "type": "image_picker",
+        "id": "mastt_category_image_sets",
+        "label": "Sets"
+      },
+      {
+        "type": "image_picker",
+        "id": "mastt_category_image_anklets",
+        "label": "Anklets"
       }
     ]
   }

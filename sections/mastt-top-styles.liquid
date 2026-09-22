@@ -275,7 +275,7 @@
           merchant picks a collection (and because the "all" handle does not
           always resolve to a real collection object).
         endcomment
-        if source == blank or source.products_count == 0
+        if source == blank
           assign source = collections.all
         endif
         comment

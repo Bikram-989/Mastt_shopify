@@ -58,5 +58,5 @@
     {%- endif -%}
   </ul>
 
-  <a class="mmd__viewall" href="{{ url }}">View all</a>
+  {%- if src != blank -%}<a class="mmd__viewall" href="{{ src.url }}">View all <span aria-hidden="true">↗</span></a>{%- endif -%}
 </div>

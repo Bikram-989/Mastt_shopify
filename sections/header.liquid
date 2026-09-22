@@ -214,6 +214,7 @@
               alt="{{ shop.name | escape }}"
               class="header__heading-logo motion-reduce"
               width="{{ settings.logo_width | default: 140 }}"
+              height="{{ settings.logo_width | default: 140 | times: 406.0 | divided_by: 867 | round }}"
             >
           </div>
         {%- endif -%}
@@ -373,6 +374,7 @@
               alt="{{ shop.name | escape }}"
               class="header__heading-logo motion-reduce"
               width="{{ settings.logo_width | default: 140 }}"
+              height="{{ settings.logo_width | default: 140 | times: 406.0 | divided_by: 867 | round }}"
             >
           </div>
         {%- endif -%}
@@ -849,6 +851,40 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Mastt side menu"
+    },
+    {
+      "type": "link_list",
+      "id": "mastt_category_menu",
+      "label": "Category links",
+      "info": "Use collection links. Leave empty for the six Mastt categories."
+    },
+    {
+      "type": "collection",
+      "id": "mastt_new_arrivals",
+      "label": "New Arrivals",
+      "info": "Leave empty to use the matching Mastt collection."
+    },
+    {
+      "type": "collection",
+      "id": "mastt_for_her",
+      "label": "For Her",
+      "info": "Leave empty to use the matching Mastt collection."
+    },
+    {
+      "type": "collection",
+      "id": "mastt_for_him",
+      "label": "For Him",
+      "info": "Leave empty to use the matching Mastt collection."
+    },
+    {
+      "type": "collection",
+      "id": "mastt_best_sellers",
+      "label": "Best Sellers",
+      "info": "Leave empty to use the matching Mastt collection."
     }
   ],
   "blocks": [

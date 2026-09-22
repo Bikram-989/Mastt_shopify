@@ -17,7 +17,9 @@
     try {
       var raw = window.localStorage.getItem(KEY);
       var list = raw ? JSON.parse(raw) : [];
-      return Array.isArray(list) ? list : [];
+      return Array.isArray(list) ? list.filter(function (handle, index) {
+        return typeof handle === 'string' && /^[a-z0-9][a-z0-9-]*$/.test(handle) && list.indexOf(handle) === index;
+      }) : [];
     } catch (e) {
       // Private browsing, blocked storage, or corrupt JSON. Saving is a
       // convenience, never let it break a product grid.
@@ -37,9 +39,7 @@
   function paint(button, saved) {
     button.setAttribute('aria-pressed', saved ? 'true' : 'false');
     button.classList.toggle('is-saved', saved);
-    var title = button.dataset.handle ? '' : '';
     button.title = saved ? 'Saved' : 'Save for later';
-    return title;
   }
 
   /* Reflect stored state onto every button currently in the DOM. */
@@ -50,7 +50,7 @@
     for (var i = 0; i < buttons.length; i++) {
       paint(buttons[i], list.indexOf(buttons[i].dataset.handle) !== -1);
     }
-    broadcast(list.length);
+    paintCount(list.length);
   }
 
   /* Header badge. Rendered empty by Liquid on purpose — a server-rendered
@@ -74,7 +74,7 @@
   function broadcast(count) {
     paintCount(count);
     document.dispatchEvent(
-      new CustomEvent('mastt:wishlist:change', { detail: { count: count } })
+      new CustomEvent('mastt:wishlist:change', { detail: { count: count, handles: read() } })
     );
   }
 
@@ -154,6 +154,12 @@
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
+
+  window.addEventListener('storage', function (event) {
+    if (event.key !== KEY && event.key !== null) return;
+    sync();
+    broadcast(read().length);
+  });
 
   window.MasttWishlist = { read: read, sync: sync };
 })();
