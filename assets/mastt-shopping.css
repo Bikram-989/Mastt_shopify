@@ -74,6 +74,9 @@
 .template-cart .moff__chip.is-locked { opacity: 1; background: transparent; }
 .template-cart .moff__cond, .template-cart .moff__badge--locked { color: var(--color-charcoal-70); }
 .template-cart .moff__go, .template-cart .moff__badge { min-height: 40px; display: grid; place-content: center; }
+.moff__status { margin: 12px 0 0; font-size: 12px; line-height: 1.5; }
+.moff__status:empty { display: none; }
+cart-items[data-offer-pending] .moff__go { pointer-events: none; opacity: .65; }
 .template-cart #main-cart-footer .cart__footer { padding: 24px; border: 1px solid var(--color-charcoal-15); border-radius: 16px; background: var(--color-white); flex-direction: column; gap: 24px; }
 .template-cart #main-cart-footer.is-empty .cart__footer { display: none; }
 .template-cart #main-cart-footer .cart__blocks { width: 100%; margin: 0; }

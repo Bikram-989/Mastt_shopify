@@ -2,13 +2,12 @@
   Cart offers — a slim horizontal strip.
 
   Each tier is its own chip with its own Apply. Nothing is applied by default:
-  Apply is a link to /discount/CODE?redirect=/cart, Shopify's own mechanism, so
-  the code only lands when the customer asks for it.
+  The cart Ajax API applies the selected code and returns Shopify's totals.
+  The /discount/CODE link is a no-JavaScript fallback.
 
   Any unlocked tier can be chosen, including a lower one while a higher is also
-  available — that is the customer's call, not ours. Shopify accepts one
-  order-level code at a time, so choosing a second replaces the first, and the
-  totals breakdown below shows whichever is live.
+  available. We send a single code to replace the previous selection; the
+  configured discounts also disallow combination with other order discounts.
 
   Locked chips stay in the strip so the ladder above the current spend is
   visible and worth reaching for.
@@ -108,5 +107,8 @@
         {%- endif -%}
       {%- endfor -%}
     </ul>
+    {%- if show_apply != false -%}
+      <p class="moff__status" data-moff-status role="status" aria-live="polite"></p>
+    {%- endif -%}
   </div>
 {%- endif -%}

@@ -5,6 +5,7 @@ const fs = require('node:fs');
 
 function setup() {
   const pending = [];
+  const handlers = {};
   const chips = [99900, 159900, 209900].map((min, i) => {
     const classes = new Set();
     const action = { dataset: {}, replaceChildren(el) { this.child = el; } };
@@ -17,15 +18,26 @@ function setup() {
     };
   });
   const box = { querySelectorAll: () => chips };
-  const window = { Shopify: { routes: { root: '/en/' } } };
+  const attrs = new Map();
+  const cartItems = {
+    getAttribute: key => attrs.get(key), setAttribute: (key, value) => attrs.set(key, value), removeAttribute: key => attrs.delete(key),
+    getSectionsToRender: () => [{ section: 'items' }, { section: 'totals' }],
+    renderPageSections(sections) { this.rendered = sections; },
+    classList: { contains: () => false },
+  };
+  const checkout = { disabled: false };
+  const status = { textContent: '' };
+  const window = { Shopify: { routes: { root: '/en/' } }, location: { pathname: '/en/cart' } };
   const document = {
-    readyState: 'loading', addEventListener() {},
+    readyState: 'loading', addEventListener(name, fn) { handlers[name] = fn; },
     querySelectorAll: s => s === '[data-moff]' ? [box] : [],
+    querySelector: s => s === 'cart-items' ? cartItems : s === '[data-moff-status]' ? status : null,
+    getElementById: id => id === 'checkout' ? checkout : null,
     createElement: tag => ({ tag }),
   };
   vm.runInNewContext(fs.readFileSync('assets/mastt-cart-tiers.js', 'utf8'), {
     window, document,
-    fetch: url => new Promise(resolve => pending.push({ url, resolve })),
+    fetch: (url, options) => new Promise((resolve, reject) => pending.push({ url, options, resolve, reject })),
   });
   async function complete(index, subtotal, code, total = subtotal) {
     pending[index].resolve({ ok: true, json: async () => ({
@@ -34,7 +46,11 @@ function setup() {
     }) });
     await new Promise(resolve => setImmediate(resolve));
   }
-  return { chips, pending, refresh: window.MasttTiers.refresh, complete };
+  function apply(index) {
+    const link = { closest: () => chips[index], textContent: 'Apply' };
+    return handlers.click({ target: { closest: () => link }, preventDefault() {} });
+  }
+  return { chips, pending, refresh: window.MasttTiers.refresh, complete, apply, cartItems, checkout, status };
 }
 
 test('all three tiers unlock at their exact pre-order-discount thresholds', async () => {
@@ -61,4 +77,36 @@ test('a late response cannot overwrite the newest cart state', async () => {
   await s.complete(1, 50000); await s.complete(0, 209900);
   assert.ok(s.chips.every(c => c.action.child.textContent === 'Locked'));
   assert.equal(s.pending[0].url, '/en/cart.js');
+});
+
+test('choosing a lower offer replaces the discount list and renders Shopify totals', async () => {
+  const s = setup();
+  const applying = s.apply(0);
+  assert.equal(s.checkout.disabled, true);
+  assert.equal(s.pending[0].url, '/en/cart/update.js');
+  assert.deepEqual(JSON.parse(s.pending[0].options.body), {
+    discount: 'MASTT100', sections: ['items', 'totals'], sections_url: '/en/cart',
+  });
+  await s.apply(1);
+  assert.equal(s.pending.length, 1, 'a second click cannot race the pending request');
+  const sections = { items: '<items>', totals: '<total>₹1,899</total>' };
+  s.pending[0].resolve({ ok: true, json: async () => ({
+    items_subtotal_price: 199900, total_price: 189900, sections,
+    discount_codes: [{ code: 'MASTT100', applicable: true }],
+    cart_level_discount_applications: [{ title: null }],
+  }) });
+  await applying;
+  assert.equal(s.cartItems.rendered, sections);
+  assert.deepEqual(s.chips.map(c => c.action.child.textContent), ['Applied', 'Apply', 'Locked']);
+  assert.equal(s.checkout.disabled, false);
+  assert.match(s.status.textContent, /MASTT100 applied/);
+});
+
+test('an unconfirmed offer does not show Applied or allow checkout with stale totals', async () => {
+  const s = setup(); const applying = s.apply(0);
+  s.pending[0].reject(new Error('Network disconnected'));
+  await applying;
+  assert.equal(s.checkout.disabled, true);
+  assert.equal(s.cartItems.rendered, undefined);
+  assert.match(s.status.textContent, /Could not confirm/);
 });

@@ -157,9 +157,11 @@ class CartItems extends HTMLElement {
       const source = html.querySelector(selector);
       const host = section.id === 'main-cart-items' ? this : document.getElementById(section.id);
       if (!source || !host) throw new Error('Missing cart content');
-      return { host, source };
+      return { id: section.id, source };
     });
-    for (const { host, source } of updates) {
+    for (const { id, source } of updates) {
+      // Earlier sections can replace a later section's host (the live region).
+      const host = id === 'main-cart-items' ? this : document.getElementById(id);
       host.innerHTML = source.innerHTML;
       if (host === this || host.id === 'main-cart-footer') host.classList.toggle('is-empty', source.classList.contains('is-empty'));
     }
@@ -168,6 +170,10 @@ class CartItems extends HTMLElement {
   }
 
   updateQuantity(line, quantity, event, name, variantId) {
+    if (this.hasAttribute('data-offer-pending')) {
+      this.resetQuantityInput(line);
+      return;
+    }
     this.refreshVersion = (this.refreshVersion || 0) + 1;
     this.enableLoading(line);
 

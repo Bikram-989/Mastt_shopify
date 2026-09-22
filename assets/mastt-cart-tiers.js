@@ -166,6 +166,74 @@
   }
 
   var refreshVersion = 0;
+  var applyingOffer = false;
+
+  function appliedCodes(cart) {
+    return (cart.discount_codes || []).filter(function (discount) { return discount.applicable; })
+      .map(function (discount) { return String(discount.code).toUpperCase(); })
+      .concat((cart.cart_level_discount_applications || []).map(function (discount) {
+        return String(discount.title || '').toUpperCase();
+      }));
+  }
+
+  /* /discount/CODE links can retain a previous code and let Shopify choose the
+     larger saving. The Ajax API replaces the code list with the chosen code.
+     Prices always come back from Shopify; never subtract a client-side amount. */
+  document.addEventListener('click', async function (event) {
+    var link = event.target.closest && event.target.closest('[data-moff-action] .moff__go');
+    if (!link) return;
+    var cartItems = document.querySelector('cart-items');
+    if (!cartItems || typeof cartItems.renderPageSections !== 'function') return;
+    event.preventDefault();
+    if (applyingOffer || cartItems.getAttribute('aria-busy') === 'true') return;
+    var chip = link.closest('[data-moff-chip]');
+    if (!chip || chip.classList.contains('is-locked') || !chip.dataset.code) return;
+
+    applyingOffer = true;
+    ++refreshVersion;
+    cartItems.refreshVersion = (cartItems.refreshVersion || 0) + 1;
+    cartItems.setAttribute('aria-busy', 'true');
+    cartItems.setAttribute('data-offer-pending', '');
+    var checkout = document.getElementById('checkout');
+    if (checkout) checkout.disabled = true;
+    link.textContent = 'Applying…';
+    var confirmed = false;
+    var message = '';
+    try {
+      var response = await fetch((window.Shopify?.routes?.root || '/') + 'cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          discount: chip.dataset.code,
+          sections: cartItems.getSectionsToRender().map(function (section) { return section.section; }),
+          sections_url: window.location.pathname
+        })
+      });
+      if (!response.ok) throw new Error('Offer update failed');
+      var cart = await response.json();
+      cartItems.renderPageSections(cart.sections);
+      confirmed = true;
+      var codes = appliedCodes(cart);
+      paintOffers(cart.items_subtotal_price, codes);
+      message = codes.indexOf(chip.dataset.code.toUpperCase()) !== -1
+        ? chip.dataset.code + ' applied. Your total has been updated.'
+        : 'This offer is not available for the current cart.';
+      if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+        publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: cart });
+      }
+    } catch (e) {
+      message = 'Could not confirm the offer. Try again, or refresh your cart before checkout.';
+      link.textContent = 'Apply';
+    } finally {
+      applyingOffer = false;
+      cartItems.removeAttribute('aria-busy');
+      cartItems.removeAttribute('data-offer-pending');
+      checkout = document.getElementById('checkout');
+      if (checkout) checkout.disabled = !confirmed || cartItems.classList.contains('is-empty');
+      var status = document.querySelector('[data-moff-status]');
+      if (status) status.textContent = message;
+    }
+  });
 
   function refresh() {
     var version = ++refreshVersion;
@@ -178,12 +246,10 @@
       .then(function (cart) {
         if (!cart || version !== refreshVersion) return;
         var total = cart.items_subtotal_price;
-        var appliedCodes = (cart.cart_level_discount_applications || []).map(function (discount) {
-          return String(discount.title).toUpperCase();
-        });
+        var codes = appliedCodes(cart);
         roots = document.querySelectorAll('[data-mastt-tiers]');
         for (var i = 0; i < roots.length; i++) render(roots[i], total);
-        paintOffers(total, appliedCodes);
+        paintOffers(total, codes);
       })
       .catch(function () { /* offline or blocked — leave the server-rendered state */ });
   }
