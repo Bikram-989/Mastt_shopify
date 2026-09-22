@@ -165,6 +165,7 @@
                   type="button"
                   class="media-gallery__dot{% if forloop.first %} is-active{% endif %}"
                   data-slide-index="{{ forloop.index0 }}"
+                  aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
                   aria-label="{{ 'products.product.media.load_image' | t: index: forloop.index }}"
                 ></button>
               {%- endfor -%}
@@ -380,7 +381,10 @@
       if (!dots.length || !slides.length) return;
 
       function setActive(i) {
-        for (var d = 0; d < dots.length; d++) dots[d].classList.toggle('is-active', d === i);
+        for (var d = 0; d < dots.length; d++) {
+          dots[d].classList.toggle('is-active', d === i);
+          dots[d].setAttribute('aria-current', String(d === i));
+        }
       }
       function currentIndex() {
         var center = slider.getBoundingClientRect().left + slider.clientWidth / 2;
@@ -396,7 +400,10 @@
         dot.addEventListener('click', function () {
           var r = slides[i].getBoundingClientRect();
           var s = slider.getBoundingClientRect();
-          slider.scrollTo({ left: slider.scrollLeft + (r.left - s.left), behavior: 'smooth' });
+          slider.scrollTo({
+            left: slider.scrollLeft + (r.left - s.left),
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+          });
           setActive(i);
         });
       });

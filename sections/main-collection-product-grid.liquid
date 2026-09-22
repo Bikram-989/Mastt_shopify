@@ -44,7 +44,6 @@
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-      <script src="{{ 'kekaa-infinite-scroll.js' | asset_url }}" ></script>
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
           aria-labelledby="verticalTitle"
@@ -62,6 +61,10 @@
         </aside>
       {%- endif -%}
 
+      <p class="mastt-filter-error" id="MasttFilterError" role="alert" hidden>
+        {{ 'mastt.collection.error' | t }}
+        <a href="{{ collection.url }}" data-facets-retry>{{ 'mastt.collection.retry' | t }}</a>
+      </p>
       <div
         class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
         id="ProductGridContainer"
@@ -126,8 +129,6 @@
                 {%- assign skip_card_product_styles = true -%}
               {%- endfor -%}
             </ul>
-            <!-- infinite scroll sentinel -->
-            <div id="infinite-trigger" style="width:1px; height:1px; visibility:hidden;"></div>
 
             {%- if paginate.pages > 1 -%}
               {% render 'pagination', paginate: paginate, anchor: '' %}
@@ -141,37 +142,6 @@
     {{ 'mask-arch.svg' | inline_asset_content }}
   {%- endif -%}
 </div>
-
-<div id="loader" style="display: none; width: 100%;text-align: center;"><img src="https://cdn.shopify.com/s/files/1/0668/1398/5008/files/Iphone-spinner-2.gif?v=1735809435" style="margin: 0 auto;" width="50px" height="50px"> </div>
-<script>
-window.infiniteCollection = new MeetAjaxForProduct({
-  container:  '#product-grid',
-  pagination: '.infinite_next',
-  loader:     '#loader',
-  offset:     300
-});
-
-  (function () {
-    if (window.__kkJudgemeReinitObserver) return;
-
-    const container = document.getElementById('ProductGridContainer');
-    if (!container) return;
-
-    function reinitJudgeme() {
-      if (!window.jdgm || typeof jdgm.customizeBadges !== 'function') return;
-      if (!container.querySelector('.jdgm-preview-badge:not(.jdgm--done-setup)')) return;
-      jdgm.customizeBadges();
-    }
-
-    reinitJudgeme();
-
-    const observer = new MutationObserver(reinitJudgeme);
-    observer.observe(container, { childList: true });
-
-    window.__kkJudgemeReinitObserver = observer;
-  })();
-
-</script>
 
 {% schema %}
 {

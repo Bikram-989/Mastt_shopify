@@ -116,3 +116,38 @@ cart-items[data-offer-pending] .moff__go { pointer-events: none; opacity: .65; }
 @media (prefers-reduced-motion: reduce) {
   .mwp *, #menu-drawer.mmd * { scroll-behavior: auto; }
 }
+
+/* Clear category context and native, reachable navigation between result pages. */
+.template-collection .collection-hero__inner { padding: 24px 16px 0; }
+.template-collection .collection-hero__title { margin: 0; font-size: clamp(28px, 4vw, 44px); }
+.template-collection .pagination-wrapper { margin-block: 28px; }
+.mastt-filter-error { padding: 16px; font-size: 14px; }
+.mastt-filter-error[hidden] { display: none; }
+@media (max-width: 749px) {
+  .template-collection .facets-container { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+  .template-collection .mobile-facets__wrapper { flex-grow: 0; }
+  .template-collection .mobile-facets__open { position: static; min-height: 44px; padding: 8px 12px; box-shadow: none; border: 1px solid var(--color-charcoal-15); border-radius: 8px; font: 500 12px/1.4 var(--font-body-family); color: var(--color-charcoal); }
+  .template-collection .active-facets { flex-basis: 100%; order: 3; }
+  .template-collection .active-facets:empty { display: none; }
+  .template-collection .product-count { flex: 0 0 auto; }
+}
+
+/* Native purchase controls share a row; their actual checkout behavior is untouched. */
+.product .product-form__buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; align-items: start; gap: 8px; }
+.product .product-form__buttons > :only-child { grid-column: 1 / -1; }
+.product .product-form__buttons .product-form__submit { min-height: 48px; padding-inline: 8px; font-size: 12px; margin: 0; }
+.product .product-form__buttons .shopify-payment-button__button { min-height: 48px; font-size: 12px; }
+.product shopify-accelerated-checkout { --shopify-accelerated-checkout-button-block-size: 48px; --shopify-accelerated-checkout-button-border-radius: 999px; }
+
+.footer .footer-block__details-content { font-family: var(--font-body-family); font-size: 13px; line-height: 1.7; }
+.footer .footer-block__details-content .list-menu__item--link { font-family: var(--font-body-family); font-size: 13px; min-height: 40px; padding-block: 8px; }
+@media (max-width: 749px) {
+  .footer .footer__content-top { padding: 24px 8px 12px; }
+  .footer .footer__blocks-wrapper { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  .footer .footer-block { width: auto; max-width: none; margin: 0; }
+  .footer .footer-block:not(.footer-block--menu) { grid-column: 1 / -1; }
+  .footer .footer-block__heading { font-size: 18px; margin-bottom: 10px; }
+  .footer .footer-block__details-content { margin-bottom: 0; }
+  .footer .footer-block__details-content p { margin-block: 8px; }
+  .footer .footer__content-bottom { padding-top: 16px; }
+}

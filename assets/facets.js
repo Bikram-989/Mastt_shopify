@@ -5,7 +5,7 @@ class FacetFiltersForm extends HTMLElement {
 
     this.debouncedOnSubmit = debounce((event) => {
       this.onSubmitHandler(event);
-    }, 800);
+    }, 300);
 
     const facetForm = this.querySelector('form');
     facetForm.addEventListener('input', this.debouncedOnSubmit.bind(this));
@@ -33,6 +33,9 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderPage(searchParams, event, updateURLHash = true) {
+    const version = FacetFiltersForm.requestVersion = (FacetFiltersForm.requestVersion || 0) + 1;
+    const error = document.getElementById('MasttFilterError');
+    if (error) error.hidden = true;
     FacetFiltersForm.searchParamsPrev = searchParams;
     const sections = FacetFiltersForm.getSections();
     const countContainer = document.getElementById('ProductCount');
@@ -55,29 +58,41 @@ class FacetFiltersForm extends HTMLElement {
       if (FacetFiltersForm.filterData.some(filterDataUrl)) {
         FacetFiltersForm.renderSectionFromCache(filterDataUrl, event);
       } else {
-        FacetFiltersForm.renderSectionFromFetch(url, event);
+        FacetFiltersForm.renderSectionFromFetch(url, event, version);
       }
     });
 
     if (updateURLHash) FacetFiltersForm.updateURLHash(searchParams);
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
 
-  static renderSectionFromFetch(url, event) {
+  static renderSectionFromFetch(url, event, version = FacetFiltersForm.requestVersion) {
     fetch(url)
-      .then((response) => response.text())
+      .then((response) => { if (!response.ok) throw new Error('Collection update failed'); return response.text(); })
       .then((responseText) => {
+        if (version !== FacetFiltersForm.requestVersion) return;
         const html = responseText;
         FacetFiltersForm.filterData = [
-          ...FacetFiltersForm.filterData,
+          ...FacetFiltersForm.filterData.slice(-19),
           { html, url },
         ];
         FacetFiltersForm.renderFilters(html, event);
         FacetFiltersForm.renderProductGridContainer(html);
         FacetFiltersForm.renderProductCount(html);
         if (typeof initializeScrollAnimationTrigger === 'function')
-          initializeScrollAnimationTrigger(html.innerHTML);
+          initializeScrollAnimationTrigger(document.getElementById('ProductGridContainer'));
+      })
+      .catch(() => {
+        if (version !== FacetFiltersForm.requestVersion) return;
+        document.querySelector('#ProductGridContainer .collection')?.classList.remove('loading');
+        document.querySelectorAll('.product-count, .product-count-vertical').forEach(el => el.classList.remove('loading'));
+        document.querySelectorAll('.facets-container .loading__spinner').forEach(el => el.classList.add('hidden'));
+        const error = document.getElementById('MasttFilterError');
+        if (error) {
+          error.hidden = false;
+          error.querySelector('[data-facets-retry]').href = window.location.href;
+        }
       });
   }
 
@@ -87,7 +102,7 @@ class FacetFiltersForm extends HTMLElement {
     FacetFiltersForm.renderProductGridContainer(html);
     FacetFiltersForm.renderProductCount(html);
     if (typeof initializeScrollAnimationTrigger === 'function')
-      initializeScrollAnimationTrigger(html.innerHTML);
+      initializeScrollAnimationTrigger(document.getElementById('ProductGridContainer'));
   }
 
   static renderProductGridContainer(html) {
@@ -97,22 +112,7 @@ class FacetFiltersForm extends HTMLElement {
     const wrapper = document.getElementById('ProductGridContainer');
     wrapper.innerHTML = newHtml;
   
-    // ensure sentinel
-    if (!wrapper.querySelector('#infinite-trigger')) {
-      wrapper.insertAdjacentHTML('beforeend',
-        '<div id="infinite-trigger" style="width:1px;height:1px;visibility:hidden;"></div>'
-      );
-    }
-  
-    // teardown old infinite scroll
-    window.infiniteCollection?.meetProductDestroy?.();
-  
-    // re-create
-    window.infiniteCollection = new MeetAjaxForProduct({
-      container:  '#product-grid',
-      pagination: '.infinite_next',
-      offset:     0
-    });
+    window.MasttWishlist?.sync(wrapper);
   }
 
   static renderProductCount(html) {

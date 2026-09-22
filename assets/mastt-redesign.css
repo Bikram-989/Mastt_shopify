@@ -1629,7 +1629,7 @@ body.template-index {
 .product-card-wrapper .card > .card__content { padding: 4px 8px 10px; }
 .product-card-wrapper .card > .card__content .card__information { gap: 4px; }
 .product-card-wrapper .card > .card__content .card__heading { display: block; }
-.product-card-wrapper .card__heading .full-unstyled-link {
+.product-card-wrapper .card .card__heading .full-unstyled-link {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -1743,13 +1743,6 @@ body.template-index {
 }
 
 .product-form__buttons .product-form__submit { margin-bottom: 0; }
-
-/* Below 380px the two labels cannot both fit; stacking beats truncating. */
-@media screen and (max-width: 379px) {
-  .product-form__buttons { flex-wrap: wrap; }
-  .product-form__buttons > * { flex: 1 1 100%; }
-}
-
 
 /* --------------------------------------------------------------------------
    PRODUCT PAGE — accordions open with a plus, not a chevron

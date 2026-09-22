@@ -1546,9 +1546,8 @@ a.product__text {
 .product-form__buttons {
   max-width: unset;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 15px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .product-form__input--pill{
@@ -1606,11 +1605,6 @@ a.product__text {
     padding: 10px;
   }
 
-  .product-form__buttons {
-    max-width: unset;
-    grid-template-columns: 1fr;
-  }
-
   .product .price__sale.price__sale{
     gap: 5px;
     margin-bottom: 5px;
@@ -1632,6 +1626,5 @@ a.product__text {
     display: none;
   }
 }
-
 
 
