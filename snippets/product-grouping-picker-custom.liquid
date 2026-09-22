@@ -1,3 +1,10 @@
+{%- liquid
+  assign related_products_metaobject = product.metafields.custom[block.settings.option_type_metafield_key].value
+  assign related_product_refs = related_products_metaobject.product_grouping.value
+  assign sorted_products = related_product_refs | sort: 'title'
+  assign product_count = sorted_products | size
+-%}
+{%- if product_count > 0 -%}
 <style>
 .form__label {
   font-family: var(--font-body-family);
@@ -184,10 +191,6 @@
       {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {% endif %}
 
-    {% assign related_products_metaobject = product.metafields.custom[block.settings.option_type_metafield_key].value %}
-    {% assign related_product_refs     = related_products_metaobject.product_grouping.value %}
-    {% assign sorted_products          = related_product_refs | sort: 'title' %}
-    {% assign product_count            = sorted_products | size %}
     {% assign picker_type              = block.settings.picker_type %}
     {% assign threshold                = block.settings.dynamic_threshold | default: 6 %}
 
@@ -350,12 +353,14 @@
   }
 
   function initScrollUI(wrapper) {
+    if (wrapper.dataset.masttScrollReady) return;
     const scrollEl     = wrapper.querySelector('.kk-pill-scroll');
     const prevBtn      = wrapper.querySelector('.kk-scroll-prev');
     const nextBtn      = wrapper.querySelector('.kk-scroll-next');
     const overlayLeft  = wrapper.querySelector('.kk-scroll-overlay-left');
     const overlayRight = wrapper.querySelector('.kk-scroll-overlay-right');
     if (!scrollEl || !prevBtn || !nextBtn) return;
+    wrapper.dataset.masttScrollReady = 'true';
 
     const pageWidth = () => scrollEl.clientWidth;
     const maxScroll = () => scrollEl.scrollWidth - scrollEl.clientWidth;
@@ -400,6 +405,7 @@
 
     // Also ensure we catch any late layout changes on full page load
     window.addEventListener('load', updateUI);
+    window.addEventListener('resize', debounce(updateUI, DEBOUNCE_MS));
   }
 
   function initAll() {
@@ -407,7 +413,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', initAll);
-  window.addEventListener('resize', debounce(initAll, DEBOUNCE_MS));
 })();
 </script>
-
+{%- endif -%}

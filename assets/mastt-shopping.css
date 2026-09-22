@@ -142,6 +142,7 @@ cart-items[data-offer-pending] .moff__go { pointer-events: none; opacity: .65; }
 .footer .footer-block__details-content { font-family: var(--font-body-family); font-size: 13px; line-height: 1.7; }
 .footer .footer-block__brand-info p { max-width: 36ch; font-family: var(--font-body-family); font-size: 13px; line-height: 1.7; }
 .footer .footer-block__details-content .list-menu__item--link { font-family: var(--font-body-family); font-size: 13px; min-height: 40px; padding-block: 8px; }
+.footer .footer-block--menu .footer-block__details-content { display: block; }
 @media (max-width: 749px) {
   .footer .footer__content-top.page-width { padding: 24px 16px 12px; }
   .footer .footer__content-top .footer__blocks-wrapper { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
