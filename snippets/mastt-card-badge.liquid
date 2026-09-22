@@ -1,0 +1,43 @@
+{% doc %}
+  Renders at most one product-card badge.
+  @param {product} product - Product to label
+  @param {string} [section_label] - Optional label from the containing product rail
+{% enddoc %}
+{%- liquid
+  assign label = ''
+  if product.available == false
+    assign label = 'products.product.sold_out' | t
+  elsif product.metafields.custom.card_badge.value != blank
+    assign label = product.metafields.custom.card_badge.value
+  elsif section_label != blank
+    assign label = section_label
+  else
+    assign tags = product.tags | join: '|' | downcase | split: '|'
+    assign badge_keys = 'bogo,halfprice,20off,50off,new,excl,medit,art' | split: ','
+    assign chosen = ''
+    for key in badge_keys
+      assign priority_tag = key | prepend: '!'
+      if tags contains priority_tag
+        assign chosen = key
+        break
+      endif
+    endfor
+    if chosen == blank
+      for key in badge_keys
+        if tags contains key
+          assign chosen = key
+          break
+        endif
+      endfor
+    endif
+    if chosen != blank
+      assign label_key = chosen | prepend: 'mastt.badges.'
+      assign label = label_key | t
+    elsif product.compare_at_price > product.price
+      assign label = 'products.product.on_sale' | t
+    endif
+  endif
+-%}
+{%- if label != blank -%}
+  <span class="mcard__badge" data-mcard-badge title="{{ label | escape }}">{{ label | escape }}</span>
+{%- endif -%}

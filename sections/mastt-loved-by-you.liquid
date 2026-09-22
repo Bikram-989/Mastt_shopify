@@ -104,25 +104,6 @@
     scroll-snap-align: start;
   }
 
-  /* Rank ribbon. Only the top few carry it — a badge on every card is
-     wallpaper, not a signal. */
-  #Loved-{{ section.id }} .mlv__badge {
-    position: absolute;
-    top: 8px;
-    left: 0;
-    z-index: 2;
-    padding: 3px 10px 3px 8px;
-    background: var(--color-charcoal, #201B19);
-    color: var(--color-pearl-beige, #F5E7DF);
-    font-family: var(--font-body-family);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: var(--tracking-wide, 0.08em);
-    text-transform: uppercase;
-    border-radius: 0 var(--radius-xs, 6px) var(--radius-xs, 6px) 0;
-    pointer-events: none;
-  }
-
   @media screen and (min-width: 990px) {
     #Loved-{{ section.id }} .mlv__head { margin-bottom: clamp(20px, 14px + 1.2vw, 32px); }
 
@@ -173,11 +154,15 @@
     {%- for product in source.products limit: limit -%}
       {%- assign shown = shown | plus: 1 -%}
       <li class="mlv__item">
-        {%- if forloop.index <= section.settings.badge_count and section.settings.badge_label != blank -%}
-          <span class="mlv__badge">{{ section.settings.badge_label | escape }}</span>
-        {%- endif -%}
+        {%- liquid
+          assign card_badge = ''
+          if forloop.index <= section.settings.badge_count
+            assign card_badge = section.settings.badge_label
+          endif
+        -%}
         {%- render 'card-product',
           card_product: product,
+          card_badge: card_badge,
           media_aspect_ratio: 'square',
           show_secondary_image: section.settings.show_secondary_image,
           show_vendor: false,

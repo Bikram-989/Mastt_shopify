@@ -14,14 +14,11 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign badge = card_product.metafields.custom.card_badge.value
   assign rating = card_product.metafields.custom.rating.value
 -%}
 
 <div class="mcard__overlay">
-  {%- if badge != blank -%}
-    <span class="mcard__ribbon">{{ badge | escape }}</span>
-  {%- endif -%}
+  {%- render 'mastt-card-badge', product: card_product, section_label: card_badge -%}
 
   <button
     type="button"

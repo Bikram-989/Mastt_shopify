@@ -45,8 +45,12 @@
   endif
 -%}
 
-{%- assign discount_amount = compare_at_price | minus: price -%}
-{%- assign discount_percent  = discount_amount | times: 100 | divided_by: compare_at_price | round -%}
+{%- liquid
+  assign discount_amount = 0
+  if compare_at_price > price
+    assign discount_amount = compare_at_price | minus: price
+  endif
+-%}
 
 
 {%- unless target == null and placeholder == null -%}
@@ -155,7 +159,7 @@
     {%- endif -%}
     {%- if show_badges and compare_at_price > price and template.name == 'product' -%}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }} discount">
-        Save {{ discount_amount | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }} <!-- ({{ discount_percent }}%) -->
+        Save {{ discount_amount | money_without_trailing_zeros | replace: 'Rs.', '₹' | replace: 'Rs', '₹' | replace: '₹ ', '₹' }}
       </span>
     
       <span class="badge price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">
